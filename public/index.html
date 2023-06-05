@@ -1,0 +1,53 @@
+<h6>Started Jun 4th, 2023 Version 0.0.1-1</h6>
+
+<h1 align=center>tinyMLjs</h1>
+
+A set of hardware independent web-page, client-side (No Internet required) programming tools to help bring Machine Learning Proof of Concept's to more students, 
+by using the power of the web with javascript-tensorflowJS and the simplicity of the C/C++ microcontroller serial print command
+combined together using Google's WebSerial that works on any desktop (or laptop) computer. 
+Note: webSerial using polyfill works on a few Android phones such as some of the Google Pixel phones<br>
+
+<h2>The Demos, see below for <a href="#basicInstructions">basic instructions</a></h2>
+
+<ol><h3 Acceleration x,y,z time-series Demos:</h3>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+</ol>
+    
+
+
+
+<ol><h3 Any Sensor time-series Demos:</h3>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+</ol>
+    
+
+
+
+<ol><h3 Vision Demos: Just here for consistency, much better to use <a href="edgeImpulse.com">edgeImpulse.com</a></h3>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+</ol>
+    
+
+
+<ol><h3 Sound Demos: Just here for consistency, much better to use <a href="edgeImpulse.com">edgeImpulse.com</a></h3>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+  <li><a href="...">..</a>
+</ol>
+
+
+<h3 name="basicInstructions">Basic instructions</h3>
+<li>Hardware independent proof of concept. Use a sensor or two and get a Machine Learning Keras model working with an actuator on any microcontroller board.
+<li>Once you know your model works, slow down and record your data into a CSV file for uploading to a professional cloud Machine Learning service like 
+  <a href="edgeImpulse.com">edgeImpulse.com</a> or or <a href="https://cloud.arduino.cc/">Arduino Cloud</a> or just stay client-side with tinyMLjs and build another model.
+<li>If staying with tinyMLjs Upload the CSV files to a model designer, train the model and save your tensorflowJS saved model
+<li>If staying with tinyMLjs load the saved model onto a webpage with webSerial connection to your actuator and test how well your =model works in real world settings.
+<li> or use the conversion program either downloaded to online that converts the TensorflowJS saved model into tensorflowLite format and then use xxd -i
+  to convert the binary file into a c-header file that can be installed onto your microcontroller using your IDE or the <a href="https://www.arduino.cc/en/software#future-version-of-the-arduino-ide"> Arduino IDE</a>.    
+    
