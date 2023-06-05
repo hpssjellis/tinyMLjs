@@ -7,3 +7,8 @@ Started Jun 2, 2023
 
 See index at https://hpssjellis.github.io/tinyMLjs/public/index.html
 
+
+
+
+
+Great resource here   https://learn.ml5js.org/#/reference/image-classifier
