@@ -30,7 +30,7 @@
 <span id="mySpanSize">...</span><br>
 
 <input type="button" value="Convert Images to Tensor" onclick="loadImagesToTensor()">
-<input type="button" value="Train Model" onclick="trainModel()">
+<input type="button" id="myTrainButton" value="Train Model" onclick="trainModel()">
 <label for="myEpochs">Enter model input height:</label>
 <input type="number" id="myEpochs" value=100 style="width:50px"> loops, 
 <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> learning rate, 
@@ -84,8 +84,11 @@
     let labelsArray = labelsInput.split(",").map((label) => label.trim());
     
     if (labelsArray.length < myImageFiles.length) {
-        labelsArray = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
-        document.getElementById("myLabels").value = labelsArray.join(',');
+       //labelsArray2 = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
+       for (let myLoop=0; myLoop <= myImageFiles.length-labelsArray.length; myLoop++ ){
+         labelsArray.push("unknown"); 
+       }    
+     //  document.getElementById("myLabels").value = labelsArray.join(',');
     }
     
     const myMinWidth2 = document.getElementById("myMinWidth").value;
@@ -204,6 +207,8 @@ document.getElementById("myImageFile").addEventListener("change", (event) => {
 
           
 async function trainModel() { 
+       
+    document.getElementById('myTrainButton').style.backgroundColor = 'green'
     document.getElementById('mySpanExport').innerHTML = `Starting to train model`;
      
     minWidth = parseInt(document.getElementById("myMinWidth").value);
