@@ -14,8 +14,8 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v03</h1>
-  <div id="output"></div>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.3.0</h1>
+   <div id="output"></div>   
   
 
    <div id="chart"></div>
@@ -23,22 +23,10 @@
 
     <script>
       
+    //global variables
+      let myInterval = 2000    // duration of data collection
       
-      
-      /*
-      
-      // Function to generate sinusoidal data
-      function myGenerateData(amplitude, frequency) {
-        var data = [];
-        for (var i = 0; i <= 360; i++) {
-          var radians = (i * Math.PI) / 180;
-          var y = amplitude * Math.sin(frequency * radians);
-          data.push(y);
-        }
-        return data;
-      }
 
-     */
      function displayAccelerationData() {
     // Create traces for x, y, and z acceleration data
     const traceX = {
@@ -82,59 +70,6 @@
  
       
       
-      
-      
-     /* 
-      // Function to update the chart with new data
-      function myUpdateChart(data1, data2, data3) {
-        var trace1 = {
-          x: Array.from(Array(361).keys()),
-          y: data1,
-          mode: 'lines',
-          name: 'Line 1',
-          line: { color: 'red' },
-        };
-
-        var trace2 = {
-          x: Array.from(Array(361).keys()),
-          y: data2,
-          mode: 'lines',
-          name: 'Line 2',
-          line: { color: 'blue' },
-        };
-
-        var trace3 = {
-          x: Array.from(Array(361).keys()),
-          y: data3,
-          mode: 'lines',
-          name: 'Line 3',
-          line: { color: 'green' },
-        };
-
-        var layout = {
-          title: 'Sinusoidal Graph',
-          xaxis: {
-            title: 'Angle (degrees)',
-          },
-          yaxis: {
-            title: 'Value',
-          },
-        };
-
-        Plotly.newPlot('chart', [trace1, trace2, trace3], layout);
-      }
-
-   */   
-      
-
-  
-  
-  
-  
-  
-  
-  
-  
 
 
     // TensorFlow model
@@ -169,7 +104,7 @@
       const elapsedTime = performance.now() - startTime;
 
       // Collect accelerometer data for 500 ms
-      if (elapsedTime < 500) {
+      if (elapsedTime < myInterval) {
         accelerometerData.push([x, y, z]);
       } else {
         // Preprocess the collected accelerometer data and use it for inference with TensorFlow.js
@@ -178,8 +113,7 @@
      //   const predictedLabel = prediction.dataSync()[0];
       //  const result = predictedLabel === 0 ? 'punch' : 'get up';
 
-      //  document.getElementById('output').innerHTML = `<p>Prediction: ${result}</p>`;
-        document.getElementById('output').innerHTML = `<p>accelerometerData: ${accelerometerData}</p>`;
+    //    document.getElementById('output').innerHTML = `<p>accelerometerData: ${accelerometerData}</p>`;
 
         displayAccelerationData()
         // Reset variables for the next data collection
