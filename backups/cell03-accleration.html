@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Accelerometer Data and TensorFlow.js Model</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+<body>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.3.2</h1>
+   <div id="output"></div>   
+  
+
+   <div id="chart"></div>
+
+
+    <script>
+      
+    //global variables
+      let myInterval = 2000    // duration of data collection
+      
+
+     function displayAccelerationData() {
+       
+           // Create a new div element for the chart
+    const chartDiv = document.createElement('div');
+    chartDiv.style.width = '200px'; // Set the width of the chart
+    chartDiv.style.height = '200px'; // Set the height of the chart
+    document.body.appendChild(chartDiv); // Append the new div element to the body
+       
+       
+       
+       
+    // Create traces for x, y, and z acceleration data
+    const traceX = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[0]),
+        mode: 'lines',
+        name: 'X',
+        line: { color: 'red' },
+    };
+    
+    const traceY = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[1]),
+        mode: 'lines',
+        name: 'Y',
+        line: { color: 'blue' },
+    };
+    
+    const traceZ = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[2]),
+        mode: 'lines',
+        name: 'Z',
+        line: { color: 'green' },
+    };
+    
+    // Define the layout for the chart
+    const layout = {
+        title: 'accelerometer Data',
+        xaxis: {
+            title: 'Time (ms)',
+        },
+        yaxis: {
+            title: 'Acceleration (m/s^2)',
+        },
+    };
+    
+    // Plot the chart
+   // Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
+      Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);
+}
+ 
+      
+      
+
+
+    // TensorFlow model
+ //   const model = tf.sequential();
+    // Add your model layers here
+    // model.add(...);
+
+    // Check if the device supports the DeviceMotion event
+    if (window.DeviceMotionEvent) {
+      // DeviceMotion event listener
+      window.addEventListener('devicemotion', handleMotionEvent);
+    } else {
+      document.getElementById('output').innerHTML = 'DeviceMotion not supported.';
+    }
+
+    let accelerometerData = [];
+    let startTime = null;
+
+    // Event handler for DeviceMotion event
+    function handleMotionEvent(event) {
+      const acceleration = event.acceleration;
+      const x = acceleration.x;
+      const y = acceleration.y;
+      const z = acceleration.z;
+
+      // Start collecting data if startTime is null
+      if (startTime === null) {
+        startTime = performance.now();
+      }
+
+      // Calculate elapsed time in milliseconds
+      const elapsedTime = performance.now() - startTime;
+
+      // Collect accelerometer data for 500 ms
+      if (elapsedTime < myInterval) {
+        accelerometerData.push([x, y, z]);
+      } else {
+        // Preprocess the collected accelerometer data and use it for inference with TensorFlow.js
+        const input = tf.tensor2d(accelerometerData);
+     //   const prediction = model.predict(input);
+     //   const predictedLabel = prediction.dataSync()[0];
+      //  const result = predictedLabel === 0 ? 'punch' : 'get up';
+
+    //    document.getElementById('output').innerHTML = `<p>accelerometerData: ${accelerometerData}</p>`;
+
+        displayAccelerationData()
+        // Reset variables for the next data collection
+        accelerometerData = [];
+        startTime = null;
+      }
+    }
+  </script>
+</body>
+</html>
