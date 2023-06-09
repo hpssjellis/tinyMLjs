@@ -14,7 +14,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.3.1</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.3.2</h1>
    <div id="output"></div>   
   
 
@@ -75,7 +75,8 @@
     };
     
     // Plot the chart
-    Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
+   // Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
+      Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);
 }
  
       
