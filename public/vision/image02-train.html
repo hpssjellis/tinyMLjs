@@ -216,7 +216,7 @@ document.getElementById("myImageFile").addEventListener("change", (event) => {
 
           
 async function trainModel() { 
-       
+    let myOldBackground = document.getElementById('myTrainButton').style.backgroundColor 
     document.getElementById('myTrainButton').style.backgroundColor = 'green'
     document.getElementById('mySpanExport').innerHTML = `Starting to train model`;
      
@@ -268,7 +268,7 @@ async function trainModel() {
 
         }
     });
-    document.getElementById('myTrainButton').style.backgroundColor = 'gray'   
+    document.getElementById('myTrainButton').style.backgroundColor = myOldBackground  
 }
 
   async function exportModel() {
