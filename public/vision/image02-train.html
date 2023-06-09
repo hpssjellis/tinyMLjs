@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.3</h6>
+<h6> Version 0.26.4</h6>
 <h1>Upload Images</h1>       
 <label for="myLabels">Enter image labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
@@ -83,13 +83,19 @@
     let labelsInput = document.getElementById("myLabels").value;
     let labelsArray = labelsInput.split(",").map((label) => label.trim());
     
-    if (labelsArray.length < myImageFiles.length) {
-       //labelsArray2 = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
+    if (labelsArray.length < myImageFiles.length) {  // if not enough labels
        for (let myLoop=0; myLoop <= myImageFiles.length-labelsArray.length; myLoop++ ){
          labelsArray.push("unknown"); 
        }    
-     //  document.getElementById("myLabels").value = labelsArray.join(',');
     }
+    
+
+   if (labelsArray.length > myImageFiles.length) {  // if too many labels
+       //labelsArray2 = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
+       for (let myLoop=0; myLoop <= labelsArray.length-myImageFiles.length; myLoop++ ){
+         labelsArray.pop(); 
+       }    
+    }         
     
     const myMinWidth2 = document.getElementById("myMinWidth").value;
     const myMinHeight2 = document.getElementById("myMinHeight").value;
@@ -259,7 +265,7 @@ async function trainModel() {
 
         }
     });
-    
+    document.getElementById('myTrainButton').style.backgroundColor = 'gray'   
 }
 
   async function exportModel() {
