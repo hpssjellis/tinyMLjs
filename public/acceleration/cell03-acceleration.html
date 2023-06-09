@@ -14,7 +14,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.3.7</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.4.0</h1>
   <input id="myStartStop" type=button value="Stop" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
         document.getElementById('myStartStop').value = 'Stop'    
@@ -38,16 +38,17 @@
 
      function displayAccelerationData() {
        
-             // Create a new div element for the chart
-      const chartDiv = document.createElement('div');
-      chartDiv.style.width = '800px'; // Set the width of the chart
-      chartDiv.style.height = '300px'; // Set the height of the chart
-      //document.body.appendChild(chartDiv); // Append the new div element to the body
+    if (document.getElementById('myStartStop').value == 'Start'  ){  // only append a chart
+        const chartDiv = document.createElement('div');
+        chartDiv.style.width = '800px'; 
+        chartDiv.style.height = '300px'; 
+       // document.body.appendChild(chartDiv); // Append the new div element to the body
+        document.body.append(chartDiv); // Append the new div element to the body
 
-    //  document.body.prepend(chartDiv); // Append the new div element to the body
-      document.body.before(chartDiv); // Append the new div element to the body
+      //  document.body.prepend(chartDiv); // Append the new div element to the body
+     //   document.body.before(chartDiv); // Append the new div element to the body
+       }
 
-       
        
        
     // Create traces for x, y, and z acceleration data
@@ -142,8 +143,10 @@
       //  const result = predictedLabel === 0 ? 'punch' : 'get up';
 
     //    document.getElementById('output').innerHTML = `<p>accelerometerData: ${accelerometerData}</p>`;
+        
 
-        displayAccelerationData()
+          displayAccelerationData()
+
         // Reset variables for the next data collection
         accelerometerData = [];
         startTime = null;
