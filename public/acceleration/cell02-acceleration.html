@@ -20,9 +20,6 @@
 
    <div id="chart"></div>
 
-    <input type="button" value="Graph 1" onclick="btn1Click()">
-    <input type="button" value="Graph 2" onclick="btn2Click()">
-    <input type="button" value="Graph 3" onclick="btn3Click()">
 
     <script>
       // Function to generate sinusoidal data
@@ -40,24 +37,24 @@
      function displayAccelerationData() {
     // Create traces for x, y, and z acceleration data
     const traceX = {
-        x: Array.from(Array(accelerationData.length).keys()),
-        y: accelerationData.map(data => data[0]),
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[0]),
         mode: 'lines',
         name: 'X',
         line: { color: 'red' },
     };
     
     const traceY = {
-        x: Array.from(Array(accelerationData.length).keys()),
-        y: accelerationData.map(data => data[1]),
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[1]),
         mode: 'lines',
         name: 'Y',
         line: { color: 'blue' },
     };
     
     const traceZ = {
-        x: Array.from(Array(accelerationData.length).keys()),
-        y: accelerationData.map(data => data[2]),
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[2]),
         mode: 'lines',
         name: 'Z',
         line: { color: 'green' },
@@ -65,7 +62,7 @@
     
     // Define the layout for the chart
     const layout = {
-        title: 'Acceleration Data',
+        title: 'accelerometer Data',
         xaxis: {
             title: 'Time (ms)',
         },
@@ -124,29 +121,7 @@
 
    */   
       
-      
-      // Button click event handlers
-      function btn1Click() {
-        var data1 = myGenerateData(6, 1);
-        var data2 = myGenerateData(0.5, 2);
-        var data3 = myGenerateData(0.2, 3);
-        myUpdateChart(data1, data2, data3);
-      }
 
-      function btn2Click() {
-        var data1 = myGenerateData(2, 1);
-        var data2 = myGenerateData(1, 6);
-        var data3 = myGenerateData(0.5, 3);
-        myUpdateChart(data1, data2, data3);
-      }
-
-      function btn3Click() {
-        var data1 = myGenerateData(3.5, 1);
-        var data2 = myGenerateData(0.2, 2);
-        var data3 = myGenerateData(0.6, 3);
-        myUpdateChart(data1, data2, data3);
-      }
-  
   
   
   
