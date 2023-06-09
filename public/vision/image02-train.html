@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.6</h6>
+<h6> Version 0.26.7</h6>
 <h1>Upload Images</h1>       
 <label for="myLabels">Enter image labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
@@ -84,7 +84,7 @@
     let labelsArray = labelsInput.split(",").map((label) => label.trim());
     
     if (labelsArray.length < myImageFiles.length) {  // if not enough labels
-       for (let myLoop=0; myLoop < myImageFiles.length-labelsArray.length; myLoop++ ){
+       for (let myLoop=0; myLoop <= myImageFiles.length-labelsArray.length -1; myLoop++ ){
          labelsArray.push("unknown"); 
        } 
       document.getElementById("myLabels").value = labelsArray.join(',');       
@@ -93,7 +93,7 @@
 
    if (labelsArray.length > myImageFiles.length) {  // if too many labels
        //labelsArray2 = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
-       for (let myLoop=0; myLoop < labelsArray.length-myImageFiles.length; myLoop++ ){
+       for (let myLoop=0; myLoop <= labelsArray.length-myImageFiles.length -1; myLoop++ ){
          labelsArray.pop(); 
          console.log(labelsArray.length)
        }
