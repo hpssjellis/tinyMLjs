@@ -1,4 +1,117 @@
        
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Upload to Tensor</title>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+
+<h6> Version 0.24.1</h6>
+<h1>Upload Images</h1>       
+<label for="myLabels">Enter image labels (comma-separated), then click Choose Files</label>
+<input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
+<label for="myMinWidth">Enter model input width:</label>
+<input type="number" id="myMinWidth" value=96  style="width:50px"> px, 
+
+<label for="myMinHeight">Enter model input height:</label>
+<input type="number" id="myMinHeight" value=96  style="width:50px"> px
+
+<br>
+
+<input type="file" id="myImageFile" accept="image/*" multiple> 
+<br>
+
+<div id="myImagePreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<span id="mySpanSize">...</span><br>
+
+<input type="button" value="Convert Images to Tensor" onclick="loadImagesToTensor()">
+<input type="button" value="Train Model" onclick="trainModel()">
+<label for="myEpochs">Enter model input height:</label>
+<input type="number" id="myEpochs" value=100 style="width:50px"> loops, 
+<input type="number" id="myLearningRate" value="0.0005" style="width:70px"> learning rate, 
+<br>
+    
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="my-model">
+<span id="mySpanExport">...</span>
+<hr>
+
+<label for="modelFile">Select model file:</label>
+<input type="file" id="modelFile" accept=".json">
+<br>
+<label for="weightsFile">Select weights file:</label>
+<input type="file" id="weightsFile" accept=".bin">
+<br>
+<input type="button" value="Upload Model" onclick="uploadModel()">
+<span id="mySpanUpload">...</span>
+
+
+<hr>
+
+
+<input type="button" value="Start Webcam" onclick="startWebcam()"> 
+<select id="mySelectWebcam" size="1">
+    <option value="environment" selected="selected">Rear Camera</option>
+    <option value="user">Front Camera</option>
+</select>
+<input type="button" value="Capture and Classify Image" onclick="classifyImage()">
+<span id="mySpanWebcam">...</span><br>
+<input type="button" value="Save Image" onclick="saveImage()"> <input id="myImageExportFileName" type=text value="my-image.jpg"><br>
+
+    
+<video id="webcam" width="96" height="96" autoplay></video>
+<canvas id="canvas" width="96" height="96"></canvas>
+<br>
+--------------------------------------------------------------------------------------------
+
+<script>
+    let myImageFiles, myTensor;
+    let minWidth = Infinity;
+    let minHeight = Infinity;
+    let labelsArray;
+    let uniqueLabels, labelsTensor;
+    let model;
+    let canvasElement;
+            
+          
+
+function previewImages() {
+    const preview = document.getElementById("myImagePreview");
+    preview.innerHTML = "";
+    const labelsInput = document.getElementById("myLabels").value;
+    const labelsArray = labelsInput.split(",").map((label) => label.trim());
+    
+    const myMinWidth2 = document.getElementById("myMinWidth").value;
+    const myMinHeight2 = document.getElementById("myMinHeight").value;
+    
+    for (let i = 0; i < myImageFiles.length; i++) {
+        const file = myImageFiles[i];
+        const label = labelsArray[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const container = document.createElement("div");
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.alignItems = "center";
+            const img = document.createElement("img");
+            img.src = reader.result;
+            img.style.width = myMinWidth2 + "px";
+            img.style.height = myMinHeight2 + "px";
+           // img.style.height = "auto";
+            container.appendChild(img);
+            const labelElement = document.createElement("span");
+            labelElement.textContent = label;
+            container.appendChild(labelElement);
+            preview.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+          
           
     async function imgToTensor(img) {
         return new Promise((resolve)=>{
