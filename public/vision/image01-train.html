@@ -75,8 +75,47 @@
     let uniqueLabels, labelsTensor;
     let model;
     let canvasElement;
-            
+     
+       
           
+function updateLabels(index) {
+  const newLabel = prompt("Enter new label:");
+  if (newLabel !== null && newLabel.trim() !== "") {
+    labelsArray[index] = newLabel;
+    previewImages();
+  }
+}
+       
+ 
+function previewImages() {
+  const previewContainer = document.getElementById("myImagePreview");
+  previewContainer.innerHTML = "";
+
+  for (let i = 0; i < myImageFiles.length; i++) {
+    const file = myImageFiles[i];
+    const img = document.createElement("img");
+    const label = labelsArray[i];
+    img.src = URL.createObjectURL(file);
+    img.style.width = "100px";
+    img.style.height = "100px";
+    img.style.objectFit = "cover";
+    img.style.margin = "5px";
+    img.style.border = "1px solid black";
+    img.style.cursor = "pointer";
+    img.onclick = () => updateLabels(i);
+    const labelElement = document.createElement("span");
+    labelElement.textContent = `Label: ${label}`;
+    labelElement.style.marginTop = "5px";
+    previewContainer.appendChild(img);
+    previewContainer.appendChild(labelElement);
+  }
+
+  const spanSize = document.getElementById("mySpanSize");
+  spanSize.textContent = `Preview Size: ${myImageFiles.length}`;
+}      
+       
+       
+      /*    
 
 function previewImages() {
     const preview = document.getElementById("myImagePreview");
@@ -111,7 +150,7 @@ function previewImages() {
     }
 }
 
-          
+    */      
           
     async function imgToTensor(img) {
         return new Promise((resolve)=>{
