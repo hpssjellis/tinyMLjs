@@ -147,6 +147,193 @@
                 reader.readAsDataURL(file);
             }
         }
+        
+        
+        
+        
+   
+
+          
+async function trainModel() { 
+    document.getElementById('mySpanExport').innerHTML = `Starting to train model`;
+     
+    minWidth = parseInt(document.getElementById("myMinWidth").value);
+    minHeight = parseInt(document.getElementById("myMinHeight").value);
+    
+    // Define the model architecture
+    model = tf.sequential();
+    model.add(tf.layers.conv2d({
+        inputShape: [minWidth, minHeight, 3],
+        kernelSize: 3,
+        filters: 16,
+        activation: 'relu'
+    }));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.flatten({}));
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}));
+    model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+    // Compile the model
+    const myRate = parseFloat(document.getElementById('myLearningRate').value)
+    model.compile({
+        optimizer: tf.train.adam(myRate),
+        loss: 'categoricalCrossentropy',
+        metrics: ['accuracy']
+    });
+
+    // Prepare the data for training
+    const xs = myTensor;
+    const ys = labelsTensor;
+
+    // Train the model
+    await model.fit(xs, ys, {
+        epochs:  parseInt(document.getElementById('myEpochs').value),  //100,
+        batchSize: 32,
+        callbacks: {
+            onEpochEnd: (epoch, logs) => {
+                console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+                document.getElementById('mySpanExport').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`;
+                //console.log(logs);
+            }
+
+        }
+    });
+    
+}
+
+  async function exportModel() {
+    let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value
+    await model.save(myModelFileName);
+    document.getElementById('mySpanExport').innerHTML = `Model exported as: ${myModelFileName}.json and ${myModelFileName}.bin`;
+}        
+   
+            
+    async function uploadModel() {
+
+
+    // Set the minWidth and minHeight variables
+    minWidth = parseInt(document.getElementById("myMinWidth").value);
+    minHeight = parseInt(document.getElementById("myMinHeight").value);
+
+    const modelFile = document.getElementById("modelFile").files[0];
+    const weightsFile = document.getElementById("weightsFile").files[0];
+    if (!modelFile || !weightsFile) {
+        alert("Please select both a model file and a weights file to upload");
+        return;
+    }
+
+
+
+    model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+    
+
+    // log info about the model
+    console.log('model');
+    console.log(model);
+    console.log('weightsFile');
+    console.log(weightsFile);
+    console.log('modelFile');    
+    console.log(modelFile);   
+    document.getElementById('mySpanUpload').innerHTML = `Model imported from: ${modelFile.name} and ${weightsFile.name}<br><br> `;
+
+    await model.summary(null,null,x => {document.getElementById('mySpanUpload').innerHTML += x + '<br>'});
+}
+     
+    
+ let stream = null;   
+ async function startWebcam() {
+    const videoElement = document.getElementById("webcam");
+     
+    // Stop the previous stream if it exists
+    if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+    }
+
+    const myMinWidth = document.getElementById("myMinWidth").value;
+    videoElement.width = myMinWidth;
+    const myMinHeight = document.getElementById("myMinHeight").value;
+    videoElement.height = myMinHeight;
+     
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: document.getElementById('mySelectWebcam').value }
+        });
+        videoElement.srcObject = stream;
+    } catch (error) {
+        console.error("Error accessing webcam:", error);
+    }
+        
+ }
+
+async function classifyImage() {
+    // Capture an image from the webcam
+    const videoElement = document.getElementById("webcam");
+     canvasElement = document.getElementById("canvas");
+    
+    const myMinWidth = document.getElementById("myMinWidth").value;
+    const myMinHeight = document.getElementById("myMinHeight").value;
+    canvasElement.width = myMinWidth
+    canvasElement.height = myMinHeight
+    
+    const ctx = canvasElement.getContext("2d");
+    ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+    const imageData = ctx.getImageData(0, 0, canvasElement.width, canvasElement.height);
+
+    // Resize the image to match the model input size
+    const inputTensor = tf.tidy(() => {
+        let tensor = tf.browser.fromPixels(imageData);
+        console.log(tensor);
+        tensor = tf.image.resizeBilinear(tensor, [minWidth, minHeight]);
+        tensor = tensor.expandDims(0);
+        return tensor;
+    });
+
+
+   // setup labels from webpage
+    const labelsInput = document.getElementById("myLabels").value;
+    labelsArray = labelsInput.split(",").map((label) => label.trim());
+    uniqueLabels = [...new Set(labelsArray)];
+
+
+    // Make a prediction using the trained model
+    const prediction = model.predict(inputTensor);
+    const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+    const predictedLabel = uniqueLabels[predictedLabelIndex];
+    console.log(`Predicted label: ${predictedLabel}`);
+    console.log(`Predicted label: ${prediction}`);
+    document.getElementById('mySpanWebcam').innerHTML = `Predicted label: ${predictedLabel}<br>`
+    document.getElementById('mySpanWebcam').innerHTML += `Prediction: ${prediction}<br>`
+    
+
+    // Dispose the input tensor to free up memory
+    inputTensor.dispose();
+    
+ 
+}
+
+        
+ function saveImage(){      
+    let myImageFileName = document.getElementById('myImageExportFileName').value
+    const imageURL = canvasElement.toDataURL("image/jpeg");
+    const link = document.createElement("a");
+    link.href = imageURL;
+    link.download = myImageFileName;
+    link.click();
+    document.getElementById('mySpanWebcam').innerHTML = `File saved as ${myImageFileName}<br>`
+ }           
+        
+        
+        
+        
+        
     </script>
 </body>
 </html>
