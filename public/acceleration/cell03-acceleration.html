@@ -14,8 +14,8 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.3.3</h1>
-  <input id="myStartStop" type=button value="Start" onclick="{
+  <h1>Accelerometer Data and TensorFlow.js Model v0.3.4</h1>
+  <input id="myStartStop" type=button value="Stop" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
         document.getElementById('myStartStop').value = 'Stop'    
         document.getElementById('myStartStop').style.backgroundColor = 'red'
@@ -42,7 +42,9 @@
     const chartDiv = document.createElement('div');
     chartDiv.style.width = '1000px'; // Set the width of the chart
     chartDiv.style.height = '300px'; // Set the height of the chart
-    document.body.appendChild(chartDiv); // Append the new div element to the body
+    //document.body.appendChild(chartDiv); // Append the new div element to the body
+       
+    document.body.prependChild(chartDiv); // Append the new div element to the body
        
        
        
