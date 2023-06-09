@@ -15,6 +15,15 @@
 </head>
 <body>
   <h1>Accelerometer Data and TensorFlow.js Model v0.3.2</h1>
+  <input id="myStartStop" type=button value="Start" onclick="{
+   if (document.getElementById('myStartStop').value == 'Start'  ) {
+        document.getElementById('myStartStop').value = 'Stop'    
+        document.getElementById('myStartStop').style.backgroundColor = 'red'
+   } else {
+        document.getElementById('myStartStop').value = 'Start' 
+        document.getElementById('myStartStop').style.backgroundColor = 'green'
+   }                                       
+  }">
    <div id="output"></div>   
   
 
@@ -31,8 +40,8 @@
        
            // Create a new div element for the chart
     const chartDiv = document.createElement('div');
-    chartDiv.style.width = '200px'; // Set the width of the chart
-    chartDiv.style.height = '200px'; // Set the height of the chart
+    chartDiv.style.width = '1000px'; // Set the width of the chart
+    chartDiv.style.height = '300px'; // Set the height of the chart
     document.body.appendChild(chartDiv); // Append the new div element to the body
        
        
@@ -75,8 +84,13 @@
     };
     
     // Plot the chart
-   // Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
-      Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);
+    if (document.getElementById('myStartStop').value == 'Start'  ){  
+        // make new charts
+        Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);
+    }  else {
+        // show one live chart
+        Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
+    }    
 }
  
       
