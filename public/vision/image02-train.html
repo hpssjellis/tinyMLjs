@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h6> Version 0.24.1</h6>
+<h6> Version 0.26.1</h6>
 <h1>Upload Images</h1>       
 <label for="myLabels">Enter image labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
@@ -76,7 +76,53 @@
     let model;
     let canvasElement;
             
-  
+  function previewImages() {
+    const preview = document.getElementById("myImagePreview");
+    preview.innerHTML = "";
+    let labelsInput = document.getElementById("myLabels").value;
+    let labelsArray = labelsInput.split(",").map((label) => label.trim());
+    
+    if (labelsArray.length < myImageFiles.length) {
+        labelsArray = Array(myImageFiles.length).fill("unknown");
+        document.getElementById("myLabels").value = labelsArray.join(',');
+    }
+    
+    const myMinWidth2 = document.getElementById("myMinWidth").value;
+    const myMinHeight2 = document.getElementById("myMinHeight").value;
+    
+    for (let i = 0; i < myImageFiles.length; i++) {
+        const file = myImageFiles[i];
+        let label = labelsArray[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const container = document.createElement("div");
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.alignItems = "center";
+            const img = document.createElement("img");
+            img.src = reader.result;
+            img.style.width = myMinWidth2 + "px";
+            img.style.height = myMinHeight2 + "px";
+           // img.style.height = "auto";
+            container.appendChild(img);
+            const labelElement = document.createElement("span");
+            labelElement.textContent = label;
+            labelElement.contentEditable = true;
+            labelElement.addEventListener('input', (event) => {
+                labelsArray[i] = event.target.textContent;
+                document.getElementById("myLabels").value = labelsArray.join(',');
+            });
+            container.appendChild(labelElement);
+            preview.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+       
+       
+     /*  
+       
  function previewImages() {
     const preview = document.getElementById("myImagePreview");
     preview.innerHTML = "";
@@ -116,7 +162,7 @@
 }
    
     
-  /*  
+  
 
 function previewImages() {
     const preview = document.getElementById("myImagePreview");
