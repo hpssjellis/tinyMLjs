@@ -16,7 +16,7 @@
 <body>
   <h1>Accelerometer Data and TensorFlow.js Model v0.6.2</h1>
   
-    <input id="myStartStop" type=button value="Stop" style="width:400px; height:200px" onclick="{
+    <input id="myStartStop" type=button value="Stop" style="width:300px; height:100px align:center" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
         document.getElementById('myStartStop').value = 'Stop'    
         document.getElementById('myStartStop').style.backgroundColor = 'red'
@@ -80,9 +80,12 @@
         },
         yaxis: {
             title: 'Acceleration (m/s^2)',
+            range: [100, -100],
         },
     };
     
+       
+       
     // Plot the chart
         
        if (myStart){
