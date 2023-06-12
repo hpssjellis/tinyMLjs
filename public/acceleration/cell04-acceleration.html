@@ -31,7 +31,7 @@
    <div id="output"></div>   
   
 
-   <div id="chart"></div>
+   <div id="chart" style="display:inline"></div>
 
    <div id="dynamicCharts"></div>
 
@@ -98,9 +98,12 @@
             document.getElementById('dynamicCharts').prepend(chartDiv);   
          
            Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);  // makes more charts
+         
+           document.getElementById('chart').style.display = none       // hide the other one
        } else {      
-                           
-          Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
+          
+           document.getElementById('chart').style.display = inline    // show it             
+           Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
        }
 }
  
