@@ -43,6 +43,9 @@
     //global variables
       let myInterval = 2000    // duration of data collection
       let myStart = false
+      let myChartTitle = 'Not Yet Set'
+      let myChartCount = 0;
+      let myPageStart = Date.now();
 
      function displayAccelerationData() {
        
@@ -77,7 +80,7 @@
     
     // Define the layout for the chart
     const layout = {
-        title: 'accelerometer Data',
+        title: myChartTitle,
         xaxis: {
             title: 'Time (ms)',
             fixedrange: true,
@@ -94,7 +97,10 @@
     // Plot the chart
         
        if (myStart){
-
+            myChartCount += 1;
+            let myTimeStamp = Date.now();
+            let myElapsed = myTimeStamp - myPageStart
+            myChartTitle = `#{$myChartCount} Since: myElapsed Label: NotSet`
             const chartDiv = document.createElement('div');
             chartDiv.style.width = '700px'; 
             chartDiv.style.height = '400px'; 
@@ -106,7 +112,7 @@
          
           document.getElementById('chart').style.display = 'none'       // hide the other one
        } else {      
-          
+           myChartTitle = 'Live chart. Get ready to start recording'
            document.getElementById('chart').style.display = 'block'    // show it             
            Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
        }
