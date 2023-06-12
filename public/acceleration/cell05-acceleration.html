@@ -100,7 +100,7 @@
             myChartCount += 1;
             let myTimeStamp = Date.now();
             let myElapsed = myTimeStamp - myPageStart
-            myChartTitle = `#{$myChartCount} Since: myElapsed Label: NotSet`
+            myChartTitle = '#' + myChartCount + ', Since: ' + myElapsed + ', Label: NotSet'
             const chartDiv = document.createElement('div');
             chartDiv.style.width = '700px'; 
             chartDiv.style.height = '400px'; 
@@ -132,7 +132,7 @@
       // DeviceMotion event listener
       window.addEventListener('devicemotion', handleMotionEvent);
     } else {
-      document.getElementById('output').innerHTML = 'DeviceMotion not supported.';
+      document.getElementById('output').innerHTML = 'Device Motion not supported.';
     }
 
     let accelerometerData = [];
