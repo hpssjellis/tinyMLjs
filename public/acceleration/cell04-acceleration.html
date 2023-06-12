@@ -28,6 +28,8 @@
    }                                       
   }">
   
+  
+  
    <div id="output"></div>   
   
 
@@ -77,10 +79,12 @@
         title: 'accelerometer Data',
         xaxis: {
             title: 'Time (ms)',
+            fixedrange: true,
         },
         yaxis: {
             title: 'Acceleration (m/s^2)',
             range: [100, -100],
+            fixedrange: true,
         },
     };
     
