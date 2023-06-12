@@ -14,7 +14,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.1</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.2</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:400px;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -86,17 +86,18 @@
     // Plot the chart
         
        if (myStart){
-           Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);  // repeating chart
-       } else {
+
+            const chartDiv = document.createElement('div');
+            chartDiv.style.width = '700px'; 
+            chartDiv.style.height = '400px'; 
+            // document.body.appendChild(chartDiv); 
+            // document.getElementById('dynamicCharts').appendChild(chartDiv);   
+            document.getElementById('dynamicCharts').prepend(chartDiv);   
          
-          const chartDiv = document.createElement('div');
-          chartDiv.style.width = '700px'; 
-          chartDiv.style.height = '400px'; 
-          // document.body.appendChild(chartDiv); 
-          // document.getElementById('dynamicCharts').appendChild(chartDiv);   
-          document.getElementById('dynamicCharts').prepend(chartDiv);   
+           Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);  // makes more charts
+       } else {      
                            
-          Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // new chart below old chart
+          Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
        }
 }
  
