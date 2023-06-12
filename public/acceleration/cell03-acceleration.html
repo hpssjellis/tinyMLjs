@@ -14,7 +14,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.0</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.1</h1>
   
     <input id="myStartStop" type=button value="Stop" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -47,7 +47,8 @@
     const chartDiv = document.createElement('div');
     chartDiv.style.width = '800px'; 
     chartDiv.style.height = '200px'; 
-    document.getElementById('dynamicCharts').appendChild(chartDiv);   
+  //  document.getElementById('dynamicCharts').appendChild(chartDiv);   
+    document.getElementById('dynamicCharts').prepend(chartDiv);   
    // document.body.appendChild(chartDiv); 
    //  }   
        
