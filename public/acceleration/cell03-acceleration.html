@@ -43,14 +43,7 @@
 
      function displayAccelerationData() {
        
-    // if (myStart){      
-    const chartDiv = document.createElement('div');
-    chartDiv.style.width = '700px'; 
-    chartDiv.style.height = '400px'; 
-  //  document.getElementById('dynamicCharts').appendChild(chartDiv);   
-    document.getElementById('dynamicCharts').prepend(chartDiv);   
-   // document.body.appendChild(chartDiv); 
-   //  }   
+
        
        
        
@@ -93,9 +86,17 @@
     // Plot the chart
         
        if (myStart){
-           Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);
+           Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);  // repeating chart
        } else {
-          Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
+         
+          const chartDiv = document.createElement('div');
+          chartDiv.style.width = '700px'; 
+          chartDiv.style.height = '400px'; 
+          // document.body.appendChild(chartDiv); 
+          // document.getElementById('dynamicCharts').appendChild(chartDiv);   
+          document.getElementById('dynamicCharts').prepend(chartDiv);   
+                           
+          Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // new chart below old chart
        }
 }
  
