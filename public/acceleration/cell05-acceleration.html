@@ -29,9 +29,9 @@
    }                                       
   }">
   
+   <input id="myLabel" type=text value="1Label" > 
   
-  
-   <div id="output"></div>   
+   <div id="output"></div> 
   
 
    <div id="chart" style="display:block;"></div>
@@ -100,7 +100,8 @@
             myChartCount += 1;
             let myTimeStamp = Date.now();
             let myElapsed = myTimeStamp - myPageStart
-            myChartTitle = '#' + myChartCount + ', Since: ' + myElapsed + ', Label: NotSet'
+            
+            myChartTitle = '#' + myChartCount + ', Since: ' + myElapsed + ', Label: ' + document.getElementById('myLabel').value
             const chartDiv = document.createElement('div');
             chartDiv.style.width = '700px'; 
             chartDiv.style.height = '400px'; 
