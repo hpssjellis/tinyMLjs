@@ -15,7 +15,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.22</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.23</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -34,13 +34,29 @@
    }                                       
   }"><br>
   
-   <input id="myLabel" type=text value="1Label" > <br>
+   <input id="myLabel" type=text value="1Label" >   <input id="myStartStop" type=button value="Export to CSV" onclick="{   
+     exportToCsv()
+   }">  
+  
+  <input type=file onChange="{
+      handleFileSelect(event)                       
+  }">
+  
+  <br>
   
   <input id="myStartStop" type=button value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="{
     document.getElementById('output').innerHTML = ''
     myBuildModel()
     myTrainModel()                                                                                                                    
-   }">
+   }"><br>
+    
+
+  
+  
+  
+  
+  
+  
   
    <div id="output"></div> 
   
@@ -270,6 +286,47 @@ function myStackTensors(newTensor) {
         startTime = null;
       }
     }
+      
+      
+      
+     function exportToCsv() {
+  // Convert accelerometerData to CSV format
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  accelerometerData.forEach(row => {
+    csvContent += row.join(',') + '\r\n';
+  });
+
+  // Create a link to download the CSV file
+  const link = document.createElement('a');
+  link.setAttribute('href', encodeURI(csvContent));
+  link.setAttribute('download', 'accelerometerData.csv');
+  document.body.appendChild(link);
+
+  // Click the link to download the CSV file
+  link.click();
+}
+
+      
+//document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const csvContent = event.target.result;
+    // Parse the CSV content and update accelerometerData
+    accelerometerData = csvContent.split('\n').map(row => row.split(',').map(cell => parseFloat(cell)));
+  };
+  reader.readAsText(file);
+}
+
+      
+      
+      
+      
+      
+      
+      
   </script>
 </body>
 </html>
