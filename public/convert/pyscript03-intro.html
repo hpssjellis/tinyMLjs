@@ -15,11 +15,11 @@
         <div id="lineplot"> </div> 
 	
         <py-script>  
-           import numpy as np
+            import numpy as np				
+            import matplotlib.pyplot as plt
+			
             print(np.random.randn(10, 4))
 		
-		
-            import matplotlib.pyplot as plt
             fig, ax = plt.subplots()
             
             year_2 = [2016, 2017, 2018, 2019, 2020, 2021]
@@ -27,7 +27,6 @@
             
             plt.plot(year_2, population_2)
             
-    
             pyscript.write('lineplot',fig)
 
             print('Python script in pyscript end here ')
