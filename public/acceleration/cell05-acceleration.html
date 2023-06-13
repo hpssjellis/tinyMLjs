@@ -192,6 +192,10 @@
            myChartTitle = 'Live chart. Get ready to start recording'
            document.getElementById('chart').style.display = 'block'    // show it             
            Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
+         
+           if (model){
+               predict(accelerometerData)
+           }
            accelerometerData = [];
            startTime = null;     
        }
