@@ -45,23 +45,48 @@
 
     <script>
       
-    //global variables
-      let myInterval = 2000    // duration of data collection
-      let myStart = false
-      let myChartTitle = 'Not Yet Set'
-      let myChartCount = 0;
-      let myPageStart = Date.now();
+  //global variables
+    let myInterval = 2000    // duration of data collection
+    let myStart = false
+    let myChartTitle = 'Not Yet Set'
+    let myChartCount = 0;
+    let myPageStart = Date.now();
+
+    let stackedTensors = null;      
+    let accelerometerData = [];
+    let startTime = null;
+
+    const model = tf.sequential();     
       
-      let stackedTensors = null;      
-      let accelerometerData = [];
-      let startTime = null;
+     function myBuildModel(){
 
+        // Add a LSTM layer
+        model.add(tf.layers.lstm({
+          units: 8,
+          inputShape: [null, 3]
+        }));
+
+        // Add a dense layer
+        model.add(tf.layers.dense({
+          units: 1,
+          activation: 'sigmoid'
+        }));
+
+        // Compile the model
+        model.compile({
+          optimizer: 'adam',
+          loss: 'binaryCrossentropy',
+          metrics: ['accuracy']
+        });
+
+
+     
+     
+     } 
+      
+     
      function displayAccelerationData() {
-       
-
-       
-       
-       
+     
     // Create traces for x, y, and z acceleration data
     const traceX = {
         x: Array.from(Array(accelerometerData.length).keys()),
