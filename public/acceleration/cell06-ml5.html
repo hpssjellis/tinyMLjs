@@ -7,28 +7,97 @@
     
   </head>
   <body>
-    <h6> Version 0.0.1</h6>
-    See console<br>
     <script>
       let accelerationData = [];
       let classifier;
+      let isCollectingData = false;
 
       function setup() {
         createCanvas(400, 400);
         classifier = ml5.neuralNetwork();
-        collectData();
+        createButtons();
+      }
+
+      function createButtons() {
+        // Create buttons for training and classifying
+        let trainButton = createButton('Train');
+        trainButton.mousePressed(trainModel);
+
+        let classifyButton = createButton('Classify');
+        classifyButton.mousePressed(classifyData);
+      }
+
+      function trainModel() {
+        if (accelerationData.length === 0) {
+          console.log('No data to train the model.');
+          return;
+        }
+
+        // Prepare training data
+        let trainingData = [];
+        for (let i = 0; i < accelerationData.length; i++) {
+          let inputs = {
+            acceleration: accelerationData[i]
+          };
+          let target = {
+            label: 'label' // Replace 'label' with the desired label for the collected data
+          };
+          trainingData.push({ inputs, target });
+        }
+
+        // Normalize and train the model
+        classifier.normalizeData();
+        classifier.train(trainingData, {}, finishedTraining);
+      }
+
+      function finishedTraining() {
+        console.log('Model training complete!');
+      }
+
+      function classifyData() {
+        if (!isCollectingData) {
+          console.log('Start collecting data for classification.');
+          isCollectingData = true;
+          collectData();
+        } else {
+          console.log('Stop collecting data for classification.');
+          isCollectingData = false;
+        }
       }
 
       function collectData() {
-        if (accelerationData.length < 100) { // Collect 100 data points
+        if (isCollectingData) {
           classifier.data.addDataPoint('acceleration', [accelerationX, accelerationY, accelerationZ]);
           accelerationData.push([accelerationX, accelerationY, accelerationZ]);
           setTimeout(collectData, 100); // Collect data every 100 milliseconds
         } else {
-          classifier.normalizeData();
-          classifier.saveData();
           console.log('Data collection complete!');
+          classify();
         }
+      }
+
+      function classify() {
+        if (accelerationData.length === 0) {
+          console.log('No data to classify.');
+          return;
+        }
+
+        // Prepare input data for classification
+        let inputs = {
+          acceleration: accelerationData
+        };
+
+        // Classify the data
+        classifier.classify(inputs, handleClassification);
+      }
+
+      function handleClassification(error, result) {
+        if (error) {
+          console.error(error);
+          return;
+        }
+
+        console.log('Classification result:', result);
       }
 
       function draw() {
