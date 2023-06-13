@@ -15,7 +15,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.16</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.17</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -133,7 +133,7 @@
        if (myStart){
             myChartCount += 1;
             let myTimeStamp = Date.now();
-            let myElapsed = (myTimeStamp - myPageStart)/1000  //seconds since start
+            let myElapsed = parseInt((myTimeStamp - myPageStart)/1000)  //seconds since start
             
           //  myChartTitle = '#' + myChartCount + ', Since: ' + myElapsed + 'seconds, Label: ' + document.getElementById('myLabel').value
             myChartTitle = `# ${myChartCount}, Since: ${myElapsed} seconds, Label: ${document.getElementById('myLabel').value}`
@@ -151,6 +151,8 @@
            myChartTitle = 'Live chart. Get ready to start recording'
            document.getElementById('chart').style.display = 'block'    // show it             
            Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
+           accelerometerData = [];
+           startTime = null;     
        }
 }
  
