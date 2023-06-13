@@ -15,7 +15,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.19</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.20</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -37,8 +37,9 @@
    <input id="myLabel" type=text value="1Label" > 
   
   <input id="myStartStop" type=button value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="{
+    document.getElementById('output').innerHTML = ''
     myBuildModel()
-                                                                                                                        
+    myTrainModel()                                                                                                                    
    }">
   
    <div id="output"></div> 
@@ -85,10 +86,27 @@
           metrics: ['accuracy']
         });
 
-
-     
-     
      } 
+      
+  async function myTrainModel() {
+  // Convert myLabelArray to a tensor
+  const labels = tf.tensor1d(myLabelArray);
+
+  // Train the model
+  await model.fit(stackedTensors, labels, {
+    epochs: 10,
+    batchSize: 32,
+    validationSplit: 0.2,
+    callbacks: {
+      onEpochEnd: (epoch, logs) => {
+        document.getElementById('output').innerHTML +=`Epoch ${epoch}: loss = ${logs.loss}, val_loss = ${logs.val_loss}` 
+      }
+    }
+  });
+}
+
+      
+      
       
      
      function displayAccelerationData() {
