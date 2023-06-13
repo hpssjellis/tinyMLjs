@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ml5/0.6.0/ml5.js"></script>
+  </head>
+  <body>
+    <script>
+      let accelerationData = [];
+      let classifier;
+
+      function setup() {
+        createCanvas(400, 400);
+        classifier = ml5.neuralNetwork();
+        collectData();
+      }
+
+      function collectData() {
+        if (accelerationData.length < 100) { // Collect 100 data points
+          classifier.data.addDataPoint('acceleration', [accelerationX, accelerationY, accelerationZ]);
+          accelerationData.push([accelerationX, accelerationY, accelerationZ]);
+          setTimeout(collectData, 100); // Collect data every 100 milliseconds
+        } else {
+          classifier.normalizeData();
+          classifier.saveData();
+          console.log('Data collection complete!');
+        }
+      }
+
+      function draw() {
+        background(220);
+        fill(0);
+        textSize(16);
+        text('Data Points: ' + accelerationData.length, 20, 20);
+      }
+
+      // Event handler for device motion
+      function handleMotion(event) {
+        accelerationX = event.accelerationIncludingGravity.x;
+        accelerationY = event.accelerationIncludingGravity.y;
+        accelerationZ = event.accelerationIncludingGravity.z;
+      }
+
+      // Register device motion event listener
+      window.addEventListener('devicemotion', handleMotion);
+    </script>
+  </body>
+</html>
