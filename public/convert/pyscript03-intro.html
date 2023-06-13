@@ -4,9 +4,10 @@
   
         <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
         <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-
+  <!--  - numpy==1.22.3  -->
         <py-env>
             - matplotlib
+            - numpy
         </py-env>
     </head>
     <body>
@@ -14,6 +15,10 @@
         <div id="lineplot"> </div> 
 	
         <py-script>  
+           import numpy as np
+            print(np.random.randn(10, 4))
+		
+		
             import matplotlib.pyplot as plt
             fig, ax = plt.subplots()
             
