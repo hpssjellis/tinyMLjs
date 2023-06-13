@@ -106,6 +106,23 @@
 }
 
       
+      function predict(accelerometerData) {
+        // Preprocess the accelerometer data
+        const input = tf.tensor2d(accelerometerData);
+
+        // Use the trained model to make a prediction
+        const prediction = model.predict(input);
+        
+        
+        // Get the predicted label
+        const predictedLabel = prediction.dataSync()[0];
+
+        // Return the predicted label
+       // return predictedLabel;
+        
+        document.getElementById('output').innerHTML += `<p> prediction: ${JSON.stringify(prediction,null,'<br>')}</p>`;
+        document.getElementById('output').innerHTML += `<p> predictedLabel: ${JSON.stringify(predictedLabel,null,'<br>')}</p>`;
+      }
       
       
      
