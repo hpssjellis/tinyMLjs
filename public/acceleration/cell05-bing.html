@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Accelerometer Mobile Phone Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4"></script>
+  <script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
+</head>
+<body>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.24</h1>
+
+  <input id="myStartStop" type="button" value="Stop" style="width:300px; height:150px; text-align:center;" onclick="toggleStartStop()">
+  <br>
+
+  <label for="myLabel">Label:</label>
+  <input id="myLabel" type="text" value="1Label">
+  <input type="button" value="Export to CSV" onclick="exportToCsv()">
+  
+  <br>
+
+  <label for="fileInput">Import CSV:</label>
+  <input id="fileInput" type="file" accept=".csv" onchange="handleFileSelect(event)">
+  
+  <br>
+
+  <input type="button" value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="trainModel()">
+  <br>
+
+  <div id="output"></div>
+
+  <div id="chart" style="display:block;"></div>
+
+  <div id="dynamicCharts"></div>
+
+  <script>
+    // Global variables
+    let myInterval = 2000; // Duration of data collection
+    let myStart = false;
+    let myChartTitle = 'Not Yet Set';
+    let myChartCount = 0;
+    let myPageStart = Date.now();
+
+    let stackedTensors = null;
+    let accelerometerData = [];
+    let startTime = null;
+
+    const model = tf.sequential();
+    let myLabelArray = [];
+
+    function buildModel() {
+      // Add a LSTM layer
+      model.add(tf.layers.lstm({
+        units: 8,
+        inputShape: [null, 3]
+      }));
+
+      // Add a dense layer
+      model.add(tf.layers.dense({
+        units: 1,
+        activation: 'sigmoid'
+      }));
+
+      // Compile the model
+      model.compile({
+        optimizer: 'adam',
+        loss: 'binaryCrossentropy',
+        metrics: ['accuracy']
+      });
+    }
+
+    async function trainModel() {
+      // Convert myLabelArray to a tensor
+      const labels = tf.tensor1d(myLabelArray);
+
+      // Train the model
+      await model.fit(stackedTensors, labels, {
+        epochs: 10,
+        batchSize: 32,
+        validationSplit: 0.2,
+        callbacks: {
+          onEpochEnd: (epoch, logs) => {
+            document.getElementById('output').innerHTML += `Epoch ${epoch}: loss = ${logs.loss}, val_loss = ${logs.val_loss}<br>`;
+          }
+        }
+      });
+    }
+
+    function predict(accelerometerData) {
+      // Preprocess the accelerometer data
+      const input = tf.tensor2d(accelerometerData);
+
+      // Use the trained model to make a prediction
+      const prediction = model.predict(input);
+
+      // Get the predicted label
+      const predictedLabel = prediction.dataSync()[0];
+
+      document.getElementById('output').innerHTML += `<p>Prediction: ${JSON.stringify(prediction.arraySync())}</p>`;
+      document.getElementById('output').innerHTML += `<p>Predicted label: ${predictedLabel}</p>`;
+    }
+
+    function displayAccelerationData() {
+      // Create traces for x, y, and z acceleration data
+      const traceX = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[0]),
+        mode: 'lines',
+        name: 'X',
+        line: { color: 'red' },
+      };
+
+      const traceY = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[1]),
+        mode: 'lines',
+        name: 'Y',
+        line: { color: 'blue' },
+      };
+
+      const traceZ = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[2]),
+        mode: 'lines',
+        name: 'Z',
+        line: { color: 'green' },
+      };
+
+      // Define the layout for the chart
+      const layout = {
+        title: myChartTitle,
+        xaxis: {
+          title: 'Time (ms)',
+          fixedrange: true,
+        },
+        yaxis: {
+          title: 'Acceleration (m/s^2)',
+          range: [100, -100],
+          fixedrange: true,
+        },
+      };
+
+      // Plot the chart
+      if (myStart) {
+        myChartCount += 1;
+        let myTimeStamp = Date.now();
+        let myElapsed = parseInt((myTimeStamp - myPageStart) / 1000); // Seconds since start
+
+        myChartTitle = `# ${myChartCount}, Since: ${myElapsed} seconds, Label: ${document.getElementById('myLabel').value}`;
+        const chartDiv = document.createElement('div');
+        chartDiv.style.width = '700px';
+        chartDiv.style.height = '400px';
+        document.getElementById('dynamicCharts').prepend(chartDiv);
+
+        Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout); // Makes more charts
+
+        document.getElementById('chart').style.display = 'none'; // Hide the other one
+      } else {
+        myChartTitle = 'Live chart. Get ready to start recording';
+        document.getElementById('chart').style.display = 'block'; // Show it
+        Plotly.newPlot('chart', [traceX, traceY, traceZ], layout); // Stable chart on screen
+
+        if (model) {
+          predict(accelerometerData);
+        }
+        accelerometerData = [];
+        startTime = null;
+      }
+    }
+
+    function toggleStartStop() {
+      if (document.getElementById('myStartStop').value == 'Start') {
+        document.getElementById('myStartStop').value = 'Stop';
+        document.getElementById('myStartStop').style.backgroundColor = 'red';
+        myStart = false;
+      } else {
+        document.getElementById('myStartStop').value = 'Start';
+        document.getElementById('myStartStop').style.backgroundColor = 'green';
+        myStart = true;
+      }
+    }
+
+    function stackTensors(newTensor) {
+      if (stackedTensors === null) {
+        stackedTensors = newTensor;
+      } else {
+        stackedTensors = tf.concat([stackedTensors, newTensor], 0);
+      }
+    }
+
+    // Check if the device supports the DeviceMotion event
+    if (window.DeviceMotionEvent) {
+      // DeviceMotion event listener
+      window.addEventListener('devicemotion', handleMotionEvent);
+    } else {
+      document.getElementById('output').innerHTML = 'Device Motion not supported.';
+    }
+
+    // Event handler for DeviceMotion event
+    function handleMotionEvent(event) {
+      const acceleration = event.acceleration;
+      const x = acceleration.x;
+      const y = acceleration.y;
+      const z = acceleration.z;
+
+      // Start collecting data if startTime is null
+      if (startTime === null) {
+        startTime = performance.now();
+      }
+
+      // Calculate elapsed time in milliseconds
+      const elapsedTime = performance.now() - startTime;
+
+      // Collect accelerometer data for 500 ms
+      if (elapsedTime < myInterval) {
+        accelerometerData.push([x, y, z]);
+      } else {
+        // Preprocess the collected accelerometer data and use it for inference with TensorFlow.js
+        if (myStart) {
+          myLabelArray.push(document.getElementById('myLabel').value); // Store the labels
+          const myInput = tf.tensor2d(accelerometerData);
+          stackTensors(myInput); // Stack the data as a tensor
+
+          document.getElementById('output').innerHTML += `<p>Stacked tensors shape: ${stackedTensors.shape}</p>`;
+          document.getElementById('output').innerHTML += `<p>Label array length: ${myLabelArray.length}</p>`;
+        }
+
+        displayAccelerationData();
+        
+        // Reset variables for the next data collection
+        accelerometerData = [];
+        startTime = null;
+      }
+    }
+
+    function exportToCsv() {
+      // Convert accelerometerData to CSV format
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      accelerometerData.forEach(row => {
+        csvContent += row.join(',') + '\r\n';
+      });
+
+      // Create a link to download the CSV file
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'accelerometerData.csv');
+      document.body.appendChild(link);
+
+      // Click the link to download the CSV file
+      link.click();
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onloadend = function(event) {
+      	const csvContent = event.target.result;
+      	
+      	// Parse the CSV content and update accelerometerData
+      	accelerometerData = csvContent.split('\n')
+      		.filter(row => row.trim().length > 0)
+      		.map(row => row.split(',').map(cell => parseFloat(cell)));
+      	
+      	const myInput = tf.tensor2d(accelerometerData);
+        stackTensors(myInput); // Stack the data as a tensor
+
+        document.getElementById('output').innerHTML += `<p>Stacked tensors shape: ${stackedTensors.shape}</p>`;
+        document.getElementById('output').innerHTML += `<p>Label array length: ${myLabelArray.length}</p>`;
+      };
+      
+      reader.readAsText(file);
+    }
+  </script>
+</body>
+</html>
+
+        
+        
