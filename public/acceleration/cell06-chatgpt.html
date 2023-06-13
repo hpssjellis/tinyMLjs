@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Accelerometer Mobile Phone Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.js"></script>
+  <script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
+</head>
+<body>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.24</h1>
+  
+  <input id="startStopButton" type="button" value="Start" style="width:300px; height:150px; text-align:center;" onclick="toggleStartStop()">
+  <br>
+  
+  <input id="labelInput" type="text" value="1Label">
+  <input type="button" value="Export to CSV" onclick="exportToCsv()">
+  
+  <input type="file" id="fileInput" onChange="handleFileSelect(event)">
+  <br>
+  
+  <input type="button" value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="trainModel()">
+  <br>
+
+  <div id="output"></div>
+
+  <div id="chart" style="display:block;"></div>
+  <div id="dynamicCharts"></div>
+
+  <script>
+    let myInterval = 2000; // duration of data collection
+    let myStart = false;
+    let myChartTitle = 'Not Yet Set';
+    let myChartCount = 0;
+    let myPageStart = Date.now();
+
+    let stackedTensors = null;
+    let accelerometerData = [];
+    let startTime = null;
+    let myLabelArray = [];
+      
+    const model = tf.sequential();
+
+    function buildModel() {
+      // Add a LSTM layer
+      model.add(tf.layers.lstm({
+        units: 8,
+        inputShape: [null, 3]
+      }));
+
+      // Add a dense layer
+      model.add(tf.layers.dense({
+        units: 1,
+        activation: 'sigmoid'
+      }));
+
+      // Compile the model
+      model.compile({
+        optimizer: 'adam',
+        loss: 'binaryCrossentropy',
+        metrics: ['accuracy']
+      });
+    } 
+
+    async function trainModel() {
+      // Convert myLabelArray to a tensor
+      const labels = tf.tensor1d(myLabelArray);
+
+      // Train the model
+      await model.fit(stackedTensors, labels, {
+        epochs: 10,
+        batchSize: 32,
+        validationSplit: 0.2,
+        callbacks: {
+          onEpochEnd: (epoch, logs) => {
+            document.getElementById('output').innerHTML += `Epoch ${epoch}: loss = ${logs.loss}, val_loss = ${logs.val_loss}<br>`;
+          }
+        }
+      });
+    }
+      
+    function predict(accelerometerData) {
+      // Preprocess the accelerometer data
+      const input = tf.tensor2d(accelerometerData);
+
+      // Use the trained model to make a prediction
+      const prediction = model.predict(input);
+
+      // Get the predicted label
+      const predictedLabel = prediction.dataSync()[0];
+
+      document.getElementById('output').innerHTML += `<p>Prediction: ${JSON.stringify(prediction.arraySync(), null, '<br>')}</p>`;
+      document.getElementById('output').innerHTML += `<p>Predicted Label: ${predictedLabel}</p>`;
+    }
+
+    function displayAccelerationData() {
+      // Create traces for x, y, and z acceleration data
+      const traceX = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[0]),
+        mode: 'lines',
+        name: 'X',
+        line: { color: 'red' },
+      };
+
+      const traceY = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[1]),
+        mode: 'lines',
+        name: 'Y',
+        line: { color: 'blue' },
+      };
+
+      const traceZ = {
+        x: Array.from(Array(accelerometerData.length).keys()),
+        y: accelerometerData.map(data => data[2]),
+        mode: 'lines',
+        name: 'Z',
+        line: { color: 'green' },
+      };
+
+      // Define the layout for the chart
+      const layout = {
+        title: myChartTitle,
+        xaxis: {
+          title: 'Time (ms)',
+          fixedrange: true,
+        },
+        yaxis: {
+          title: 'Acceleration (m/s^2)',
+          range: [100, -100],
+          fixedrange: true,
+        },
+      };
+
+      // Plot the chart
+      if (myStart) {
+        myChartCount += 1;
+        let myTimeStamp = Date.now();
+        let myElapsed = parseInt((myTimeStamp - myPageStart) / 1000); // seconds since start
+
+        myChartTitle = `#${myChartCount}, Since: ${myElapsed} seconds, Label: ${document.getElementById('labelInput').value}`;
+        const chartDiv = document.createElement('div');
+        chartDiv.style.width = '700px';
+        chartDiv.style.height = '400px';
+        document.getElementById('dynamicCharts').prepend(chartDiv);
+
+        Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);
+        document.getElementById('chart').style.display = 'none';
+      } else {
+        myChartTitle = 'Live chart. Get ready to start recording';
+        document.getElementById('chart').style.display = 'block';
+        Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);
+
+        if (model) {
+          predict(accelerometerData);
+        }
+
+        accelerometerData = [];
+        startTime = null;
+      }
+    }
+
+    function stackTensors(newTensor) {
+      if (stackedTensors === null) {
+        stackedTensors = newTensor;
+      } else {
+        stackedTensors = tf.concat([stackedTensors, newTensor], 0);
+      }
+    }
+
+    function toggleStartStop() {
+      const startStopButton = document.getElementById('startStopButton');
+
+      if (myStart) {
+        startStopButton.value = 'Start';
+        startStopButton.style.backgroundColor = 'green';
+        myStart = false;
+      } else {
+        startStopButton.value = 'Stop';
+        startStopButton.style.backgroundColor = 'red';
+        myStart = true;
+      }
+    }
+
+    function exportToCsv() {
+      // Convert accelerometerData to CSV format
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      accelerometerData.forEach(row => {
+        csvContent += row.join(',') + '\r\n';
+      });
+
+      // Create a link to download the CSV file
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'accelerometerData.csv');
+      document.body.appendChild(link);
+
+      // Click the link to download the CSV file
+      link.click();
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const csvContent = event.target.result;
+        // Parse the CSV content and update accelerometerData
+        accelerometerData = csvContent
+          .split('\n')
+          .map(row => row.split(',').map(cell => parseFloat(cell)));
+        const myInput = tf.tensor2d(accelerometerData);
+        stackTensors(myInput);
+
+        document.getElementById('output').innerHTML = `<p>stackedTensors: ${JSON.stringify(
+          stackedTensors,
+          null,
+          '<br>'
+        )}</p>`;
+        document.getElementById('output').innerHTML += `<p>labelArray: ${JSON.stringify(
+          myLabelArray,
+          null,
+          '<br>'
+        )}</p>`;
+      };
+      reader.readAsText(file);
+    }
+  </script>
+</body>
+</html>
