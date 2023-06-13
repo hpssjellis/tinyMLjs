@@ -1,1 +1,33 @@
-Sdf
+import sys
+import subprocess
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "TensorFlow"])
+
+# check if TensorFlow is installed
+try:
+    import tensorflow as tf
+except ImportError:
+    install('tensorflow')
+
+# check if TensorFlow-Converter is installed
+try:
+    import tensorflow_converter as tfc
+except ImportError:
+    install('tensorflow_converter')
+
+# load PyScript
+with open('pyscript.py', 'r') as f:
+    code = f.read()
+
+# run PyScript
+exec(code)
+
+# upload TensorFlow.js file
+with open('model.json', 'r') as f:
+    model_json = f.read()
+
+with open('model.weights.bin', 'rb') as f:
+    model_weights = f.read()
+
+tfjs.converters.save_keras_model(tf.keras.models.model_from_json(model_json), 'tfjs_model')
