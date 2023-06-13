@@ -15,7 +15,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.23</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.24</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -316,6 +316,11 @@ function handleFileSelect(event) {
     const csvContent = event.target.result;
     // Parse the CSV content and update accelerometerData
     accelerometerData = csvContent.split('\n').map(row => row.split(',').map(cell => parseFloat(cell)));
+    const myInput = tf.tensor2d(accelerometerData);
+     myStackTensors(myInput);                                      // stack the data as a tensor
+
+    document.getElementById('output').innerHTML = `<p>stackedTensors: ${JSON.stringify(stackedTensors,null,'<br>')}</p>`;
+    document.getElementById('output').innerHTML += `<p>labelArray: ${JSON.stringify(myLabelArray,null,'<br>')}</p>`;
   };
   reader.readAsText(file);
 }
