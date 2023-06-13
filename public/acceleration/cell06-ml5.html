@@ -16,6 +16,7 @@
         createCanvas(400, 400);
         classifier = ml5.neuralNetwork();
         createButtons();
+        document.getElementById('myDiv01').innerHTML = `Setup complete<br>` 
       }
 
       function createButtons() {
@@ -25,6 +26,7 @@
 
         let classifyButton = createButton('Classify');
         classifyButton.mousePressed(classifyData);
+        document.getElementById('myDiv01').innerHTML += `Buttons added<br>` 
       }
 
       function trainModel() {
@@ -57,10 +59,12 @@
       function classifyData() {
         if (!isCollectingData) {
           console.log('Start collecting data for classification.');
+          document.getElementById('myDiv01').innerHTML += `Collecting data<br>` 
           isCollectingData = true;
           collectData();
         } else {
           console.log('Stop collecting data for classification.');
+          document.getElementById('myDiv01').innerHTML += `Finished collecting data<br>` 
           isCollectingData = false;
         }
       }
@@ -72,6 +76,7 @@
           setTimeout(collectData, 100); // Collect data every 100 milliseconds
         } else {
           console.log('Data collection complete!');
+          document.getElementById('myDiv01').innerHTML += `Data Collection DONE!<br>` 
           classify();
         }
       }
@@ -79,6 +84,7 @@
       function classify() {
         if (accelerationData.length === 0) {
           console.log('No data to classify.');
+          document.getElementById('myDiv01').innerHTML += `Nothing to classify<br>` 
           return;
         }
 
@@ -94,10 +100,12 @@
       function handleClassification(error, result) {
         if (error) {
           console.error(error);
+           document.getElementById('myDiv01').innerHTML += `Error ${error}<br>` 
           return;
         }
 
         console.log('Classification result:', result);
+        document.getElementById('myDiv01').innerHTML += `Results ${result}<br>` 
       }
 
       function draw() {
@@ -117,5 +125,6 @@
       // Register device motion event listener
       window.addEventListener('devicemotion', handleMotion);
     </script>
+    <div id="myDiv0"></div>
   </body>
 </html>
