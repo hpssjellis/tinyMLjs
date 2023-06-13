@@ -15,7 +15,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.18</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.19</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -208,10 +208,11 @@ function myStackTensors(newTensor) {
         accelerometerData.push([x, y, z]);
       } else {
         // Preprocess the collected accelerometer data and use it for inference with TensorFlow.js
-        myLabelArray.push(document.getElementById('myLabel').value);
-        const myInput = tf.tensor2d(accelerometerData);
+
         if(myStart){
-           myStackTensors(myInput);
+           myLabelArray.push(document.getElementById('myLabel').value);  // store the labels
+           const myInput = tf.tensor2d(accelerometerData);
+           myStackTensors(myInput);                                      // stack the data as a tensor
         }
         document.getElementById('output').innerHTML = `<p>stackedTensors: ${JSON.stringify(stackedTensors,null,'<br>')}</p>`;
         document.getElementById('output').innerHTML += `<p>labelArray: ${JSON.stringify(myLabelArray,null,'<br>')}</p>`;
