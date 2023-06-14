@@ -6,18 +6,18 @@
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
     
         <py-env>
-            - tensorflowjs
+            - tensorflow
         </py-env>
 </head>
 <body>
     <button onclick="pyscript.run()">Click me!</button>
     <pyscript>
-        import tensorflowjs as tfjs
+        import tensorflow as tf
 
         #  tfjs.converters.save_keras_model(model, 'tfjs_model')
 
-        print("Hello World! TensorflowJS version")
-        print(tfjs.version.tfjs)
+        print("Hello World! Tensorflow version")
+        print(tf.version.tf)
     </pyscript>
 </body>
 </html>
