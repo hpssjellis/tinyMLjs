@@ -74,7 +74,8 @@
 <input type=button value="send 'start' " onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
-    myShowGraph()                                            
+    setTimeout(function() { myShowGraph() }, 3000); // give the data a few seconds to load before drawing chart
+                                                
 }">
 <input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
     
