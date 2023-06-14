@@ -1,0 +1,474 @@
+       
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Upload to Tensor</title>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>  -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.7.0"></script>
+</head>
+<body>
+
+<h6> Version 0.26.9</h6>
+<h1>Upload Images</h1>       
+<label for="myLabels">Enter image labels (comma-separated), then click Choose Files</label>
+<input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
+<label for="myMinWidth">Enter model input width:</label>
+<input type="number" id="myMinWidth" value=96  style="width:50px"> px, 
+
+<label for="myMinHeight">Enter model input height:</label>
+<input type="number" id="myMinHeight" value=96  style="width:50px"> px
+
+<br>
+
+<input type="file" id="myImageFile" accept="image/*" multiple> 
+<br>
+
+<div id="myImagePreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<span id="mySpanSize">...</span><br>
+
+<input type="button" value="Convert Images to Tensor" onclick="loadImagesToTensor()">
+<input type="button" id="myTrainButton" value="Train Model" onclick="trainModel()">
+<label for="myEpochs">Enter model input height:</label>
+<input type="number" id="myEpochs" value=100 style="width:50px"> loops, 
+<input type="number" id="myLearningRate" value="0.0005" style="width:70px"> learning rate, 
+<br>
+    
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="my-model">
+<span id="mySpanExport">...</span>
+<hr>
+
+<label for="modelFile">Select model file:</label>
+<input type="file" id="modelFile" accept=".json">
+<br>
+<label for="weightsFile">Select weights file:</label>
+<input type="file" id="weightsFile" accept=".bin">
+<br>
+<input type="button" value="Upload Model" onclick="uploadModel()">
+<span id="mySpanUpload">...</span>
+
+
+<hr>
+
+
+<input type="button" value="Start Webcam" onclick="startWebcam()"> 
+<select id="mySelectWebcam" size="1">
+    <option value="environment" selected="selected">Rear Camera</option>
+    <option value="user">Front Camera</option>
+</select>
+<input type="button" value="Capture and Classify Image" onclick="classifyImage()">
+<span id="mySpanWebcam">...</span><br>
+<input type="button" value="Save Image" onclick="saveImage()"> <input id="myImageExportFileName" type=text value="my-image.jpg"><br>
+
+    
+<video id="webcam" width="96" height="96" autoplay></video>
+<canvas id="canvas" width="96" height="96"></canvas>
+<br>
+--------------------------------------------------------------------------------------------
+
+<script>
+    let myImageFiles, myTensor;
+    let minWidth = Infinity;
+    let minHeight = Infinity;
+    let labelsArray;
+    let uniqueLabels, labelsTensor;
+    let model;
+    let canvasElement;
+        
+  function previewImages() {
+    const preview = document.getElementById("myImagePreview");
+    preview.innerHTML = "";
+    let labelsInput = document.getElementById("myLabels").value;
+    let labelsArray = labelsInput.split(",").map((label) => label.trim());
+    
+    if (labelsArray.length < myImageFiles.length) {  // if not enough labels
+       for (let myLoop=0; myLoop <= myImageFiles.length-labelsArray.length +1; myLoop++ ){
+         labelsArray.push("unknown"); 
+       } 
+      document.getElementById("myLabels").value = labelsArray.join(',');       
+    }
+    
+
+   if (labelsArray.length > myImageFiles.length) {  // if too many labels
+       //labelsArray2 = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
+       for (let myLoop=0; myLoop <= labelsArray.length-myImageFiles.length ; myLoop++ ){
+         labelsArray.pop(); 
+        // console.log(labelsArray.length)
+       }
+       document.getElementById("myLabels").value = labelsArray.join(',');        
+    }         
+    
+    const myMinWidth2 = document.getElementById("myMinWidth").value;
+    const myMinHeight2 = document.getElementById("myMinHeight").value;
+    
+    for (let i = 0; i < myImageFiles.length; i++) {
+        const file = myImageFiles[i];
+        let label = labelsArray[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const container = document.createElement("div");
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.alignItems = "center";
+            const img = document.createElement("img");
+            img.src = reader.result;
+            img.style.width = myMinWidth2 + "px";
+            img.style.height = myMinHeight2 + "px";
+           // img.style.height = "auto";
+            container.appendChild(img);
+            const labelElement = document.createElement("span");
+            labelElement.textContent = label;
+            labelElement.contentEditable = true;
+            labelElement.addEventListener('input', (event) => {
+                labelsArray[i] = event.target.textContent;
+                document.getElementById("myLabels").value = labelsArray.join(',');
+            });
+            container.appendChild(labelElement);
+            
+            // Create a delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener('click', () => {
+                // Remove the image from the preview
+                preview.removeChild(container);
+                // Remove the image from the array of files
+                myImageFiles.splice(i, 1);
+                // Update the labels
+                labelsArray.splice(i, 1);
+                document.getElementById("myLabels").value = labelsArray.join(',');
+            });
+            
+            container.appendChild(deleteButton);
+            
+            preview.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+  
+  /*
+  function previewImages() {
+    const preview = document.getElementById("myImagePreview");
+    preview.innerHTML = "";
+    let labelsInput = document.getElementById("myLabels").value;
+    let labelsArray = labelsInput.split(",").map((label) => label.trim());
+    
+    if (labelsArray.length < myImageFiles.length) {  // if not enough labels
+       for (let myLoop=0; myLoop <= myImageFiles.length-labelsArray.length +1; myLoop++ ){
+         labelsArray.push("unknown"); 
+       } 
+      document.getElementById("myLabels").value = labelsArray.join(',');       
+    }
+    
+
+   if (labelsArray.length > myImageFiles.length) {  // if too many labels
+       //labelsArray2 = Array(myImageFiles.length).fill("unknown", labelsArray.length, myImageFiles.length);
+       for (let myLoop=0; myLoop <= labelsArray.length-myImageFiles.length ; myLoop++ ){
+         labelsArray.pop(); 
+        // console.log(labelsArray.length)
+       }
+       document.getElementById("myLabels").value = labelsArray.join(',');        
+    }         
+    
+    const myMinWidth2 = document.getElementById("myMinWidth").value;
+    const myMinHeight2 = document.getElementById("myMinHeight").value;
+    
+    for (let i = 0; i < myImageFiles.length; i++) {
+        const file = myImageFiles[i];
+        let label = labelsArray[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const container = document.createElement("div");
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.alignItems = "center";
+            const img = document.createElement("img");
+            img.src = reader.result;
+            img.style.width = myMinWidth2 + "px";
+            img.style.height = myMinHeight2 + "px";
+           // img.style.height = "auto";
+            container.appendChild(img);
+            const labelElement = document.createElement("span");
+            labelElement.textContent = label;
+            labelElement.contentEditable = true;
+            labelElement.addEventListener('input', (event) => {
+                labelsArray[i] = event.target.textContent;
+                document.getElementById("myLabels").value = labelsArray.join(',');
+            });
+            container.appendChild(labelElement);
+            preview.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+       
+ */ 
+    
+    
+          
+    async function imgToTensor(img) {
+        return new Promise((resolve)=>{
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            const imageData = ctx.getImageData(0, 0, img.width, img.height);
+            resolve(tf.browser.fromPixels(imageData));
+        }
+        );
+    };
+            
+          
+async function loadImagesToTensor() {
+    const imagesPromise = Array.from(myImageFiles).map((file) => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => resolve(img);
+        });
+    });
+
+    const imgs = await Promise.all(imagesPromise);
+
+    // Set minWidth to the value of myMinWidth
+    const myMinWidth3 = parseInt(document.getElementById("myMinWidth").value);
+    const myMinHeight3 = parseInt(document.getElementById("myMinHeight").value);
+    minWidth = myMinWidth3;
+    minHeight = myMinHeight3;
+   
+    // Resize all images to match minWidth
+    const resizedImgs = imgs.map((img) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = minWidth;
+        canvas.height = minHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, minWidth, minHeight);
+        return ctx.getImageData(0, 0, minWidth, minHeight);
+    });
+
+    document.getElementById('mySpanSize').innerHTML = `Images Loaded<br>`;
+    // Convert images to tensors
+    const tensors = resizedImgs.map((imgData) => tf.browser.fromPixels(imgData));
+    myTensor = tf.stack(tensors);
+    console.log('Images converted to tensor:', myTensor);
+    document.getElementById('mySpanSize').innerHTML += `Images converted to tensor of type ${myTensor.dtype}, shape: ${myTensor.shape} and size: ${myTensor.size}<br><br>`;
+
+    // Create a one-hot encoded tensor for the labels
+    const labelsInput = document.getElementById("myLabels").value;
+    labelsArray = labelsInput.split(",").map((label) => label.trim());
+    uniqueLabels = [...new Set(labelsArray)];
+    const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+    labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
+    console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
+   // console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
+    document.getElementById('mySpanSize').innerHTML += `Labels converted to one-hot encoded tensor of type: ${labelsTensor.dtype}, shape:  ${labelsTensor.shape}  and size: ${labelsTensor.size}<br><br>`;
+}
+
+    
+          
+          
+document.getElementById("myImageFile").addEventListener("change", (event) => {
+    minWidth = Infinity;
+    minHeight = Infinity;
+    if (!myImageFiles) {
+        myImageFiles = event.target.files;
+    } else {
+        myImageFiles = [...myImageFiles, ...event.target.files];
+    }
+    if (myImageFiles.length > 0) {
+        previewImages();
+    }
+});
+            
+ 
+
+          
+async function trainModel() { 
+    let myOldBackground = document.getElementById('myTrainButton').style.backgroundColor 
+    requestAnimationFrame(() => {   // otherwise this change takes a few seconds
+       document.getElementById('myTrainButton').style.backgroundColor = 'green'      
+       document.getElementById('mySpanExport').innerHTML = `Starting to train model`;
+    });
+     
+    minWidth = parseInt(document.getElementById("myMinWidth").value);
+    minHeight = parseInt(document.getElementById("myMinHeight").value);
+    
+    // Define the model architecture
+    model = tf.sequential();
+    model.add(tf.layers.conv2d({
+        inputShape: [minWidth, minHeight, 3],
+        kernelSize: 3,
+        filters: 16,
+        activation: 'relu'
+    }));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize: 2}));
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.flatten({}));
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}));
+    model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+    // Compile the model
+    const myRate = parseFloat(document.getElementById('myLearningRate').value)
+    model.compile({
+        optimizer: tf.train.adam(myRate),
+        loss: 'categoricalCrossentropy',
+        metrics: ['accuracy']
+    });
+
+    // Prepare the data for training
+    const xs = myTensor;
+    const ys = labelsTensor;
+
+    // Train the model
+    await model.fit(xs, ys, {
+        epochs:  parseInt(document.getElementById('myEpochs').value),  //100,
+        batchSize: 32,
+        callbacks: {
+            onEpochEnd: (epoch, logs) => {
+                console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+                document.getElementById('mySpanExport').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`;
+                //console.log(logs);
+            }
+
+        }
+    });
+    document.getElementById('myTrainButton').style.backgroundColor = myOldBackground  
+}
+
+  async function exportModel() {
+    let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value
+    await model.save(myModelFileName);
+    document.getElementById('mySpanExport').innerHTML = `Model exported as: ${myModelFileName}.json and ${myModelFileName}.bin`;
+}        
+   
+            
+    async function uploadModel() {
+
+
+    // Set the minWidth and minHeight variables
+    minWidth = parseInt(document.getElementById("myMinWidth").value);
+    minHeight = parseInt(document.getElementById("myMinHeight").value);
+
+    const modelFile = document.getElementById("modelFile").files[0];
+    const weightsFile = document.getElementById("weightsFile").files[0];
+    if (!modelFile || !weightsFile) {
+        alert("Please select both a model file and a weights file to upload");
+        return;
+    }
+
+
+
+    model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+    
+
+    // log info about the model
+    console.log('model');
+    console.log(model);
+    console.log('weightsFile');
+    console.log(weightsFile);
+    console.log('modelFile');    
+    console.log(modelFile);   
+    document.getElementById('mySpanUpload').innerHTML = `Model imported from: ${modelFile.name} and ${weightsFile.name}<br><br> `;
+
+    await model.summary(null,null,x => {document.getElementById('mySpanUpload').innerHTML += x + '<br>'});
+}
+     
+    
+ let stream = null;   
+ async function startWebcam() {
+    const videoElement = document.getElementById("webcam");
+     
+    // Stop the previous stream if it exists
+    if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+    }
+
+    const myMinWidth = document.getElementById("myMinWidth").value;
+    videoElement.width = myMinWidth;
+    const myMinHeight = document.getElementById("myMinHeight").value;
+    videoElement.height = myMinHeight;
+     
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: document.getElementById('mySelectWebcam').value }
+        });
+        videoElement.srcObject = stream;
+    } catch (error) {
+        console.error("Error accessing webcam:", error);
+    }
+        
+ }
+
+async function classifyImage() {
+    // Capture an image from the webcam
+    const videoElement = document.getElementById("webcam");
+     canvasElement = document.getElementById("canvas");
+    
+    const myMinWidth = document.getElementById("myMinWidth").value;
+    const myMinHeight = document.getElementById("myMinHeight").value;
+    canvasElement.width = myMinWidth
+    canvasElement.height = myMinHeight
+    
+    const ctx = canvasElement.getContext("2d");
+    ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+    const imageData = ctx.getImageData(0, 0, canvasElement.width, canvasElement.height);
+
+    // Resize the image to match the model input size
+    const inputTensor = tf.tidy(() => {
+        let tensor = tf.browser.fromPixels(imageData);
+        console.log(tensor);
+        tensor = tf.image.resizeBilinear(tensor, [minWidth, minHeight]);
+        tensor = tensor.expandDims(0);
+        return tensor;
+    });
+
+
+   // setup labels from webpage
+    const labelsInput = document.getElementById("myLabels").value;
+    labelsArray = labelsInput.split(",").map((label) => label.trim());
+    uniqueLabels = [...new Set(labelsArray)];
+
+
+    // Make a prediction using the trained model
+    const prediction = model.predict(inputTensor);
+    const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+    const predictedLabel = uniqueLabels[predictedLabelIndex];
+    console.log(`Predicted label: ${predictedLabel}`);
+    console.log(`Predicted label: ${prediction}`);
+    document.getElementById('mySpanWebcam').innerHTML = `Predicted label: ${predictedLabel}<br>`
+    document.getElementById('mySpanWebcam').innerHTML += `Prediction: ${prediction}<br>`
+    
+
+    // Dispose the input tensor to free up memory
+    inputTensor.dispose();
+    
+ 
+}
+
+        
+ function saveImage(){      
+    let myImageFileName = document.getElementById('myImageExportFileName').value
+    const imageURL = canvasElement.toDataURL("image/jpeg");
+    const link = document.createElement("a");
+    link.href = imageURL;
+    link.download = myImageFileName;
+    link.click();
+    document.getElementById('mySpanWebcam').innerHTML = `File saved as ${myImageFileName}<br>`
+ }         
+            
+
+</script>
+</body>
+</html>
