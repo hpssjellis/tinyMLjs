@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>xxd -i</title>
+</head>
+<body>
+    <h1>xxd -i</h1>
+    <input type="file" id="fileInput">
+    <button id="convertButton">Convert</button>
+    <script>
+        function xxd(filename, data) {
+            let output = `unsigned char ${filename}[] = {\n`;
+            for (let i = 0; i < data.length; i++) {
+                output += `  0x${data[i].toString(16).padStart(2, '0')}`;
+                if (i !== data.length - 1) {
+                    output += ',';
+                }
+                if ((i + 1) % 12 === 0) {
+                    output += '\n';
+                }
+            }
+            output += `\n};\nunsigned int ${filename}_len = ${data.length};\n`;
+            return output;
+        }
+
+        async function convertFile(file) {
+            // Read the binary data from the file
+            const data = new Uint8Array(await file.arrayBuffer());
+
+            // Convert the binary data to a C header file
+            const header = xxd(file.name.replace(/\W/g, '_'), data);
+
+            // Download the C header file
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(new Blob([header], {type: 'text/plain'}));
+            downloadLink.download = `${file.name}.h`;
+            downloadLink.click();
+        }
+
+        const fileInput = document.getElementById("fileInput");
+        const convertButton = document.getElementById("convertButton");
+        convertButton.addEventListener("click", () => {
+            const file = fileInput.files[0];
+            if (file) {
+                convertFile(file);
+            } else {
+                alert("Please select a file to convert");
+            }
+        });
+    </script>
+</body>
+</html>
