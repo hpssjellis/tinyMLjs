@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.8</h6>
+<h6> Version 0.25.9</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -282,13 +282,13 @@ for (let i = 0; i < inputArray[0].length; i++) {
   }
     
     */
-for (let i = 0; i < inputArray[0].length; i += 2) {    
+for (let i = 0; i < inputArray[0].length; i += 3) {    
   line1.push(inputArray[0][i]);  
 }
-for (let i = 1; i < inputArray[0].length; i += 2) {    
+for (let i = 1; i < inputArray[0].length; i += 3) {    
   line2.push(inputArray[0][i]);  
 }
-for (let i = 2; i < inputArray[0].length; i += 2) {    
+for (let i = 2; i < inputArray[0].length; i += 3) {    
   line3.push(inputArray[0][i]);  
 }
    
