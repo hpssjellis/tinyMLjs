@@ -19,7 +19,7 @@
 
 <h6> Version 0.25.21</h6>
 <h1>Upload Acceleration Data</h1>
-<label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
+<label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
 
 <br>
@@ -64,7 +64,7 @@
 
 
 <button id="connectButton"  style="color:red; width:200px; ">Connect via Serial Port</button><br>
-<input type=text id="mySendText" value="d1000">
+<input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
 
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
