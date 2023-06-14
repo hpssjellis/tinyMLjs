@@ -44,7 +44,7 @@
   
   <br>
   
-  <input id="myStartStop" type=button value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="{
+  <input id="myTrainModel" type=button value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="{
     document.getElementById('output').innerHTML = ''
     myBuildModel()
     myTrainModel()                                                                                                                    
@@ -136,8 +136,8 @@
         // Return the predicted label
        // return predictedLabel;
         
-        document.getElementById('output').innerHTML += `<p> prediction: ${JSON.stringify(prediction,null,'<br>')}</p>`;
-        document.getElementById('output').innerHTML += `<p> predictedLabel: ${JSON.stringify(predictedLabel,null,'<br>')}</p>`;
+        document.getElementById('output').innerHTML += `<p> prediction: ${JSON.stringify(prediction,null,null)}</p>`;
+        document.getElementById('output').innerHTML += `<p> predictedLabel: ${JSON.stringify(predictedLabel,null,null)}</p>`;
       }
       
       
