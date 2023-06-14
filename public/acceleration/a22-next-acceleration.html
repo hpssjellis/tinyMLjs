@@ -14,6 +14,14 @@
     
 <script src="https://cdn.jsdelivr.net/npm/web-serial-polyfill@1.0.13/dist/serial.js"> </script> 
 <script src="https://unpkg.com/papaparse@5.3.2/papaparse.js"></script>  <!-- For CSV manipulation  -->
+    
+<script>
+  //Global Variables
+  var exports = {};
+  let myMultiCSV = true
+ // let myRaw = false
+//  let myRawInterval
+</script>  
 </head>
 <body>
 
@@ -23,14 +31,7 @@
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
 
 <br>
-    
-    <script>
-  //Global Variables
-  var exports = {};
-  let myMultiCSV = true
- // let myRaw = false
-//  let myRawInterval
-</script>  
+
     
     
 
@@ -73,6 +74,7 @@
 <input type=button value="send 'start' " onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
+    myShowGraph()                                            
 }">
 <input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
     
