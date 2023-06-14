@@ -199,6 +199,21 @@
             chartDiv.style.height = '400px'; 
             // document.body.appendChild(chartDiv); 
             // document.getElementById('dynamicCharts').appendChild(chartDiv);   
+         
+         
+           // Create a delete button
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = 'X';
+            deleteButton.className = 'delete-button';
+            deleteButton.onclick = function() {
+              chartDiv.remove(); // Remove the chart's container div
+            };
+
+            // Append the delete button to the chartDiv
+            chartDiv.appendChild(deleteButton);
+         
+
+         
             document.getElementById('dynamicCharts').prepend(chartDiv);   
          
            Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);  // makes more charts
