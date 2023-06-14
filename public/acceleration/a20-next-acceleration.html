@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceleration Data to Tensor</title>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h6> Version 0.24.1</h6>
+<h1>Upload Acceleration Data</h1>
+<label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
+<input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
+
+<br>
+
+<input type="file" id="myDataFile" accept=".csv" multiple>
+<br>
+
+<div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<span id="mySpanSize">...</span><br>
+
+<input type="button" value="Convert Data to Tensor" onclick="loadDataToTensor()">
+<input type="button" value="Train Model" onclick="trainModel()">
+<label for="myEpochs">Enter number of epochs:</label>
+<input type="number" id="myEpochs" value=100 style="width:50px"> loops,
+<input type="number" id="myLearningRate" value="0.0005" style="width:70px"> learning rate,
+<br>
+
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="my-model">
+<span id="mySpanExport">...</span>
+<hr>
+
+<label for="modelFile">Select model file:</label>
+<input type="file" id="modelFile" accept=".json">
+<br>
+<label for="weightsFile">Select weights file:</label>
+<input type="file" id="weightsFile" accept=".bin">
+<br>
+<input type="button" value="Upload Model" onclick="uploadModel()">
+<span id="mySpanUpload">...</span>
+
+<hr>
+
+<label for="classifyData">Enter data to classify:</label><br>
+  <textarea id="classifyData" rows=10 cols=70></textarea>
+<br>
+<input type="button" value="Show Graph" onclick="myShowGraph()">
+<input type="button" value="Classify Data" onclick="classifyData()">
+<span id="mySpanClassify">...</span><br>
+  
+  
+   
+
+
+  
+
+--------------------------------------------------------------------------------------------
+
+<canvas id="myChart" width="400" height="400"></canvas> 
+
+<script>
+let myDataFiles, myTensor;
+let labelsArray;
+let uniqueLabels, labelsTensor;
+let model;
+
+function previewData() {
+const preview = document.getElementById("myDataPreview");
+preview.innerHTML = "";
+const labelsInput = document.getElementById("myLabels").value;
+const labelsArray = labelsInput.split(",").map((label) => label.trim());
+
+for (let i = 0; i < myDataFiles.length; i++) {
+const file = myDataFiles[i];
+const label = labelsArray[i];
+const reader = new FileReader();
+reader.onloadend = () => {
+const container = document.createElement("div");
+container.style.display = "flex";
+container.style.flexDirection = "column";
+container.style.alignItems = "center";
+const dataElement = document.createElement("span");
+dataElement.textContent = reader.result;
+container.appendChild(dataElement);
+const labelElement = document.createElement("span");
+labelElement.textContent = label;
+container.appendChild(labelElement);
+preview.appendChild(container);
+};
+reader.readAsText(file);
+}
+}
+
+async function loadDataToTensor() {
+const dataPromise = Array.from(myDataFiles).map((file) => {
+return new Promise((resolve) => {
+const reader = new FileReader();
+reader.onloadend = () => resolve(reader.result);
+reader.readAsText(file);
+});
+});
+
+const dataStrings = await Promise.all(dataPromise);
+
+// Convert data strings to arrays
+const dataArrays = dataStrings.map((dataString) => {
+  return dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+});
+
+// Convert data arrays to tensors
+const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
+myTensor = tf.stack(tensors);
+console.log('Data converted to tensor:', myTensor);
+
+// Create a one-hot encoded tensor for the labels
+const labelsInput = document.getElementById("myLabels").value;
+labelsArray = labelsInput.split(",").map((label) => label.trim());
+uniqueLabels = [...new Set(labelsArray)];
+const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
+console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
+}
+
+document.getElementById("myDataFile").addEventListener("change", (event) => {
+if (!myDataFiles) {
+myDataFiles = event.target.files;
+} else {
+myDataFiles = [...myDataFiles, ...event.target.files];
+}
+if (myDataFiles.length > 0) {
+previewData();
+}
+});
+
+async function trainModel() {
+// Define the model architecture
+model = tf.sequential();
+model.add(tf.layers.lstm({
+units: 8,
+inputShape: [99, 3]
+}));
+model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+// Compile the model
+const myRate = parseFloat(document.getElementById('myLearningRate').value)
+model.compile({
+optimizer: tf.train.adam(myRate),
+loss: 'categoricalCrossentropy',
+metrics: ['accuracy']
+});
+
+// Prepare the data for training
+const xs = myTensor;
+const ys = labelsTensor;
+
+// Train the model
+await model.fit(xs, ys, {
+epochs:  parseInt(document.getElementById('myEpochs').value),
+batchSize: 32,
+callbacks: {
+onEpochEnd: (epoch, logs) => {
+console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`
+}
+}
+});
+}
+
+async function exportModel() {
+let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value
+await model.save(myModelFileName);
+}
+
+async function uploadModel() {
+const modelFile = document.getElementById("modelFile").files[0];
+const weightsFile = document.getElementById("weightsFile").files[0];
+if (!modelFile || !weightsFile) {
+alert("Please select both a model file and a weights file to upload");
+return;
+}
+
+model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+}
+
+async function classifyData() {
+// Get data from input field
+
+  
+ const dataString = document.getElementById("classifyData").value;
+
+// Convert data string to array
+let dataArray = dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+console.log(dataArray)
+let myLength = 99 * 3;  // shape of final tensor
+let myOrig = dataArray[0].length
+let myBig = myLength-dataArray.length
+console.log('dataArray[0].length is myOrig')
+console.log(myOrig)
+console.log('myLength')
+console.log(myLength)
+console.log('myBig')
+console.log(myBig)
+console.log('myBig-myOrig')
+console.log(myBig-myOrig)
+  
+document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
+
+if (dataArray.length > myLength) { 
+   dataArray.length = myLength;   // reduce it if it is too big
+} else { 
+     for (let myLoop = myOrig; myLoop <= myBig;  myLoop++ ){
+     // dataArray[myLoop + myOrig] = 0
+      dataArray[0].push(0)     // use push so wwe don't have to worry about the array locations
+     }  
+}
+ document.getElementById('mySpanClassify').innerHTML += `dataArray 2nd: ${dataArray}<br>` 
+
+// Convert data array to tensor
+const inputTensor = tf.tensor([dataArray]); 
+console.log('inputTensor before reshape')  
+console.log(inputTensor)  
+  
+const inputTensor2 = inputTensor.reshape([1,99,3])
+//inputTensor.reshape([99,3]).print();
+  
+console.log('inputTensor2 after reshape')  
+console.log(inputTensor2)  
+  
+// Make a prediction using the trained model
+const prediction = model.predict(inputTensor2);
+const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+const predictedLabel = uniqueLabels[predictedLabelIndex];
+console.log(`Predicted label: ${predictedLabel}`);
+document.getElementById('mySpanClassify').innerHTML = `Predicted label: ${predictedLabel}<br>`
+
+console.log('done predicted Label')
+  
+console.log(predictedLabel)
+// Dispose the input tensor to free up memory
+inputTensor.dispose();
+}
+  
+  
+  
+ function myShowGraph(){ 
+  
+  
+  
+    
+ const dataString2 = document.getElementById("classifyData").value;
+
+// Convert data string to array
+let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+  
+console.log(inputArray)
+// Assuming your input array is named 'inputArray'
+
+// Split the input array into three separate arrays
+var line1 = [];
+var line2 = [];
+var line3 = [];
+
+for (let i = 0; i < inputArray[0].length; i++) {
+  if (i % 3 == 0) {
+    console.log(1)
+    line1.push(inputArray[0][i]);
+  } else if (i % 3 == 1) {
+    
+    console.log(2)
+    line2.push(inputArray[0][i]);
+  } else {
+    
+    console.log(3)
+    line3.push(inputArray[0][i]);
+  }
+}
+
+   
+ console.log(line1)
+ console.log(line2)
+ console.log(line3)
+// Create the line graph data using the separate arrays
+var data = {
+  labels: [], // Add your labels here
+  datasets: [
+    {
+      label: 'Line 1',
+      data: line1,
+      fill: false,
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
+    },
+    {
+      label: 'Line 2',
+      data: line2,
+      fill: false,
+      borderColor: 'rgb(255, 99, 132)',
+      tension: 0.1
+    },
+    {
+      label: 'Line 3',
+      data: line3,
+      fill: false,
+      borderColor: 'rgb(54, 162, 235)',
+      tension: 0.1
+    }
+  ]
+};
+   
+   
+   var options = {
+  responsive: true,
+  scales: {
+    // Your scale configurations
+  },
+  plugins: {
+    zoom: {
+      zoom: {
+        enabled: true,
+        mode: 'xy', // Enable zooming for both axes (x and y)
+      },
+      pan: {
+        enabled: true,
+        mode: 'xy', // Enable panning for both axes (x and y)
+      },
+    },
+  },
+};
+
+// Create the line graph with the data
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: data,
+  options: options,
+});
+
+ }  
+  
+  
+  
+  
+</script>
+</body>
+</html>
