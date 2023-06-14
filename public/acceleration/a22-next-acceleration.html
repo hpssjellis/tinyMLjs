@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.17</h6>
+<h6> Version 0.25.18</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -66,8 +66,8 @@
     
     
     
-<label for="classifyData">Enter data to classify:</label><br>
-  <textarea id="classifyData" rows=10 cols=70></textarea>
+<label for="myArea01">Enter data to classify:</label><br>
+  <textarea id="myArea01" rows=10 cols=70></textarea>
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type="button" value="Classify Data" onclick="classifyData()">
@@ -210,7 +210,7 @@ async function classifyData() {
 // Get data from input field
 
   
- const dataString = document.getElementById("classifyData").value;
+ const dataString = document.getElementById("myArea01").value;
 
 // Convert data string to array
 let dataArray = dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
@@ -270,7 +270,7 @@ inputTensor.dispose();
  function myShowGraph(){ 
   
    
- const dataString2 = document.getElementById("classifyData").value;
+ const dataString2 = document.getElementById("myArea01").value;
 
 // Convert data string to array
 //let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
@@ -377,7 +377,7 @@ document.getElementById('connectButton').addEventListener('click', () => {
 
 async function connectSerial() {
  // const log = document.getElementById('target');
-  const log = document.getElementById('myArea01');
+//  const log = document.getElementById('myArea01');
     
   try {
     port = await navigator.serial.requestPort();
@@ -399,15 +399,15 @@ async function connectSerial() {
        // log.textContent += value + '\n';   // original div
        // log.value += value + '\n';
         if (myMultiCSV){
-            log.value += value;
+            document.getElementById('myArea01').value += value;
         } else {
-           log.value += value;
+           document.getElementById('myArea01').value += value;
            mySaveCSV(document.getElementById('myEnteredFileName').value)
            keepOneLine();
         }
         
         // error checking
-        if (log.value == ''){ console.log('nothing') }
+        if (document.getElementById('myArea01').value == ''){ console.log('nothing') }
       }
       if (done) {
         console.log('[readLoop] DONE', done);
@@ -417,7 +417,7 @@ async function connectSerial() {
     }
   
   } catch (error) {
-    log.value = error;
+    document.getElementById('myArea01').value = error;
   }
   
   // resize textarea if needed.
