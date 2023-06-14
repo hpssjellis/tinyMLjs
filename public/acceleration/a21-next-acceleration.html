@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.10</h6>
+<h6> Version 0.25.11</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -255,16 +255,18 @@ inputTensor.dispose();
  const dataString2 = document.getElementById("classifyData").value;
 
 // Convert data string to array
-let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+//let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
   
-console.log(inputArray)
+//console.log(inputArray)
 // Assuming your input array is named 'inputArray'
 
 // Split the input array into three separate arrays
 var line1 = [];
 var line2 = [];
 var line3 = [];
-const dataArray = inputArray.split(' ');
+const dataArray = dataString2.split(' ');
+console.log('dataArray')
+console.log(dataArray)
 
 for (let i = 0; i < dataArray.length; i++) {
 const accelerationValues = dataArray[i].split(',');
