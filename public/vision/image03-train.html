@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.11</h6>
+<h6> Version 0.26.12</h6>
 <h1>Upload Images</h1>       
 <label for="myLabels">Enter image labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
@@ -132,7 +132,9 @@
             deleteButton.textContent = "x";
             deleteButton.addEventListener('click', () => {
                 // Remove the image from the array of files
-                //myImageFiles.splice(i, 1);
+                  const fileListArr = [...myImageFiles.files]   // so that splice works
+                  fileListArr.splice(i, 1)
+               // myImageFiles.splice(i, 1);
                // myImageFiles.splice(3, 1);
                    console.log(`myImageFiles[0]: ${myImageFiles[0]}`);
                    console.log(`myImageFiles.length: ${myImageFiles.length}`);
