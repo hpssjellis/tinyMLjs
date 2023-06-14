@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.1</h6>
+<h6> Version 0.25.2</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -289,8 +289,9 @@ for (let i = 0; i < inputArray[0].length; i++) {
     // Create traces for x, y, and z acceleration data
     const traceX = {
      //   x: Array.from(Array(accelerometerData.length).keys()),
-        y: inputArray.map(data => data[0]),
-        x: line1,
+        x: Array.from(Array(line1.length).keys()),
+        y: line1,
+
         mode: 'lines',
         name: 'X',
         line: { color: 'red' },
@@ -299,8 +300,8 @@ for (let i = 0; i < inputArray[0].length; i++) {
     const traceY = {
       //  x: Array.from(Array(accelerometerData.length).keys()),
       //  y: accelerometerData.map(data => data[1]),
-              x:line1,
-        y: inputArray.map(data => data[1]),
+        x: Array.from(Array(line2.length).keys()),
+        y: line2, 
         mode: 'lines',
         name: 'Y',
         line: { color: 'blue' },
@@ -309,8 +310,10 @@ for (let i = 0; i < inputArray[0].length; i++) {
     const traceZ = {
       //  x: Array.from(Array(accelerometerData.length).keys()),
      //   y: accelerometerData.map(data => data[2]),
-        x:line1,
-        y: inputArray.map(data => data[2]),
+        
+        x: Array.from(Array(line3.length).keys()),
+      //  y: inputArray.map(data => data[2]),
+        y: line3,
         mode: 'lines',
         name: 'Z',
         line: { color: 'green' },
