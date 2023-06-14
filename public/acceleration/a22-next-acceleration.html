@@ -11,10 +11,13 @@
    -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.js"></script>
   <script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
+    
+<script src="https://cdn.jsdelivr.net/npm/web-serial-polyfill@1.0.13/dist/serial.js"> </script> 
+<script src="https://unpkg.com/papaparse@5.3.2/papaparse.js"></script>  <!-- For CSV manipulation  -->
 </head>
 <body>
 
-<h6> Version 0.25.16</h6>
+<h6> Version 0.25.17</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -49,6 +52,20 @@
 
 <hr>
 
+
+<button id="connectButton"  style="color:red; width:200px; ">Connect via Serial Port</button><br>
+<input type=text id="mySendText" value="d1000">
+<input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
+
+<input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
+<input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
+
+<input type=button value="send 'start' " onclick="{mySendIt('start')}">
+<input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
+    
+    
+    
+    
 <label for="classifyData">Enter data to classify:</label><br>
   <textarea id="classifyData" rows=10 cols=70></textarea>
 <br>
@@ -339,7 +356,176 @@ lineZ.push(z);
 
   
   
+
+
+  /////////////////////////////////////// webSerial code first ///////////////////////////////////////////
   
+  //Global Variables
+  //let writer;  
+  let port
+  
+
+document.getElementById('connectButton').addEventListener('click', () => {
+  if (navigator.serial) {
+    connectSerial();
+  } else {
+    document.getElementById('myDiv01').innerHTML = 'Web Serial API not supported. Switching to Polyfill<br>'
+    myPoly()
+
+  }
+});
+
+async function connectSerial() {
+ // const log = document.getElementById('target');
+  const log = document.getElementById('myArea01');
+    
+  try {
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+    
+    const decoder = new TextDecoderStream(); 
+    port.readable.pipeTo(decoder.writable);
+
+    //setup reader stream 
+    const inputStream = decoder.readable;
+    const reader = inputStream.getReader();
+    
+    //setup writer stream
+   // writer = port.writable.getWriter();
+     
+    while (true) {
+      const { value, done } = await reader.read();
+      if (value) {
+       // log.textContent += value + '\n';   // original div
+       // log.value += value + '\n';
+        if (myMultiCSV){
+            log.value += value;
+        } else {
+           log.value += value;
+           mySaveCSV(document.getElementById('myEnteredFileName').value)
+           keepOneLine();
+        }
+        
+        // error checking
+        if (log.value == ''){ console.log('nothing') }
+      }
+      if (done) {
+        console.log('[readLoop] DONE', done);
+        reader.releaseLock();
+        break;
+      }
+    }
+  
+  } catch (error) {
+    log.value = error;
+  }
+  
+  // resize textarea if needed.
+ // log.scrollTop = log.scrollHeight;   // not working
+  
+
+  
+}  
+  
+async function mySendIt(myData) {  
+  if (navigator.serial) {  
+    const encoder = new TextEncoder();
+    const writer = port.writable.getWriter();
+    await writer.write(encoder.encode(myData));
+    writer.releaseLock();
+    console.log(myData);
+    document.getElementById('mySendText').value = myData
+  } else {
+    mySend(myData)
+  }
+
+} 
+  
+  
+///////////////////////////////////////// end webSerial //////////////////////////////////////////
+///////////////////////////////////////// start polyfill for Android ////////////////////////////
+  
+  
+  
+  //Global Variables for Polyfill
+  var serial = exports.serial;  // is this needed as defined in the npm
+ 
+  let myLooping  // for read setinterval
+  var mySerial;
+  //let receivedText = '';
+  let reader = {};
+  let writer = {};
+  
+   str2ab = function(str) {
+    var buf = new Uint8Array(str.length); // 1 byte for each char
+    for (var i=0, strLen=str.length; i < strLen; i++) {
+      buf[i] = str.charCodeAt(i);
+    }
+    return buf;
+  }
+
+  ab2str = function(buf) {
+    return String.fromCharCode.apply(null, buf);
+  } 
+  
+  
+  
+async function myRead(){  
+    reader.read().then(({value}) => {        
+        let receivedText = ab2str(value);
+        document.getElementById('target').innerHTML = receivedText + '<br>' + document.getElementById('target').innerHTML // latest on top
+      },
+      error => {
+      console.error('error from read', error)
+     document.getElementById('myDiv01').innerHTML = 'error from read' + error
+     }
+    );
+}
+  
+   
+  
+async function myPoly(){  
+    mySerial = await serial.requestPort()
+                                                                     
+    document.getElementById('myDiv01').innerHTML += await '<b>mySerial: </b><br><pre>' +  JSON.stringify(mySerial, null, 3) + '</pre><br><br>'      
+                                            
+                                                                                     
+    console.log('mySerial')                    
+    console.log(mySerial)   
+
+    const myOpen = await mySerial.open({baudRate: 115200});
+    reader = mySerial.readable.getReader();                                              
+    writer = mySerial.writable.getWriter();    
+                                            
+    const results = mySerial.getInfo();
+    
+    //document.getElementById('myDiv01').innerHTML += await 'Results:<b>: </b><br><pre>' +  JSON.stringify(results, null, 3) + '</pre><br><br>'                                          
+    console.log('get info results', results);
+    document.getElementById('myDiv01').innerHTML += 'results.usbVendorId: ' + results.usbVendorId + '<br>'
+    document.getElementById('myDiv01').innerHTML += 'results.usbProductId: ' + results.usbProductId + '<br>'
+ 
+    
+    // start looping the serial read. Is there a better way to do this?
+    clearInterval(myLooping)
+    myLooping = setInterval(myRead, 1000); 
+  }
+        
+ async function mySend(myData2){  
+    writer.ready.then(() => {                                         
+      let inputArrayBuffer = str2ab(myData2);
+      const myWritten = writer.write(inputArrayBuffer);
+      console.log('myWritten')
+      console.log(myWritten)
+        
+      document.getElementById('mySendText').value = myData2      // check if this works                           
+      //document.getElementById('myDiv01').innerHTML = '<br><br><b>myWriter: </b><br><pre>' +  JSON.stringify(myWritten, null, 3) + '</pre><br><br>'  
+                                            
+   
+    })    
+} 
+  
+/////////////////////////////////////// end Polyfill for Android ////////////////////////////////  
 </script>
+
 </body>
 </html>
