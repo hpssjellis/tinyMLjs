@@ -4,14 +4,13 @@
   
         <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
         <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-  <!--  - numpy==1.22.3 
- 
-
- - numpy
--->
+   <!-- - numpy==1.22.3 
+        - numpy==1.24.3
+       - numpy
+   -->
         <py-env>
-            - matplotlib
-            - numpy==1.22.3
+            - matplotlib==3.10
+            - numpy==1.24.3
         </py-env>
     </head>
     <body>
@@ -41,42 +40,3 @@
 
 
 
-
-
-
-
-
-<!--
-
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-        <title>REPL</title>
-
-        <link rel="icon" type="image/png" href="favicon.png" />
-        <link
-            rel="stylesheet"
-            href="https://pyscript.net/latest/pyscript.css"
-        />
-        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-        <link rel="stylesheet" href="./assets/css/examples.css" />
-    </head>
-
-<body>
-  <py-env>
- - numpy==1.22.3
-  </py-env>
-
-  <py-script>
-
-import numpy as np
-
-print(np.random.randn(10, 4))
-
-</py-script>
-</body>
-</html>
--->
