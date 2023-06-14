@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.9</h6>
+<h6> Version 0.25.10</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -264,6 +264,20 @@ console.log(inputArray)
 var line1 = [];
 var line2 = [];
 var line3 = [];
+const dataArray = inputArray.split(' ');
+
+for (let i = 0; i < dataArray.length; i++) {
+const accelerationValues = dataArray[i].split(',');
+
+const x = parseFloat(accelerationValues[0]);
+const y = parseFloat(accelerationValues[1]);
+const z = parseFloat(accelerationValues[2]);
+
+line1.push(x);
+line2.push(y);
+line3.push(z);
+}     
+     
 
      
      /*
@@ -281,7 +295,7 @@ for (let i = 0; i < inputArray[0].length; i++) {
     line3.push(inputArray[0][i+1]);
   }
     
-    */
+
 for (let i = 0; i < inputArray[0].length; i += 3) {    
   line1.push(inputArray[0][i]);  
 }
@@ -291,7 +305,9 @@ for (let i = 1; i < inputArray[0].length; i += 3) {
 for (let i = 2; i < inputArray[0].length; i += 3) {    
   line3.push(inputArray[0][i]);  
 }
-   
+   */
+     
+     
 // console.log(line1)
 // console.log(line2)
 // console.log(line3)
