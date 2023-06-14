@@ -25,7 +25,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.21</h6>
+<h6> Version 0.25.22</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -82,7 +82,7 @@
     
     
 <input type=text id="mySingleLabel" value="1label">  
-<input type=button value="Keep" onclick="{myKeepData}">    
+<input type=button value="Keep" onclick="{previewSensorData()}">    
 <label for="myArea01">Enter data to classify:</label><br>
 <textarea id="myArea01" rows=10 cols=70></textarea>
 <br>
@@ -134,6 +134,44 @@ reader.readAsText(file);
 }
 }
 
+    
+function previewSensorData() {
+const preview = document.getElementById("myDataPreview");
+//preview.innerHTML = "";
+    
+    
+//const labelsInput = document.getElementById("myLabels").value;
+//const labelsArray = labelsInput.split(",").map((label) => label.trim());
+
+    
+//for (let i = 0; i < myDataFiles.length; i++) {
+//const file = myDataFiles[i];
+//const label = labelsArray[i];
+    
+//const label =  document.getElementById("mySingleLabel").value;  
+    // update labels
+document.getElementById("myLabels").value  +=  document.getElementById("mySingleLabel").value
+    
+//const reader = new FileReader();
+//reader.onloadend = () => {
+const container = document.createElement("div");
+container.style.display = "flex";
+container.style.flexDirection = "column";
+container.style.alignItems = "center";
+const dataElement = document.createElement("span");
+dataElement.textContent = document.getElementById("myArea01").value;
+container.appendChild(dataElement);
+const labelElement = document.createElement("span");
+labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
+container.appendChild(labelElement);
+preview.appendChild(container);
+//};
+//reader.readAsText(file);
+//}
+}   
+    
+    
+    
 async function loadDataToTensor() {
 const dataPromise = Array.from(myDataFiles).map((file) => {
 return new Promise((resolve) => {
@@ -371,10 +409,6 @@ lineZ.push(z);
  }  
    
 
- function myKeepData(){   
-    console.log("Keep this data")
-
- }
 
   /////////////////////////////////////// webSerial code first ///////////////////////////////////////////
   
