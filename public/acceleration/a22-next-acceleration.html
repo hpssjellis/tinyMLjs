@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.20</h6>
+<h6> Version 0.25.21</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -70,7 +70,10 @@
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="send 'start' " onclick="{mySendIt('start')}">
+<input type=button value="send 'start' " onclick="{
+    document.getElementById('myArea01').value = ''                                              
+    mySendIt('start')
+}">
 <input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
     
     
