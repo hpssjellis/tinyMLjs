@@ -21,18 +21,23 @@ Note: webSerial using polyfill works on a few Android phones such as some of the
 
 
 <ol><h3> Acceleration x,y,z time-series Demos:</h3>
-  <li><a href="./acceleration/a07-accel-ml02.html">./acceleration/a07-accel-ml02.html</a> CSV acceleration starting point with Nano33BleSense <BR>
+  <li><a href="./acceleration/a07-accel-ml02.html">./acceleration/a07-accel-ml02.html</a>no ML, CSV acceleration starting point with Nano33BleSense or XIAO esp32s3 with ADXL362 <BR>
+  <li><a href="./acceleration/cell04-acceleration.html">/acceleration/cell04-acceleration.html</a>  cell phone proof of data collection no ML
+    
+  <!--  
   <li><a href="./acceleration/cell01-acceleration.html">/acceleration/cell01-acceleration.html</a> Cell Phone Accelerometer getting internal accerlometer working
   <li><a href="./acceleration/cell02-acceleration.html">/acceleration/cell02-acceleration.html</a> cell phone only Good
   <li><a href="./acceleration/cell03-acceleration.html">/acceleration/cell03-acceleration.html</a>  cell phone only Good
-  <li><a href="./acceleration/cell04-acceleration.html">/acceleration/cell04-acceleration.html</a>  cell phone only Good charts looking good
+    
+
+    
   <li><a href="./acceleration/cell05-acceleration.html">/acceleration/cell05-acceleration.html</a>  main chart not working
   <li><a href="./acceleration/cell06-bing.html">/acceleration/cell06-bing</a> bad
   <li><a href="./acceleration/cell06-chatgpt.html">/acceleration/cell06-chatgpt.html</a> bad
   <li><a href="./acceleration/cell06-ml5.html ">/acceleration/cell06-ml5.html </a>  bad
   <li><a href="./acceleration/cell07-acceleration.html">/acceleration/cell07-acceleration.html</a>  cell phone only testing
     
-   
+   -->
     
     
   <li><a href="...">..</a>
@@ -54,9 +59,9 @@ Note: webSerial using polyfill works on a few Android phones such as some of the
 
 
 <ol><h3> Vision Demos: Just here for consistency, much better to use <a href="https://edgeimpulse.com/">edgeImpulse.com</a></h3>
-  <li><a href="./vision/image01-train.html">./vision/image01-train.html</a> Basic image loader trainer, model export
-  <li><a href="./vision/image02-train.html">./vision/image02-train.html</a> Now the labels can be dynamically changed
-  <li><a href="./vision/image03-train.html">./vision/image03-train.html</a> add image delete
+<!--  <li><a href="./vision/image01-train.html">./vision/image01-train.html</a> Basic image loader trainer, model export ML working  -->
+  <li><a href="./vision/image02-train.html">./vision/image02-train.html</a> Proof Vision image loading and ML works with export import. Some label issues with import
+  <li><a href="./vision/image03-train.html">./vision/image03-train.html</a> 
   <li><a href="...">..</a>
   <li><a href="...">..</a>
 </ol><br><br>
@@ -64,9 +69,10 @@ Note: webSerial using polyfill works on a few Android phones such as some of the
 
 
 <ol><h3> Sound Demos: Just here for consistency, much better to use <a href="https://edgeimpulse.com/">edgeImpulse.com</a></h3>
-  <li><a href="...">..</a>
-  <li><a href="...">..</a>
-  <li><a href="...">..</a>
+  <li><a href="./sound/tfjs-sound01.html">./sound/tfjs-sound01.html</a> Proof ML with sound  works
+  <li><a href="./sound/sound-ml03.html">./sound/sound-ml03.html</a> Another version no ML
+  <li><a href="./sound/simple-sound04.html">./sound/simple-sound04.html</a> Loading sound fles onto a webpage proof
+  <li><a href="./sound/simple-sound05.html">./sound/simple-sound05.html</a> 
 </ol><br><br>
 
 
@@ -80,17 +86,19 @@ Note: webSerial using polyfill works on a few Android phones such as some of the
   <li><a href="https://github.com/hpssjellis/my-examples-for-the-arduino-portentaH7/tree/master/m09-Tensoflow/tfjs-convert-to-arduino-header">https://github.com/hpssjellis/my-examples-for-the-arduino-portentaH7/tree/master/m09-Tensoflow/tfjs-convert-to-arduino-header</a>
     My tested Gitpod method, works but you need a Gitpod login.
   <li><a href="...">..</a>
-  <li><a href="...">..</a>
+  <li><a href="xxd-i.html">xxd-i.html</a> Not fully tested linux xxd -i code written in Javascript to convert a tFlite program to a c-header file for microcontrollers
+  <li><a href="./convert/pyscript03-intro.html">./convert/pyscript03-intro.html</a> Proof pyscript can load external libraries: matplotlib and numpy, numpy as a version    
+  <li><a href="./convert/pyscript02-intro.html">./convert/pyscript02-intro.html</a> Trying pyScript to load tensorflow, all these libraries fail
+<!--    
   <li><a href="./convert/pyscript01-intro.html">./convert/pyscript01-intro.html</a> Trying pyScript
-  <li><a href="./convert/pyscript02-intro.html">./convert/pyscript02-intro.html</a> Trying pyScript to load tensorflow  Has errors
-  <li><a href="./convert/pyscript03-intro.html">./convert/pyscript03-intro.html</a> Shows loading matplotlib and numpy, numpy as a version
   <li><a href="./convert/pyscript04-intro.html">./convert/pyscript04-intro.html</a> Trying pyScript not so good
   <li><a href="./convert/pyscript05-intro.html">./convert/pyscript05-intro.html</a> Trying pyScript
   <li><a href="./convert/pyscript06-intro.html">./convert/pyscript06-intro.html</a> Trying pyScript
+-->
 </ol><br><br>
 
 Note: Most of the basic research comes from this collection of tests at <a href="https://hpssjellis.github.io/webMLserial/public/index.html">https://hpssjellis.github.io/webMLserial/public/index.html</a><br>
-
+  <br>  My WebSerial github at <a href="https://github.com/hpssjellis/webMLserial"></a><br>
 <ol><h3> Best links from WebMLserial</h3>
   <li><a href="https://hpssjellis.github.io/my-examples-of-arduino-webUSB-webSerial/public/webserial-and-polyfill.html">webserial-and-polyfill</a> Starting point for webSerial and Android "Google Pixel" polyfill
   <li><a href="https://hpssjellis.github.io/webMLserial/public/a05-resistor/a05-resistor-index.html">a05-resistor-index</a> Advanced CSV file making of Sensor data. Great for EdgeImpulse data uploading
