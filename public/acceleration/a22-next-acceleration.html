@@ -78,9 +78,10 @@
     
     
     
-    
+<input type=text id="mySingleLabel" value="1label">  
+<input type=button value="Keep" onclick="{myKeepData}">    
 <label for="myArea01">Enter data to classify:</label><br>
-  <textarea id="myArea01" rows=10 cols=70></textarea>
+<textarea id="myArea01" rows=10 cols=70></textarea>
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type="button" value="Classify Data" onclick="classifyData()">
@@ -367,9 +368,10 @@ lineZ.push(z);
  }  
    
 
-  
-  
+ function myKeepData(){   
+    console.log("Keep this data")
 
+ }
 
   /////////////////////////////////////// webSerial code first ///////////////////////////////////////////
   
