@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
   <title>Accelerometer Mobile Phone Data </title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.js"></script>
   <!--<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  -->
@@ -16,7 +15,7 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.28</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.24</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
@@ -82,28 +81,28 @@
     const model = tf.sequential();
     let myLabelArray = [];  
       
-   function myBuildModel(){
+     function myBuildModel(){
 
-      // Add a LSTM layer
-      model.add(tf.layers.lstm({
-        units: 8,
-        inputShape: [null, 3]
-      }));
+        // Add a LSTM layer
+        model.add(tf.layers.lstm({
+          units: 8,
+          inputShape: [null, 3]
+        }));
 
-      // Add a dense layer
-      model.add(tf.layers.dense({
-        units: 1,
-        activation: 'sigmoid'
-      }));
+        // Add a dense layer
+        model.add(tf.layers.dense({
+          units: 1,
+          activation: 'sigmoid'
+        }));
 
-      // Compile the model
-      model.compile({
-        optimizer: 'adam',
-        loss: 'binaryCrossentropy',
-        metrics: ['accuracy']
-      });
+        // Compile the model
+        model.compile({
+          optimizer: 'adam',
+          loss: 'binaryCrossentropy',
+          metrics: ['accuracy']
+        });
 
-   } 
+     } 
       
   async function myTrainModel() {
   // Convert myLabelArray to a tensor
@@ -200,21 +199,6 @@
             chartDiv.style.height = '400px'; 
             // document.body.appendChild(chartDiv); 
             // document.getElementById('dynamicCharts').appendChild(chartDiv);   
-         
-         /*
-           // Create a delete button
-            const deleteButton = document.createElement('button');
-            deleteButton.innerHTML = 'X';
-            deleteButton.className = 'delete-button';
-            deleteButton.onclick = function() {
-              chartDiv.remove(); // Remove the chart's container div
-            };
-
-            // Append the delete button to the chartDiv
-            chartDiv.appendChild(deleteButton);
-         */
-
-         
             document.getElementById('dynamicCharts').prepend(chartDiv);   
          
            Plotly.newPlot(chartDiv, [traceX, traceY, traceZ], layout);  // makes more charts
