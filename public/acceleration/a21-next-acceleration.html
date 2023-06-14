@@ -5,12 +5,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Acceleration Data to Tensor</title>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script> 
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+   -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.js"></script>
+  <script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
 </head>
 <body>
 
-<h6> Version 0.24.1</h6>
+<h6> Version 0.25.0</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -60,7 +64,7 @@
 
 --------------------------------------------------------------------------------------------
 
-<canvas id="myChart" width="400" height="400"></canvas> 
+<canvas id="myChart" width="700" height="300"></canvas> 
 
 <script>
 let myDataFiles, myTensor;
@@ -139,18 +143,16 @@ previewData();
 async function trainModel() {
 // Define the model architecture
 model = tf.sequential();
-model.add(tf.layers.lstm({
-units: 8,
-inputShape: [99, 3]
-}));
+model.add(tf.layers.lstm({units: 8, inputShape: [99, 3] }));
+// add more layers here if you want  
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
 
 // Compile the model
 const myRate = parseFloat(document.getElementById('myLearningRate').value)
 model.compile({
-optimizer: tf.train.adam(myRate),
-loss: 'categoricalCrossentropy',
-metrics: ['accuracy']
+      optimizer: tf.train.adam(myRate),
+      loss: 'categoricalCrossentropy',
+      metrics: ['accuracy']
 });
 
 // Prepare the data for training
@@ -182,7 +184,7 @@ if (!modelFile || !weightsFile) {
 alert("Please select both a model file and a weights file to upload");
 return;
 }
-
+// careful here somehow need labels loaded!
 model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
 }
 
@@ -209,6 +211,7 @@ console.log(myBig-myOrig)
   
 document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
 
+// Problem what if incoming data is the wrong length for the ML model!
 if (dataArray.length > myLength) { 
    dataArray.length = myLength;   // reduce it if it is too big
 } else { 
@@ -248,9 +251,7 @@ inputTensor.dispose();
   
  function myShowGraph(){ 
   
-  
-  
-    
+   
  const dataString2 = document.getElementById("classifyData").value;
 
 // Convert data string to array
@@ -283,6 +284,58 @@ for (let i = 0; i < inputArray[0].length; i++) {
  console.log(line1)
  console.log(line2)
  console.log(line3)
+   
+     
+    // Create traces for x, y, and z acceleration data
+    const traceX = {
+     //   x: Array.from(Array(accelerometerData.length).keys()),
+        y: inputArray.map(data => data[0]),
+        x: line1,
+        mode: 'lines',
+        name: 'X',
+        line: { color: 'red' },
+    };
+    
+    const traceY = {
+      //  x: Array.from(Array(accelerometerData.length).keys()),
+      //  y: accelerometerData.map(data => data[1]),
+              x:line1,
+        y: inputArray.map(data => data[1]),
+        mode: 'lines',
+        name: 'Y',
+        line: { color: 'blue' },
+    };
+    
+    const traceZ = {
+      //  x: Array.from(Array(accelerometerData.length).keys()),
+     //   y: accelerometerData.map(data => data[2]),
+        x:line1,
+        y: inputArray.map(data => data[2]),
+        mode: 'lines',
+        name: 'Z',
+        line: { color: 'green' },
+    };
+    
+    // Define the layout for the chart
+    const layout = {
+        title: "Cool Chart",
+        xaxis: {
+            title: 'Time (ms)',
+            fixedrange: true,
+        },
+        yaxis: {
+            title: 'Acceleration (m/s^2)',
+            range: [100, -100],
+            fixedrange: true,
+        },
+    };
+                 
+    Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
+   
+   
+  /* 
+   
+   
 // Create the line graph data using the separate arrays
 var data = {
   labels: [], // Add your labels here
@@ -339,7 +392,9 @@ var myChart = new Chart(ctx, {
   options: options,
 });
 
- }  
+ } 
+  
+  */
   
   
   
