@@ -538,13 +538,18 @@ async function myPoly(){
 </script>
 
 <br><br>
-Aruino Nano33BleSense webSerial code that can be adapted for other microcontrollers    
-<textarea rows=5 cols=70 NOWRAP>
+Aruino Nano33BleSense webSerial code that can be adapted for other microcontrollers 
+<input type=button value=copy onclick="{                                      
+   const element = document.getElementById('myCode')
+  element.select();
+  element.setSelectionRange(0, 99999);
+  document.execCommand('copy');                                                                         
+}">    
+<textarea id="myCode" rows=5 cols=70 NOWRAP>
     
     
     
-    
-    /*
+/*
  * webSerial for testing javascript connection with an arduino
  * 
  * Latest work at   https://github.com/hpssjellis/webMLserial
@@ -608,7 +613,8 @@ void loop() {
         mySendData = false;   // stop sending data when amount reached
      }
      if (mySendData){
-        Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+       // Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+        Serial.print( String(x) + "," + String(y) + "," +  String(z)  );
      } 
    }
 
@@ -643,8 +649,6 @@ void loop() {
   
 }
 
-  
-    
     
     
     
