@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.12</h6>
+<h6> Version 0.25.14</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -262,9 +262,9 @@ inputTensor.dispose();
 // Assuming your input array is named 'inputArray'
 
 // Split the input array into three separate arrays
-var line1 = [];
-var line2 = [];
-var line3 = [];
+var lineX = [];
+var lineY = [];
+var lineZ = [];
 const dataArray = dataString2.split(' ');
 console.log('dataArray')
 console.log(dataArray)
@@ -276,9 +276,9 @@ const x = parseFloat(accelerationValues[0]);
 const y = parseFloat(accelerationValues[1]);
 const z = parseFloat(accelerationValues[2]);
 
-linex.push(x);
-liney.push(y);
-linez.push(z);
+lineX.push(x);
+lineY.push(y);
+lineZ.push(z);
 }     
      
 
@@ -287,8 +287,8 @@ linez.push(z);
     // Create traces for x, y, and z acceleration data
     const traceX = {
      //   x: Array.from(Array(accelerometerData.length).keys()),
-        x: Array.from(Array(linex.length).keys()),
-        y: linex,
+        x: Array.from(Array(lineX.length).keys()),
+        y: lineX,
 
         mode: 'lines',
         name: 'X',
@@ -298,8 +298,8 @@ linez.push(z);
     const traceY = {
       //  x: Array.from(Array(accelerometerData.length).keys()),
       //  y: accelerometerData.map(data => data[1]),
-        x: Array.from(Array(liney.length).keys()),
-        y: liney, 
+        x: Array.from(Array(lineY.length).keys()),
+        y: lineY, 
         mode: 'lines',
         name: 'Y',
         line: { color: 'blue' },
@@ -309,9 +309,9 @@ linez.push(z);
       //  x: Array.from(Array(accelerometerData.length).keys()),
      //   y: accelerometerData.map(data => data[2]),
         
-        x: Array.from(Array(linez.length).keys()),
+        x: Array.from(Array(lineZ.length).keys()),
       //  y: inputArray.map(data => data[2]),
-        y: linez,
+        y: lineZ,
         mode: 'lines',
         name: 'Z',
         line: { color: 'green' },
