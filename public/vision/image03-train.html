@@ -129,12 +129,12 @@
             
             // Create a delete button
             const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete";
+            deleteButton.textContent = "x";
             deleteButton.addEventListener('click', () => {
-                // Remove the image from the preview
-                preview.removeChild(container);
                 // Remove the image from the array of files
                 myImageFiles.splice(i, 1);
+                // Remove the image from the preview
+                preview.removeChild(container);
                 // Update the labels
                 labelsArray.splice(i, 1);
                 document.getElementById("myLabels").value = labelsArray.join(',');
