@@ -171,7 +171,7 @@ preview.appendChild(container);
 }   
     
     
-    
+// not updating for sensor data only working for CSV loaded files    
 async function loadDataToTensor() {
 const dataPromise = Array.from(myDataFiles).map((file) => {
 return new Promise((resolve) => {
