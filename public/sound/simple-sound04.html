@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sound Recorder</title>
+</head>
+<body>
+    <button onclick="uploadSounds()">Upload sounds</button>
+    <button onclick="startRecording()">Start Recording</button>
+    <button onclick="stopRecording()">Stop Recording</button>
+    <button onclick="playRecording()">Play Recording</button><br>
+    <button onclick="saveRecording()">Save Recording</button>
+
+    <input id="mySavefileName" type="text" value="mysound01.wav"><br>
+    <button onclick="cropSounds()">Crop Sounds</button> to
+    <input id="myCropMs" type="text" value="1000"> ms<br>
+
+    <script>
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let mediaRecorder;
+        let chunks = [];
+
+
+
+        function uploadSounds() {
+  // Create an input element
+  var inputElement = document.createElement("input");
+  
+  // Set the input element to accept .wav files
+  inputElement.accept = "audio/wav";
+  
+  // Set the input element to allow multiple files to be selected
+  inputElement.multiple = true;
+  
+  // Set the input element to be hidden
+  inputElement.type = "file";
+  inputElement.style.display = "none";
+  
+  // Add an event listener to the input element
+  inputElement.addEventListener("change", handleFileUpload);
+  
+  // Add the input element to the document
+  document.body.appendChild(inputElement);
+  
+  // Trigger the file selection dialog
+  inputElement.click();
+}
+
+function handleFileUpload(event) {
+  var files = event.target.files;
+  
+  // Process the selected files
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    var audioElement = document.createElement("audio");
+    
+    // Set the audio element source to the uploaded file
+    audioElement.src = URL.createObjectURL(file);
+    
+    // Set audio element attributes
+    audioElement.controls = true;
+    audioElement.autoplay = false;
+    
+    // Append the audio element to the document
+    document.body.appendChild(audioElement);
+    mediaRecorder.addEventListener("dataavailable", function (event) {
+        chunks.push(event.data);
+    });
+    console.log("Processing file:", file.name);
+  }
+}
+
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function (stream) {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+
+                    mediaRecorder.addEventListener("dataavailable", function (event) {
+                        chunks.push(event.data);
+                    });
+                })
+                .catch(function (error) {
+                    console.log("Error accessing microphone:", error);
+                });
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+
+                mediaRecorder.addEventListener("stop", function () {
+                    var blob = new Blob(chunks, { type: "audio/wav" });
+                    var url = URL.createObjectURL(blob);
+                    var audioElement = document.createElement("audio");
+                    audioElement.src = url;
+                    audioElement.controls = true;
+                    document.body.appendChild(audioElement);
+
+                    //chunks = [];
+                });
+            }
+        }
+
+        function playRecording() {
+            if (chunks.length > 0) {
+                var blob = new Blob(chunks, { type: "audio/wav" });
+                var url = URL.createObjectURL(blob);
+
+                var audioElement = new Audio();
+                audioElement.src = url;
+                audioElement.play();
+            }
+        }
+
+
+        function saveRecording() {
+            if (chunks.length > 0) {
+                var blob = new Blob(chunks, { type: "audio/wav" });
+                var url = URL.createObjectURL(blob);
+
+                var anchorElement = document.createElement("a");
+                anchorElement.href = url;
+                anchorElement.download = document.getElementById('mySavefileName').value;
+                anchorElement.click();
+            }
+        }
+
+         // in the following function crop all loaded sounds to the given length  
+        function cropSounds(){
+            // get the length of the sound to crop to
+            var cropMs = document.getElementById('myCropMs').value;
+            // get the number of chunks loaded  
+            var numChunks = chunks.length;
+            // get the length of each chunk
+            var chunkLength = chunks[0].size;
+            // get the total length of the sound
+            var totalLength = numChunks * chunkLength;
+            // get the number of chunks to keep
+            var numChunksToKeep = cropMs / chunkLength;
+            // get the total length of the sound to keep
+            var totalLengthToKeep = numChunksToKeep * chunkLength;
+            // get the number of chunks to remove
+            var numChunksToRemove = numChunks - numChunksToKeep;
+            // get the total length of the sound to remove
+
+            var totalLengthToRemove = totalLength - totalLengthToKeep;
+            // remove the chunks from the end of the sound
+            chunks.splice(-numChunksToRemove, numChunksToRemove);
+            // display the number of chunks removed
+
+            console.log("Removed " + numChunksToRemove + " chunks");
+            // display the total length of the sound removed
+
+            console.log("Removed " + totalLengthToRemove + " bytes");
+
+
+        }
+
+
+    </script>
+</body>
+</html>
+</html>

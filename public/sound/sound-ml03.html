@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Upload to Tensor</title>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+
+<h6> Version 0.24.1</h6>
+<h1>Upload Sounds</h1>       
+<label for="myLabels">Enter sound labels (comma-separated), then click Choose Files</label>
+<input type="text" id="myLabels" size=80 value="1,1,2,2"> <br>
+
+<br>
+
+<input type="file" id="mySoundFile" accept="audio/*" multiple> 
+<br>
+
+<div id="mySoundPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<span id="mySpanSize">...</span><br>
+
+<input type="button" value="Convert Sounds to Tensor" onclick="loadSoundsToTensor()">
+<input type="button" value="Train Model" onclick="trainModel()">
+<label for="myEpochs">Enter model input height:</label>
+<input type="number" id="myEpochs" value=100 style="width:50px"> loops, 
+<input type="number" id="myLearningRate" value="0.0005" style="width:70px"> learning rate, 
+<br>
+    
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="my-model">
+<span id="mySpanExport">...</span>
+<hr>
+
+<label for="modelFile">Select model file:</label>
+<input type="file" id="modelFile" accept=".json">
+<br>
+<label for="weightsFile">Select weights file:</label>
+<input type="file" id="weightsFile" accept=".bin">
+<br>
+<input type="button" value="Upload Model" onclick="uploadModel()">
+<span id="#mySpanUpload">...</span>
+
+
+<hr>
+
+
+<input type="button" value="Start WebAudio" onclick="startWebAudio()"> 
+<input type="button" value="Capture and Classify Sound" onclick="classifySound()">
+<span id="mySpanWebAudio">...</span><br>
+<input type="button" value="Save Sound" onclick="saveSound()"> <input id="mySoundExportFileName" type=text value="my-sound.wav"><br>
+
+    
+<audio id="webaudio"></audio>
+<br>
+--------------------------------------------------------------------------------------------
+
+<script>
+    let mySoundFiles, myTensor;
+    let labelsArray;
+    let uniqueLabels, labelsTensor;
+    let model;
+   
+  
+  
+  navigator.mediaDevices.getUserMedia({audio: true})
+.then(stream => {
+  const mediaRecorder = new MediaRecorder(stream);
+  mediaRecorder.start();
+  const audioChunks = [];
+  mediaRecorder.addEventListener("dataavailable", event => {
+    audioChunks.push(event.data);
+  });
+  mediaRecorder.addEventListener("stop", () => {
+    const audioBlob = new Blob(audioChunks);
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    const audioContext = new AudioContext();
+    const source = audioContext.createBufferSource();
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+      audioContext.decodeAudioData(fileReader.result).then(function(buffer) {
+        const croppedBuffer = buffer.slice(0, Math.floor(buffer.sampleRate * (10 / 1000)));
+        source.buffer = croppedBuffer;
+        source.connect(audioContext.destination);
+        source.start();
+      });
+    };
+    fileReader.readAsArrayBuffer(audioBlob);
+  });
+  setTimeout(() => {
+    mediaRecorder.stop();
+  }, 5000);
+});
+          
+
+function previewSounds() {
+    const preview = document.getElementById("mySoundPreview");
+    preview.innerHTML = "";
+    const labelsInput = document.getElementById("myLabels").value;
+    const labelsArray = labelsInput.split(",").map((label) => label.trim());
+    
+    for (let i = 0; i < mySoundFiles.length; i++) {
+        const file = mySoundFiles[i];
+        const label = labelsArray[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const container = document.createElement("div");
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.alignItems = "center";
+            const audio = document.createElement("audio");
+            audio.src = reader.result;
+            audio.controls = true;
+            container.appendChild(audio);
+            const labelElement = document.createElement("span");
+            labelElement.textContent = label;
+            container.appendChild(labelElement);
+            preview.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+          
+  /*       
+    async function soundToTensor(sound) {
+        // TODO: Implement conversion of sound to tensor
+        // This will depend on the format of the sound data and how you want to represent it as a tensor
+    };
+  
+  */
+  
+  
+  /*
+async function soundToTensor(sound) {
+    // Create an AudioContext and decode the audio data
+    const audioContext = new AudioContext();
+    const audioBuffer = await audioContext.decodeAudioData(await sound.arrayBuffer());
+
+    // Create an AnalyserNode to compute the frequency data
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Float32Array(bufferLength);
+
+    // Create a ScriptProcessorNode to process the audio data
+    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+    scriptProcessor.onaudioprocess = (audioProcessingEvent) => {
+        // Get the input buffer and copy it to the output buffer
+        const inputBuffer = audioProcessingEvent.inputBuffer;
+        const outputBuffer = audioProcessingEvent.outputBuffer;
+        for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+            const inputData = inputBuffer.getChannelData(channel);
+            const outputData = outputBuffer.getChannelData(channel);
+            for (let sample = 0; sample < inputBuffer.length; sample++) {
+                outputData[sample] = inputData[sample];
+            }
+        }
+
+        // Compute the frequency data and add it to the spectrogram
+        analyser.getFloatFrequencyData(dataArray);
+        spectrogram.push(Array.from(dataArray));
+    }
+
+    // Connect the nodes and start processing the audio data
+    const source = audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(analyser);
+    analyser.connect(scriptProcessor);
+    scriptProcessor.connect(audioContext.destination);
+    source.start();
+
+    // Wait for the audio data to finish processing
+    let spectrogram = [];
+    await new Promise((resolve) => {
+        source.onended = resolve;
+        setTimeout(resolve, audioBuffer.duration * 1000 + 1000);
+    });
+
+    // Convert the spectrogram into a tensor
+    return tf.tensor(spectrogram);
+}
+  
+*/  
+  
+  async function soundToTensor(sound) {
+    // Create an AudioContext and decode the audio data
+    const audioContext = new AudioContext();
+    const audioBuffer = await audioContext.decodeAudioData(await sound.arrayBuffer());
+
+    // Create an AudioWorkletNode to process the audio data
+    await audioContext.audioWorklet.addModule('my-worklet-processor.js');
+    const workletNode = new AudioWorkletNode(audioContext, 'my-worklet-processor');
+    workletNode.port.onmessage = (event) => {
+        // Handle messages from the worklet
+        if (event.data.type === 'frequencyData') {
+            // Add the frequency data to the spectrogram
+            spectrogram.push(event.data.frequencyData);
+        }
+    }
+
+    // Connect the nodes and start processing the audio data
+    const source = audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(workletNode);
+    workletNode.connect(audioContext.destination);
+    source.start();
+
+    // Wait for the audio data to finish processing
+    let spectrogram = [];
+    await new Promise((resolve) => {
+        source.onended = resolve;
+        setTimeout(resolve, audioBuffer.duration * 1000 + 1000);
+    });
+
+    // Convert the spectrogram into a tensor
+    return tf.tensor(spectrogram);
+}
+
+  
+  
+            
+    /*      
+async function loadSoundsToTensor() {
+    // TODO: Implement loading of sounds into tensors
+    // This will depend on the format of the sound data and how you want to represent it as a tensor
+}
+*/
+ async function loadSoundsToTensor() {
+    // Convert each sound file into a tensor
+    const tensors = [];
+    for (const file of mySoundFiles) {
+        const tensor = await soundToTensor(file);
+        tensors.push(tensor);
+    }
+
+    // Stack the tensors into a single tensor
+    myTensor = tf.stack(tensors);
+
+    // Create a one-hot encoded tensor for the labels
+    const labelsInput = document.getElementById("myLabels").value;
+    labelsArray = labelsInput.split(",").map((label) => label.trim());
+    uniqueLabels = [...new Set(labelsArray)];
+    const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+    labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
+}
+   
+          
+          
+document.getElementById("mySoundFile").addEventListener("change", (event) => {
+    if (!mySoundFiles) {
+        mySoundFiles = event.target.files;
+    } else {
+        mySoundFiles = [...mySoundFiles, ...event.target.files];
+    }
+    if (mySoundFiles.length > 0) {
+        previewSounds();
+    }
+});
+            
+ 
+
+   /*       
+async function trainModel() { 
+    // TODO: Implement training of model using sound data
+}
+   */
+    
+    async function trainModel() {
+    // Define the model architecture
+    model = tf.sequential();
+    model.add(tf.layers.conv1d({
+        inputShape: [myTensor.shape[1], myTensor.shape[2]],
+        kernelSize: 3,
+        filters: 16,
+        activation: 'relu'
+    }));
+    model.add(tf.layers.maxPooling1d({poolSize: 2}));
+    model.add(tf.layers.conv1d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling1d({poolSize: 2}));
+    model.add(tf.layers.conv1d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling1d({poolSize: 2}));
+    model.add(tf.layers.conv1d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.maxPooling1d({poolSize: 2}));
+    model.add(tf.layers.conv1d({kernelSize: 3, filters: 32, activation: 'relu'}));
+    model.add(tf.layers.flatten({}));
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}));
+    model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+    // Compile the model
+    const myRate = parseFloat(document.getElementById('myLearningRate').value)
+    model.compile({
+        optimizer: tf.train.adam(myRate),
+        loss: 'categoricalCrossentropy',
+        metrics: ['accuracy']
+    });
+
+    // Prepare the data for training
+    const xs = myTensor;
+    const ys = labelsTensor;
+
+    // Train the model
+    await model.fit(xs, ys, {
+        epochs: parseInt(document.getElementById('myEpochs').value),
+        batchSize: 32,
+        callbacks: {
+            onEpochEnd: (epoch, logs) => {
+                console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+                document.getElementById('mySpanExport').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`;
+            }
+        }
+    });
+}
+
+     /*       
+async function uploadModel() {
+    // TODO: Implement uploading of model
+}
+   */  
+    
+    async function uploadModel() {
+    const modelFile = document.getElementById("modelFile").files[0];
+    const weightsFile = document.getElementById("weightsFile").files[0];
+    if (!modelFile || !weightsFile) {
+        alert("Please select both a model file and a weights file to upload");
+        return;
+    }
+
+    model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+}
+
+    
+    
+  /*  
+async function startWebAudio() {
+    // TODO: Implement starting of WebAudio to capture sound
+}
+    
+    */
+    
+let audioContext;
+let audioSource;
+let audioProcessor;
+let audioData = [];
+
+async function startWebAudio() {
+    // Create an AudioContext and a MediaStreamAudioSourceNode   
+  // Create an AudioContext
+    const audioContext = new AudioContext();
+
+    // Load the custom AudioWorkletProcessor
+    await audioContext.audioWorklet.addModule('my-worklet-processor.js');  // cool loads the module
+  
+  
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    audioSource = audioContext.createMediaStreamSource(stream);
+
+    // Create a ScriptProcessorNode to process the audio data
+    audioProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+    audioProcessor.onaudioprocess = (audioProcessingEvent) => {
+        // Get the input buffer and add it to the audio data array
+        const inputBuffer = audioProcessingEvent.inputBuffer;
+        const inputData = inputBuffer.getChannelData(0);
+        audioData.push(...inputData);
+    }
+
+    // Connect the nodes and start processing the audio data
+    audioSource.connect(audioProcessor);
+    audioProcessor.connect(audioContext.destination);
+}
+
+    
+    
+/*
+async function classifySound() {
+    // TODO: Implement capturing and classification of sound using trained model
+}
+    */
+    
+    
+async function classifySound() {
+    // Stop the audio processor and disconnect the nodes
+    audioProcessor.disconnect();
+    audioSource.disconnect();
+
+    // Convert the captured audio data into a tensor
+    const audioTensor = tf.tensor(audioData);
+
+    // Make a prediction using the trained model
+    const prediction = model.predict(audioTensor);
+    const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+    const predictedLabel = uniqueLabels[predictedLabelIndex];
+    console.log(`Predicted label: ${predictedLabel}`);
+
+    // Dispose the audio tensor to free up memory
+    audioTensor.dispose();
+}
+
+       /* 
+function saveSound(){      
+    // TODO: Implement saving of captured sound
+}         
+     */   
+    
+    function saveSound() {
+    // Convert the captured audio data into a WAV file
+    const wavEncoder = new WavAudioEncoder(audioContext.sampleRate, 1);
+    wavEncoder.encode([audioData]);
+    const wavBlob = wavEncoder.finish();
+
+    // Create a download link for the WAV file
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(wavBlob);
+    downloadLink.download = "captured-sound.wav";
+    downloadLink.click();
+}
+
+
+</script>
+</body>
+</html>
+                            
+                            
+
+
+
+
+                            
+                            
