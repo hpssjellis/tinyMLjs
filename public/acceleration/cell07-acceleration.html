@@ -15,24 +15,22 @@
   
 </head>
 <body>
-  <h1>Accelerometer Data and TensorFlow.js Model v0.6.30</h1>
+  <h1>Accelerometer Data and TensorFlow.js Model v0.6.31</h1>
   
     <input id="myStartStop" type=button value="Stop" style="width:300px; height:150px; text-align:center;" onclick="{
    if (document.getElementById('myStartStop').value == 'Start'  ) {
         document.getElementById('myStartStop').value = 'Stop'    
         document.getElementById('myStartStop').style.backgroundColor = 'red'
         myStart = false
-       // accelerometerData = [];
-       // startTime = null;
-                                                                                                                    
    } else {
         document.getElementById('myStartStop').value = 'Start' 
         document.getElementById('myStartStop').style.backgroundColor = 'green'
-        myStart = true   
-      //  accelerometerData = [];
-     //   startTime = null;                                                                                                                                                                                                                              
+        myStart = true                                                      
    }                                       
-  }"><br>
+  }">
+  
+  
+  <br>
   
    <input id="myLabel" type=text value="1Label" >   <input id="myStartStop" type=button value="Export to CSV" onclick="{   
      exportToCsv()
@@ -44,22 +42,18 @@
   
   <br>
   
-  <input id="myTrainButton" type=button value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="{
-    document.getElementById('myTrainButton').style.backgroundColor = 'green'
+  <input id="myStartStop" type=button value="Train Model" style="width:100px; height:100px; text-align:center;" onclick="{
     document.getElementById('output').innerHTML = ''
     myBuildModel()
     myTrainModel()                                                                                                                    
    }"><br>
     
-
   
   
   
   
   
-  
-  
-   <div id="output"></div> 
+   <div id="output"></div>   
   
 
    <div id="chart" style="display:block;"></div>
@@ -68,10 +62,16 @@
 
     <script>
       
-  //global variables
-    let myInterval = 2000    // duration of data collection
-    let myStart = false
-    let myChartTitle = 'Not Yet Set'
+      
+      
+      
+      
+      
+      
+    //global variables
+      let myInterval = 2000    // duration of data collection
+      let myStart = false
+        let myChartTitle = 'Not Yet Set'
     let myChartCount = 0;
     let myPageStart = Date.now();
 
@@ -139,13 +139,17 @@
         
         document.getElementById('output').innerHTML += `<p> prediction: ${JSON.stringify(prediction,null,'<br>')}</p>`;
         document.getElementById('output').innerHTML += `<p> predictedLabel: ${JSON.stringify(predictedLabel,null,'<br>')}</p>`;
-        document.getElementById('myTrainButton').style.backgroundColor = 'red'
       }
       
       
-     
+      
+
      function displayAccelerationData() {
-     
+       
+
+       
+       
+       
     // Create traces for x, y, and z acceleration data
     const traceX = {
         x: Array.from(Array(accelerometerData.length).keys()),
@@ -173,7 +177,7 @@
     
     // Define the layout for the chart
     const layout = {
-        title: myChartTitle,
+        title: 'accelerometer Data',
         xaxis: {
             title: 'Time (ms)',
             fixedrange: true,
@@ -190,12 +194,7 @@
     // Plot the chart
         
        if (myStart){
-            myChartCount += 1;
-            let myTimeStamp = Date.now();
-            let myElapsed = parseInt((myTimeStamp - myPageStart)/1000)  //seconds since start
-            
-          //  myChartTitle = '#' + myChartCount + ', Since: ' + myElapsed + 'seconds, Label: ' + document.getElementById('myLabel').value
-            myChartTitle = `# ${myChartCount}, Since: ${myElapsed} seconds, Label: ${document.getElementById('myLabel').value}`
+
             const chartDiv = document.createElement('div');
             chartDiv.style.width = '700px'; 
             chartDiv.style.height = '400px'; 
@@ -207,28 +206,14 @@
          
           document.getElementById('chart').style.display = 'none'       // hide the other one
        } else {      
-           myChartTitle = 'Live chart. Get ready to start recording'
+          
            document.getElementById('chart').style.display = 'block'    // show it             
            Plotly.newPlot('chart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
-         
-           if (model){
-               predict(accelerometerData)
-           }
-           accelerometerData = [];
-           startTime = null;     
        }
 }
  
       
-
-function myStackTensors(newTensor) {
-  if (stackedTensors === null) {
-    stackedTensors = newTensor;
-  } else {
-    stackedTensors = tf.concat([stackedTensors, newTensor], 0);
-  }
-}
-    
+      
 
 
     // TensorFlow model
@@ -241,9 +226,11 @@ function myStackTensors(newTensor) {
       // DeviceMotion event listener
       window.addEventListener('devicemotion', handleMotionEvent);
     } else {
-      document.getElementById('output').innerHTML = 'Device Motion not supported.';
+      document.getElementById('output').innerHTML = 'DeviceMotion not supported.';
     }
 
+    let accelerometerData = [];
+    let startTime = null;
 
     // Event handler for DeviceMotion event
     function handleMotionEvent(event) {
@@ -265,17 +252,7 @@ function myStackTensors(newTensor) {
         accelerometerData.push([x, y, z]);
       } else {
         // Preprocess the collected accelerometer data and use it for inference with TensorFlow.js
-
-        if(myStart){
-           myLabelArray.push(document.getElementById('myLabel').value);  // store the labels
-           const myInput = tf.tensor2d(accelerometerData);
-           myStackTensors(myInput);                                      // stack the data as a tensor
-        
-          document.getElementById('output').innerHTML = `<p>stackedTensors: ${JSON.stringify(stackedTensors,null,'<br>')}</p>`;
-          document.getElementById('output').innerHTML += `<p>labelArray: ${JSON.stringify(myLabelArray,null,'<br>')}</p>`;
-        }
-//  stackedTensors
-        
+        const input = tf.tensor2d(accelerometerData);
      //   const prediction = model.predict(input);
      //   const predictedLabel = prediction.dataSync()[0];
       //  const result = predictedLabel === 0 ? 'punch' : 'get up';
@@ -291,6 +268,8 @@ function myStackTensors(newTensor) {
       
       
       
+      
+         
      function exportToCsv() {
   // Convert accelerometerData to CSV format
   let csvContent = 'data:text/csv;charset=utf-8,';
@@ -330,6 +309,7 @@ function handleFileSelect(event) {
       
       
       
+        
       
       
       
