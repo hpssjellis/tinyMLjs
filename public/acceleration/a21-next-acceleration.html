@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.4</h6>
+<h6> Version 0.25.5</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter data labels (comma-separated), then click Choose Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -268,15 +268,16 @@ var line3 = [];
 for (let i = 0; i < inputArray[0].length; i++) {
   if (i % 2 == 0) {
    // console.log(1)
-    line1.push(inputArray[0][i]);
+      if (i==0){line1.push(inputArray[0][i]);} else
+    line1.push(inputArray[0][i+1]);
   } else if (i % 2 == 1) {
     
    // console.log(2)
-    line2.push(inputArray[0][i]);
+    line2.push(inputArray[0][i+1]);
   } else {
     
   //  console.log(3)
-    line3.push(inputArray[0][i]);
+    line3.push(inputArray[0][i+1]);
   }
 }
 
@@ -331,9 +332,10 @@ for (let i = 0; i < inputArray[0].length; i++) {
             range: [100, -100],
             fixedrange: true,
         },
-    };
-       console.log('traceX')      
+    };   
        console.log(traceX)        
+       console.log(traceY)        
+       console.log(traceZ)        
     Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
  }  
    
