@@ -41,7 +41,10 @@ ADXL362 IMU;
 int16_t temp;
 int16_t XValue, YValue, ZValue, Temperature;
 
-#define CONVERT_G_TO_MS2    9.80665f
+#define CONVERT_G_TO_MS2    9.80665f  // not for the ADXL
+#define CONVERT_X    0.01
+#define CONVERT_Y    0.01
+#define CONVERT_Z    0.01
 #define FREQUENCY_HZ        50
 #define INTERVAL_MS         (1000 / (FREQUENCY_HZ + 1))
 #define COLLECTION_SECONDS  2
@@ -89,7 +92,10 @@ void loop() {
      }
      if (mySendData){
         //Serial.println( String(myStart)+ "," + String(XValue) + "," + String(YValue) + "," +  String(ZValue)  );
-        Serial.println(  String(XValue) + "," + String(YValue) + "," +  String(ZValue)  );
+        float myX = XValue * CONVERT_X;
+        float myY = YValue * CONVERT_Y;
+        float myZ = ZValue * CONVERT_Z;
+        Serial.println(  String(myX, 2) + "," + String(myY, 2) + "," +  String(myZ, 2)  );
      } 
    }
 
@@ -115,9 +121,12 @@ void loop() {
       mySendData = false;
     }
     if (readString == "firstline"){
-      Serial.println("timestamp,accX,accY,accZ");  // CSV file heading titles
+          //Serial.println("timestamp,accX,accY,accZ");  // CSV file heading titles
+          Serial.println("accX,accY,accZ");  // CSV file heading titles
     }
     readString="";
   } 
   
 }
+
+  
