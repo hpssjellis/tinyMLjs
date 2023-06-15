@@ -89,7 +89,10 @@ Number of Samples/count: <input type=text id="myNumSamples" value=50   size=4>
 Number of Senses/sample: <input type=text id="myNumSensors" value=3   size=4><br><br>
     
 <input type="button" value="Convert Data to Tensor"  style="color:red; width:200px;" onclick="loadDataToTensor()">
+<input type="button" value="Convert Data to Tensor-old-oringinal"  onclick="loadDataToTensorOld()">
+<input type="button" value="Convert Data to Tensor-old-bing" onclick="loadDataToTensorBing()">
 <input type="button" value="Train Model"  style="color:red; width:200px;" onclick="trainModel()">
+
 <label for="myEpochs">Enter number of epochs:</label>
 <input type="number" id="myEpochs" value=100 style="width:50px"> loops,
 <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> learning rate,
@@ -286,9 +289,9 @@ async function loadDataToTensor() {
           
 }
     
- /*
+ 
   
-  async function loadDataToTensor() {
+  async function loadDataToTensorOld() {
   // Get data from uploaded files
   const dataPromise = Array.from(myDataFiles).map((file) => {
     return new Promise((resolve) => {
@@ -339,7 +342,7 @@ async function loadDataToTensor() {
 
     
 // not updating for sensor data only working for CSV loaded files    
-async function loadDataToTensor() {
+async function loadDataToTensorBing() {
 const dataPromise = Array.from(myDataFiles).map((file) => {
 return new Promise((resolve) => {
 const reader = new FileReader();
@@ -382,7 +385,7 @@ previewData();
   
 
   
- */ 
+  
   
 
 async function trainModel() {
