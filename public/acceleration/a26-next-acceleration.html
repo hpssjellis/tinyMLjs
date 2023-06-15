@@ -106,7 +106,8 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
     
 
 <input type=button value="Clean" onclick="{                                      
-    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines                                         
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
+    myShowGraph() 
 }">
 <input type=button value="Trim or Fill" onclick="{
     myTotalNumber = parseInt(document.getElementById('myNumSamples').value)   *     parseInt(document.getElementById('myNumSensors').value)                          
@@ -126,7 +127,8 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
          myCountArray.push(0)                                  
       }  
     }                                        
-   document.getElementById('myArea01').value = myCountArray                                     
+   document.getElementById('myArea01').value = myCountArray      
+   myShowGraph() 
 }">
   
     
