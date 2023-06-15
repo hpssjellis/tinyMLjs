@@ -65,8 +65,9 @@ void setup() {
   
   myStart = millis();   // set delay
   randomSeed(analogRead(A0));  // AO pin on XIAO does not have to be connected to anything
-  Serial.println("timestamp,accX,accY,accZ");  // CSV file heading titles
-
+ // Serial.println("timestamp,accX,accY,accZ");  // CSV file heading titles
+  Serial.println("accX,accY,accZ");  // CSV file heading titles
+  
   IMU.begin(D7);                   // Setup SPI protocol, issue device soft reset
   IMU.beginMeasure();              // Switch ADXL362 to measure mode  
 
@@ -87,7 +88,8 @@ void loop() {
         mySendData = false;   // stop sending data when amount reached
      }
      if (mySendData){
-        Serial.println( String(myStart)+ "," + String(XValue) + "," + String(YValue) + "," +  String(ZValue)  );
+        //Serial.println( String(myStart)+ "," + String(XValue) + "," + String(YValue) + "," +  String(ZValue)  );
+        Serial.println(  String(XValue) + "," + String(YValue) + "," +  String(ZValue)  );
      } 
    }
 
@@ -119,5 +121,3 @@ void loop() {
   } 
   
 }
-
-  
