@@ -113,7 +113,7 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
     myDifference = myCountArray - myTotalNumber  
     console.log( myCountArray )
     console.log( myTotalNumber  )
-    myCountArray =  document.getElementById('myArea01').value.split(',')                                                  
+    let myCountArray =  document.getElementById('myArea01').value.split(',')                                                  
     console.log('myDifference')            
     console.log(myDifference)   
     if (myDifference > 0) {                                     
@@ -126,7 +126,7 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
          myCountArray.push(0)                                  
       }  
     }                                        
-                                         
+   document.getElementById('myArea01').value = myCountArray                                     
 }">
   
     
