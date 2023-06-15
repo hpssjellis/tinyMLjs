@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.2-40</h6>
+<h6> Version 0.27.2-41</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -78,12 +78,15 @@ Number of Sensors/sample: <input type=tyext id="myNumSensors" value=3   size=4><
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="send 'start' " onclick="{
+<input type=button value="send 'clear' and 'start' " onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
     setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart
                                                 
 }">
+    
+<input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
+    
 <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
 }">
@@ -111,12 +114,12 @@ Number of Sensors/sample: <input type=tyext id="myNumSensors" value=3   size=4><
                                               
                                               
 }">    
-<input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
     
     
     
 <input type=text id="mySingleLabel" value="1label">  
-<input type=button value="Keep" onclick="{previewSensorData()}">      
+<input type=button value="Keep" onclick="{previewSensorData()}">   <br>
+    
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 <input id="myOutFilename" type=text value="myCSV-myLabel.csv"><br>
 
