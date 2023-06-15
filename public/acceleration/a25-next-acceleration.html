@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.1-39</h6>
+<h6> Version 0.27.2-40</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -34,7 +34,7 @@
 
 <div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <span id="mySpanSize">...</span><br><br>
-Machine Learning models often need very specific data.
+Machine Learning models often need very specific data.<br>
 <input type=button value="Clean" onclick="{
                                          
 }">
@@ -44,8 +44,9 @@ Machine Learning models often need very specific data.
 <input type=button value="Fill" onclick="{
                                          
 }">
-Number of Samples: <input type=tyext id="myNumSamples" value=50   size=6>
-Number of Sensors: <input type=tyext id="myNumSensors" value=3   size=6><br>
+Count: <input type=tyext id="myNumCount" value=0   size=4>
+Number of Samples: <input type=tyext id="myNumSamples" value=50   size=4>
+Number of Sensors: <input type=tyext id="myNumSensors" value=3   size=4><br>
     
 <input type="button" value="Convert Data to Tensor" onclick="loadDataToTensor()">
 <input type="button" value="Train Model" onclick="trainModel()">
@@ -159,6 +160,7 @@ const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 
 myDataTotal += myDataFiles.length;  // keep track of how many samples
+document.getElementById("muyNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
@@ -184,7 +186,8 @@ reader.readAsText(file);
 
     
 function previewSensorData() {
- myDataTotal += 1  // each time this function is called
+ myDataTotal += 1  // each time this function is called 
+document.getElementById("muyNumCount").value  = myDataTotal
 const preview = document.getElementById("myDataPreview");
 
 document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
