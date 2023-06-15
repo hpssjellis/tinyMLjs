@@ -25,7 +25,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.22</h6>
+<h6> Version 0.25.23</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -82,7 +82,10 @@
 }">
     
 <input type=button value="Show Data" onclick="{
-    document.getElementById('myArea01').value = JSON.stringify(myDataPreview ,null, '\n')                                                                                           
+   document.getElementById('myArea01').value =''
+   for (let i = 0; i < myDataFiles.length; i++) {
+     document.getElementById('myArea01').value += document.getElementById('myData'+i).value + '<br>'
+   }
 }">    
 <input type=button value="send 'stop' " onclick="{mySendIt('stop')}">    
     
@@ -131,6 +134,7 @@ container.style.flexDirection = "column";
 container.style.alignItems = "center";
 const dataElement = document.createElement("span");
 dataElement.textContent = reader.result;
+dataElement.id = "myData"+i;    
 container.appendChild(dataElement);
 const labelElement = document.createElement("span");
 labelElement.textContent = label;
