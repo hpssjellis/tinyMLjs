@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.3-46</h6>
+<h6> Version 0.26.3-47</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -30,7 +30,14 @@
     
 
 <input type="file" id="myDataFile" accept=".csv" multiple onChange="{
-   previewData();                                                             
+    if (!myDataFiles) {
+       myDataFiles = event.target.files;
+    } else {
+       myDataFiles = [...myDataFiles, ...event.target.files];
+    }
+    if (myDataFiles.length > 0) {
+      previewData();
+    }                                                      
 }">
 <br>
 
