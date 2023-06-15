@@ -50,10 +50,28 @@ Machine Learning models often need very specific data.<br>
   }                                           
 }">
 <input type=button value="Trim or Fill All" onclick="{
-  for (let i = 0; i <= myDataTotal; i++) {                                       
-   let myTempArray = document.getElementById('myData' + i).textContent.split('\n')
-   console.log('myTempArray.length')                                                  
-   console.log(myTempArray.length)                                                  
+                                                     
+ const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)      
+ for (let i = 0; i <= myDataTotal; i++) {                                       
+   let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
+                                                                                         
+   let  myDifference =  myTempArray - myTotalNumber                                                 
+   console.log('myDifference')            
+   console.log(myDifference)  
+                                                                                                      
+    if (myDifference > 0) {                                     
+      for (myI=0; myI < myDifference; myI++){                     
+         myTempArray.pop()                                  
+      }  
+    }
+     if (myDifference < 0) {                                     
+      for (myI=0; myI < (-1 * myDifference); myI++){                     
+         myTempArray.push('0,0,0')                                  
+      }  
+    }       
+   //  console.log(myCountArray)
+   document.getElementById('myData' + i).textContent = myTempArray.join('\n')   
+                                                     
   }                                           
 }">
 
