@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.6-53</h6>
+<h6> Version 0.26.6-54</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -133,7 +133,7 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
       }  
     }       
    console.log(myCountArray)
-   document.getElementById('myArea01').value = myCountArray      
+   document.getElementById('myArea01').value = myCountArray.join('\n')      
    myShowGraph() 
 }">
   
