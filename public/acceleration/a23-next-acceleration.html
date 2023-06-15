@@ -40,7 +40,7 @@
 
 <div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <span id="mySpanSize">...</span><br>
-
+Number of Samples: <input type=tyext id="myNumSamples" value=50>
 <input type="button" value="Convert Data to Tensor" onclick="loadDataToTensor()">
 <input type="button" value="Train Model" onclick="trainModel()">
 <label for="myEpochs">Enter number of epochs:</label>
@@ -82,31 +82,22 @@
 }">
     
 <input type=button value="Show Data" onclick="{
-   document.getElementById('myArea01').value =''
- //  for (let i = 0; i < myDataFiles.length; i++) {
-   //  document.getElementById('myArea01').value += document.getElementById('myData'+i).value + '\n'
-   //  document.getElementById('myArea01').value += JSON.stringify(myDataFiles, null, '\n') 
-                                              
-  //   document.getElementById('myArea01').value += myDataFiles[i] + '\n'
- //  }
-            
-                                              
-                                              
-                                              
-  //   let dataString = '';
-  // for (let i = 0; i < myDataFiles.length; i++) {
-  //   dataString += myDataFiles[i] + '\\n';
- //  }
- //  document.getElementById('myArea01').value = dataString;                                            
+   document.getElementById('myArea01').value =''                                        
  
    let dataString = '';
-  for (let i = 0; i < myDataFiles.length; i++) {
+   let labelString = '';
+ // for (let i = 0; i < myDataFiles.length; i++) {
+  for (let i = 0; i < myDataTotal; i++) {                                       
     const dataElement = document.getElementById('myData' + i);
+    const labelElement = document.getElementById('myLabel' + i);
     if (dataElement) {
       dataString += dataElement.textContent + '\\n';
     }
+    if (labelElementt) {
+      labelString += labelElement.textContent + '\\n';
+    }
   }
-  document.getElementById('myArea01').value = dataString;                                             
+  document.getElementById('myArea01').value = dataString + labelString;                                             
                                               
                                               
                                               
@@ -138,6 +129,7 @@
 
 <script>
 let myDataFiles, myTensor;
+let myDataTotal = 0;
 let labelsArray;
 let uniqueLabels, labelsTensor;
 let model;
@@ -147,7 +139,7 @@ const preview = document.getElementById("myDataPreview");
 preview.innerHTML = "";
 const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
-
+myDataTotal += myDataFiles.length;  // keep track of how many samples
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
@@ -162,7 +154,8 @@ dataElement.textContent = reader.result;
 dataElement.id = "myData"+i;    
 container.appendChild(dataElement);
 const labelElement = document.createElement("span");
-labelElement.textContent = label;
+labelElement.textContent = label;    
+labelElement.id = "myLabel"+i;    
 container.appendChild(labelElement);
 preview.appendChild(container);
 };
@@ -172,6 +165,7 @@ reader.readAsText(file);
 
     
 function previewSensorData() {
+ myDataTotal += 1  // each time this function is called
 const preview = document.getElementById("myDataPreview");
 
 document.getElementById("myLabels").value  +=  document.getElementById("mySingleLabel").value
@@ -181,15 +175,22 @@ container.style.display = "flex";
 container.style.flexDirection = "column";
 container.style.alignItems = "center";
 const dataElement = document.createElement("span");
+dataElement.id = "myData"+i;    
 dataElement.textContent = document.getElementById("myArea01").value;
 container.appendChild(dataElement);
-const labelElement = document.createElement("span");
+const labelElement = document.createElement("span");  
+labelElement.id = "myLabel"+i;    
 labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
 container.appendChild(labelElement);
 preview.appendChild(container);
 
 }   
+async function loadDataToTensor() {
     
+}
+    
+    
+    /*
     
 // not updating for sensor data only working for CSV loaded files    
 async function loadDataToTensor() {
@@ -232,6 +233,12 @@ if (myDataFiles.length > 0) {
 previewData();
 }
 });
+    
+    
+ */   
+    
+    
+    
 
 async function trainModel() {
 // Define the model architecture
