@@ -480,8 +480,8 @@ var lineX = [];
 var lineY = [];
 var lineZ = [];
 const dataArray = dataString2.split('\n');
-console.log('dataArray')
-console.log(dataArray)
+//console.log('dataArray')
+//console.log(dataArray)
 
 for (let i = 0; i < dataArray.length; i++) {
 const accelerationValues = dataArray[i].split(',');
@@ -544,9 +544,9 @@ lineZ.push(z);
             fixedrange: true,
         },
     };   
-       console.log(traceX)        
-       console.log(traceY)        
-       console.log(traceZ)        
+     //  console.log(traceX)        
+     //  console.log(traceY)        
+     //  console.log(traceZ)        
     Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
  }  
    
