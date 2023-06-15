@@ -171,8 +171,8 @@ preview.innerHTML = "";
 const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 
-//myDataTotal += myDataFiles.length;  // keep track of how many samples
-//document.getElementById("myNumCount").value  = myDataTotal
+myDataTotal += myDataFiles.length;  // keep track of how many samples
+document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
