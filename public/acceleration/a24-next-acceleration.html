@@ -15,13 +15,7 @@
 <script src="https://cdn.jsdelivr.net/npm/web-serial-polyfill@1.0.13/dist/serial.js"> </script> 
 <script src="https://unpkg.com/papaparse@5.3.2/papaparse.js"></script>  <!-- For CSV manipulation  -->
     
-<script>
-  //Global Variables
-  var exports = {};
-  let myMultiCSV = true
- // let myRaw = false
-//  let myRawInterval
-</script>  
+
 </head>
 <body>
 
@@ -82,32 +76,24 @@
 }">
     
 <input type=button value="Show Data" onclick="{
-   document.getElementById('myArea01').value =''
- //  for (let i = 0; i < myDataFiles.length; i++) {
-   //  document.getElementById('myArea01').value += document.getElementById('myData'+i).value + '\n'
-   //  document.getElementById('myArea01').value += JSON.stringify(myDataFiles, null, '\n') 
-                                              
-  //   document.getElementById('myArea01').value += myDataFiles[i] + '\n'
- //  }
-            
-                                              
-                                              
-                                              
-  //   let dataString = '';
-  // for (let i = 0; i < myDataFiles.length; i++) {
-  //   dataString += myDataFiles[i] + '\\n';
- //  }
- //  document.getElementById('myArea01').value = dataString;                                            
+   document.getElementById('myArea01').value =''                                        
  
    let dataString = '';
-  for (let i = 0; i < myDataFiles.length; i++) {
+   let labelString = '';
+ // for (let i = 0; i < myDataFiles.length; i++) {
+  for (let i = 0; i < myDataTotal; i++) {                                       
     const dataElement = document.getElementById('myData' + i);
+    const labelElement = document.getElementById('myLabel' + i);
     if (dataElement) {
-      dataString += dataElement.textContent + '\\n';
+      dataString += 'Data #' + i + ':' + dataElement.textContent + '\n';
+    }
+    if (labelElement) {
+      labelString += 'Label #' + i + :' + labelElement.textContent + '\n';
     }
   }
-  document.getElementById('myArea01').value = dataString;                                             
+  document.getElementById('myArea01').value = dataString + labelString;                                             
                                               
+                                                  
                                               
                                               
                                               
@@ -137,10 +123,19 @@
 <div id="myChart" style="width:1000px; height:300px"></div>
 
 <script>
-let myDataFiles, myTensor;
+    // more globals
+let myDataFiles, myTensor; 
+let myDataTotal = 0;
 let labelsArray;
 let uniqueLabels, labelsTensor;
 let model;
+var exports = {};
+let myMultiCSV = true
+ // let myRaw = false
+//  let myRawInterval
+
+    
+    
 
 function previewData() {
 const preview = document.getElementById("myDataPreview");
@@ -172,6 +167,7 @@ reader.readAsText(file);
 
     
 function previewSensorData() {
+ myDataTotal += 1  // each time this function is called
 const preview = document.getElementById("myDataPreview");
 
 document.getElementById("myLabels").value  +=  document.getElementById("mySingleLabel").value
@@ -182,9 +178,11 @@ container.style.flexDirection = "column";
 container.style.alignItems = "center";
 const dataElement = document.createElement("span");
 dataElement.textContent = document.getElementById("myArea01").value;
+dataElement.id = "myData" + myDataTotal;    
 container.appendChild(dataElement);
 const labelElement = document.createElement("span");
 labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
+labelElement.id = "myLabel" + myDataTotal; 
 container.appendChild(labelElement);
 preview.appendChild(container);
 
