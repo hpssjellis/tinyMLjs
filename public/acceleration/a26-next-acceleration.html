@@ -49,14 +49,14 @@ Machine Learning models often need very specific data.<br>
     document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
   }                                           
 }">
-<input type=button value="Trim All" onclick="{
+<input type=button value="Trim or Fill All" onclick="{
   for (let i = 0; i <= myDataTotal; i++) {                                       
-    document.getElementById('myData' + i).textContent =  'cool' 
+   let myTempArray = document.getElementById('myData' + i).textContent.split('\n')
+   console.log('myTempArray.length')                                                  
+   console.log(myTempArray.length)                                                  
   }                                           
 }">
-<input type=button value="Fill All" onclick="{
-                                         
-}">
+
 Count: <input type=text id="myNumCount" value=0  READONLY size=4>
 Number of Samples/count: <input type=text id="myNumSamples" value=50   size=4>
 Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><br>
