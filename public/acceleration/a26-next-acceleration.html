@@ -110,8 +110,10 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
 }">
 <input type=button value="Trim or Fill" onclick="{
     myTotalNumber = parseInt(document.getElementById('myNumSamples').value)   *     parseInt(document.getElementById('myNumSensors').value)                          
-    myCountArray =  document.getElementById('myArea01').value.split(',') 
-    myDifference = myCountArray - myTotalNumber                              
+    myDifference = myCountArray - myTotalNumber  
+    console.log( myCountArray )
+    console.log( myTotalNumber  )
+    myCountArray =  document.getElementById('myArea01').value.split(',')                                                  
     console.log('myDifference')            
     console.log(myDifference)   
     if (myDifference > 0) {                                     
