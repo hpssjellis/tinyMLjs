@@ -2,7 +2,18 @@
 <html lang="en">
 <head>
 <script>  
-   let exports = {};
+   // Global CVariables
+   let exports = {};  // really important for WebSerial and Polyfill
+   
+   let myDataFiles, myTensor; 
+   let myDataTotal = -1;
+   let labelsArray;
+   let uniqueLabels, labelsTensor;
+   let model;
+   let myMultiCSV = true
+    // let myRaw = false
+   //  let myRawInterval
+
 </script>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +33,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.0-59</h6>
+<h6> Version 0.27.1-60</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -216,15 +227,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <div id="myChart" style="width:1000px; height:300px"></div>
 
 <script>
-    // more globals
-let myDataFiles, myTensor; 
-let myDataTotal = -1;
-let labelsArray;
-let uniqueLabels, labelsTensor;
-let model;
-let myMultiCSV = true
- // let myRaw = false
-//  let myRawInterval
 
     
     
