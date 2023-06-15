@@ -85,10 +85,10 @@
     const dataElement = document.getElementById('myData' + i);
     const labelElement = document.getElementById('myLabel' + i);
     if (dataElement) {
-      dataString += 'Data #' + i + ': ' + dataElement.textContent + '\n';
+      dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n';
     }
     if (labelElement) {
-      labelString += 'Label #' + i + ': ' + labelElement.textContent + '\n';
+      labelString += 'Label #' + i + '\n' + labelElement.textContent + '\n';
     }
   }
   document.getElementById('myArea01').value = dataString + labelString;                                             
@@ -143,6 +143,7 @@ preview.innerHTML = "";
 const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 
+myDataTotal += myDataFiles.length;  // keep track of how many samples
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
@@ -157,7 +158,8 @@ dataElement.textContent = reader.result;
 dataElement.id = "myData"+i;    
 container.appendChild(dataElement);
 const labelElement = document.createElement("span");
-labelElement.textContent = label;
+labelElement.textContent = label;  
+labelElement.id = "myLabel"+i;    
 container.appendChild(labelElement);
 preview.appendChild(container);
 };
