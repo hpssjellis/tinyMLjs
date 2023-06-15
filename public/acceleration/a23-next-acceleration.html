@@ -25,7 +25,7 @@
 </head>
 <body>
 
-<h6> Version 0.25.29</h6>
+<h6> Version 0.25.30</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -91,10 +91,10 @@ Number of Samples: <input type=tyext id="myNumSamples" value=50   size=6>
     const dataElement = document.getElementById('myData' + i);
     const labelElement = document.getElementById('myLabel' + i);
     if (dataElement) {
-      dataString += `Data # ${i}: ${dataElement.textContent} + \n`;
+      dataString += 'Data #' + i + ':' + dataElement.textContent + '\n';
     }
     if (labelElement) {
-      labelString += `Label #${i}: ${labelElement.textContent} + \n`;
+      labelString += 'Label #' + i + :' + labelElement.textContent + '\n';
     }
   }
   document.getElementById('myArea01').value = dataString + labelString;                                             
@@ -139,7 +139,7 @@ const preview = document.getElementById("myDataPreview");
 preview.innerHTML = "";
 const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
-//myDataTotal += myDataFiles.length;  // keep track of how many samples
+myDataTotal += myDataFiles.length;  // keep track of how many samples
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
