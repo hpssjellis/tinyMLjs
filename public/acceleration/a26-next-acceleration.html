@@ -130,7 +130,8 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
       for (myI=0; myI < (-1 * myDifference); myI++){                     
          myCountArray.push(0)                                  
       }  
-    }                                        
+    }       
+   console.log(myCountArray)
    document.getElementById('myArea01').value = myCountArray      
    myShowGraph() 
 }">
@@ -152,16 +153,16 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
  
    let dataString = '';
    let labelString = '';
- // for (let i = 0; i < myDataFiles.length; i++) {
-  for (let i = 0; i <= myDataTotal; i++) {                                       
-    const dataElement = document.getElementById('myData' + i);
-    const labelElement = document.getElementById('myLabel' + i);
-    if (dataElement) {
-      dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
-    }
-    if (labelElement) {
-      labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
-    }
+   // for (let i = 0; i < myDataFiles.length; i++) {
+   for (let i = 0; i <= myDataTotal; i++) {                                       
+      const dataElement = document.getElementById('myData' + i);
+      const labelElement = document.getElementById('myLabel' + i);
+      if (dataElement) {
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+      }
+      if (labelElement) {
+         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+      }
   }
   document.getElementById('myArea01').value = dataString + labelString;                                             
                                              
