@@ -105,7 +105,15 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
 }">
     
 
-    
+<input type=button value="Clean" onclick="{                                      
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines                                         
+}">
+<input type=button value="Trim" onclick="{
+      document.getElementById('myArea01').value = 'cool'                                   
+}">
+<input type=button value="Fill" onclick="{
+                                         
+}">    
     
 <input type=text id="mySingleLabel" placeholder="1lable" value="1label">  
 <input type=button value="Keep" onclick="{previewSensorData()}">   <br>
