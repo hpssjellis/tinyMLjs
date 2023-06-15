@@ -172,7 +172,7 @@ function previewSensorData() {
  myDataTotal += 1  // each time this function is called
 const preview = document.getElementById("myDataPreview");
 
-document.getElementById("myLabels").value  +=  document.getElementById("mySingleLabel").value
+document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
 
 const container = document.createElement("div");
 container.style.display = "flex";
