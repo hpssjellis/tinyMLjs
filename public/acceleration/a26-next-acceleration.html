@@ -91,7 +91,7 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="send 'clear' and 'start' " onclick="{
+<input type=button value="Clear and send 'start' " onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
     setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart
