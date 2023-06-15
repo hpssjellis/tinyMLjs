@@ -160,7 +160,7 @@ const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 
 myDataTotal += myDataFiles.length;  // keep track of how many samples
-document.getElementById("muyNumCount").value  = myDataTotal
+document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
@@ -187,7 +187,7 @@ reader.readAsText(file);
     
 function previewSensorData() {
  myDataTotal += 1  // each time this function is called 
-document.getElementById("muyNumCount").value  = myDataTotal
+document.getElementById("myNumCount").value  = myDataTotal
 const preview = document.getElementById("myDataPreview");
 
 document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
