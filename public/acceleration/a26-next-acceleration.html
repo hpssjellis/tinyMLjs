@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.6-56</h6>
+<h6> Version 0.26.7-57</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -77,7 +77,9 @@ Machine Learning models often need very specific data.<br>
       }  
     }       
    //  console.log(myCountArray)
-   document.getElementById('myData' + i).textContent = myTempArray.join('\n')   
+   document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
+   console.log('myTempArray.length')      
+   console.log(myTempArray.length)                                                                                              
                                                      
   }                                           
 }">
@@ -160,6 +162,8 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
    console.log(myCountArray)
    document.getElementById('myArea01').value = myCountArray.join('\n')      
    myShowGraph() 
+   console.log('myCountArray.length')
+   console.log(myCountArray.length)
 }">
   
     
