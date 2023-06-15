@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.6-55</h6>
+<h6> Version 0.26.6-56</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -55,7 +55,7 @@ Machine Learning models often need very specific data.<br>
  for (let i = 0; i <= myDataTotal; i++) {                                       
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
                                                                                          
-   let  myDifference =  myTempArray.legnth - myTotalNumber                                                 
+   let myDifference =  myTempArray.length - myTotalNumber                                                 
    console.log('myDifference')            
    console.log(myDifference)  
                                                                                                       
