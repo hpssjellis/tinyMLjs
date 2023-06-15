@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.7-57</h6>
+<h6> Version 0.26.7-58</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -59,8 +59,8 @@ Machine Learning models often need very specific data.<br>
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
                                                                                          
    let myDifference =  myTempArray.length - myTotalNumber                                                 
-   console.log('myDifference')            
-   console.log(myDifference)  
+      
+   console.log(`myDifference:` ${myDifference})  
                                                                                                       
     if (myDifference > 0) {                                     
       for (myI=0; myI < myDifference; myI++){                     
@@ -78,8 +78,8 @@ Machine Learning models often need very specific data.<br>
     }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
-   console.log('myTempArray.length')      
-   console.log(myTempArray.length)                                                                                              
+   console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)      
+                                                                                             
                                                      
   }                                           
 }">
