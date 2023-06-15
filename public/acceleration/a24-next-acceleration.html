@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.0-35</h6>
+<h6> Version 0.26.0-36</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -34,7 +34,8 @@
 
 <div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <span id="mySpanSize">...</span><br>
-
+Number of Samples: <input type=tyext id="myNumSamples" value=50   size=6>
+Number of Sensors: <input type=tyext id="myNumSensors" value=3   size=6>
 <input type="button" value="Convert Data to Tensor" onclick="loadDataToTensor()">
 <input type="button" value="Train Model" onclick="trainModel()">
 <label for="myEpochs">Enter number of epochs:</label>
