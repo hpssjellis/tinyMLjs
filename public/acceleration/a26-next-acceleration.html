@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.3-45</h6>
+<h6> Version 0.26.3-46</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -164,8 +164,8 @@ preview.innerHTML = "";
 const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 
-myDataTotal += myDataFiles.length;  // keep track of how many samples
-document.getElementById("myNumCount").value  = myDataTotal
+//myDataTotal += myDataFiles.length;  // keep track of how many samples
+//document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
 const label = labelsArray[i];
