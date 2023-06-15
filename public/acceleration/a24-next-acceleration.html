@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.0-36</h6>
+<h6> Version 0.26.0-37</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -82,7 +82,7 @@ Number of Sensors: <input type=tyext id="myNumSensors" value=3   size=6>
    let dataString = '';
    let labelString = '';
  // for (let i = 0; i < myDataFiles.length; i++) {
-  for (let i = 0; i < myDataTotal; i++) {                                       
+  for (let i = 0; i <= myDataTotal; i++) {                                       
     const dataElement = document.getElementById('myData' + i);
     const labelElement = document.getElementById('myLabel' + i);
     if (dataElement) {
