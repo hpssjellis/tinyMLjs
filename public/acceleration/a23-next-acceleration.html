@@ -91,10 +91,10 @@ Number of Samples: <input type=tyext id="myNumSamples" value=50   size=6>
     const dataElement = document.getElementById('myData' + i);
     const labelElement = document.getElementById('myLabel' + i);
     if (dataElement) {
-      dataString += dataElement.textContent + '\\n';
+      dataString += `Data # ${i}: ${dataElement.textContent} + \n`;
     }
-    if (labelElementt) {
-      labelString += labelElement.textContent + '\\n';
+    if (labelElement) {
+      labelString += `Label #${i}: ${labelElement.textContent} + \n`;
     }
   }
   document.getElementById('myArea01').value = dataString + labelString;                                             
