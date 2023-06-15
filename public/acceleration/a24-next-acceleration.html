@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.0-34</h6>
+<h6> Version 0.26.0-35</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -125,7 +125,7 @@
 <script>
     // more globals
 let myDataFiles, myTensor; 
-let myDataTotal = 0;
+let myDataTotal = -1;
 let labelsArray;
 let uniqueLabels, labelsTensor;
 let model;
