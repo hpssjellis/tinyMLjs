@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.0-37</h6>
+<h6> Version 0.27.0-38</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="punch,punch,wave,wave"> <br>
@@ -34,10 +34,20 @@
 
 <div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <span id="mySpanSize">...</span><br>
-    <input type="button" value="Convert Data to Tensor" onclick="loadDataToTensor()">
+Machine Learning Data must be exactly what the model is expecting<br>    
+<input type=button value="Clean" onclick="{
+                                         
+}">
+<input type=button value="Trim" onclick="{
+                                         
+}">
+<input type=button value="Fill" onclick="{
+                                         
+}">
 Number of Samples: <input type=tyext id="myNumSamples" value=50   size=6>
 Number of Sensors: <input type=tyext id="myNumSensors" value=3   size=6><br>
 
+<input type="button" value="Convert Data to Tensor" onclick="loadDataToTensor()">
 <input type="button" value="Train Model" onclick="trainModel()">
 <label for="myEpochs">Enter number of epochs:</label>
 <input type="number" id="myEpochs" value=100 style="width:50px"> loops,
@@ -106,6 +116,9 @@ Number of Sensors: <input type=tyext id="myNumSensors" value=3   size=6><br>
     
 <input type=text id="mySingleLabel" value="1label">  
 <input type=button value="Keep" onclick="{previewSensorData()}">    
+<input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
+<inpout id="myOutFilename" type=text value="myCSV-myLable.csv">
+    
 <label for="myArea01">Enter data to classify:</label><br>
 <textarea id="myArea01" rows=10 cols=70></textarea>
 <br>
@@ -431,6 +444,25 @@ lineZ.push(z);
  }  
    
 
+    
+function mySaveCSV(myInFileName) {
+  var csv = document.getElementById("myArea01").value;
+  var data = Papa.parse(csv, { header: true }).data;
+  var csvContent = Papa.unparse(data, { delimiter: "," });
+
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", "data:text/csv;charset=utf-8," + encodedUri);
+  link.setAttribute("download", myInFileName);
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+}
+    
+    
+    
 
   /////////////////////////////////////// webSerial code first ///////////////////////////////////////////
   
