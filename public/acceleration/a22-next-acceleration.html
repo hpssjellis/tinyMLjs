@@ -151,23 +151,9 @@ reader.readAsText(file);
     
 function previewSensorData() {
 const preview = document.getElementById("myDataPreview");
-//preview.innerHTML = "";
-    
-    
-//const labelsInput = document.getElementById("myLabels").value;
-//const labelsArray = labelsInput.split(",").map((label) => label.trim());
 
-    
-//for (let i = 0; i < myDataFiles.length; i++) {
-//const file = myDataFiles[i];
-//const label = labelsArray[i];
-    
-//const label =  document.getElementById("mySingleLabel").value;  
-    // update labels
 document.getElementById("myLabels").value  +=  document.getElementById("mySingleLabel").value
-    
-//const reader = new FileReader();
-//reader.onloadend = () => {
+
 const container = document.createElement("div");
 container.style.display = "flex";
 container.style.flexDirection = "column";
@@ -179,9 +165,7 @@ const labelElement = document.createElement("span");
 labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
 container.appendChild(labelElement);
 preview.appendChild(container);
-//};
-//reader.readAsText(file);
-//}
+
 }   
     
     
