@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.6-50</h6>
+<h6> Version 0.26.6-51</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -110,13 +110,15 @@ Number of Sensors/sample: <input type=text id="myNumSensors" value=3   size=4><b
     myShowGraph() 
 }">
 <input type=button value="Trim or Fill" onclick="{
-    myTotalNumber = parseInt(document.getElementById('myNumSamples').value)   *     parseInt(document.getElementById('myNumSensors').value)                          
-    myDifference = myCountArray - myTotalNumber  
+    let myCountArray =  document.getElementById('myArea01').value.split(',')   
+    myTotalNumber = parseInt(document.getElementById('myNumSamples').value)  *  parseInt(document.getElementById('myNumSensors').value)                          
+
     console.log( myCountArray )
     console.log( myTotalNumber  )
-    let myCountArray =  document.getElementById('myArea01').value.split(',')                                                  
+    myDifference = myCountArray - myTotalNumber                                                 
     console.log('myDifference')            
-    console.log(myDifference)   
+    console.log(myDifference)  
+                                                 
     if (myDifference > 0) {                                     
       for (myI=0; myI < myDifference; myI++){                     
          myCountArray.pop()                                  
