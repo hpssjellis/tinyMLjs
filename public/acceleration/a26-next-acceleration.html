@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h6> Version 0.26.3-47</h6>
+<h6> Version 0.26.4-48</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -44,13 +44,17 @@
 <div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <span id="mySpanSize">...</span><br><br>
 Machine Learning models often need very specific data.<br>
-<input type=button value="Clean" onclick="{
-                                         
+<input type=button value="Clean All" onclick="{
+  for (let i = 0; i <= myDataTotal; i++) {                                       
+    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+  }                                           
 }">
-<input type=button value="Trim" onclick="{
-                                         
+<input type=button value="Trim All" onclick="{
+  for (let i = 0; i <= myDataTotal; i++) {                                       
+   // document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') 
+  }                                           
 }">
-<input type=button value="Fill" onclick="{
+<input type=button value="Fill All" onclick="{
                                          
 }">
 Count: <input type=text id="myNumCount" value=0  READONLY size=4>
