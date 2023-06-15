@@ -198,7 +198,8 @@ const preview = document.getElementById("myDataPreview");
 preview.innerHTML = "";
 const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
-
+//const myOldData = myDataTotal
+    
 myDataTotal += myDataFiles.length;  // keep track of how many samples
 document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
