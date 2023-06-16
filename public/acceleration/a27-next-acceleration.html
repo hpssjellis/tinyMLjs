@@ -60,7 +60,7 @@
 <span id="mySpanSize">...</span><br><br>
 Machine Learning models often need very specific data.<br>
 <input type=button value="Clean All" onclick="{
-  for (let i = 0; i <= myDataTotal; i++) {                                       
+  for (let i = 0; i < myDataTotal; i++) {                                       
     document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
   }                                           
 }">
@@ -70,7 +70,7 @@ Machine Learning models often need very specific data.<br>
 
    console.log(`myTotalNumber: ${myTotalNumber}`) 
                                                      
-for (let i = 0; i <= myDataTotal; i++) {                                       
+for (let i = 0; i < myDataTotal; i++) {                                       
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
                                                                                          
    let myDifference =  myTempArray.length - myTotalNumber                                                 
