@@ -8,6 +8,7 @@
    let myDataFiles, myTensor; 
    let myDataTotal = 0;
    let myDataMcu = 0;
+   let myDataCSV = 0;
    let labelsArray;
    let uniqueLabels, labelsTensor;
    let model;
@@ -45,8 +46,14 @@
     
     
 
-Show: <input type=radio name="myPre" onclick="{document.getElementById('myDataPreview').style.display = 'block'}" CHECKED> <br>
-Hide: <input type=radio name="myPre" onclick="{document.getElementById('myDataPreview').style.display = 'none'}"><br>
+Show: <input type=radio name="myPre" onclick="{
+   document.getElementById('myDataPreviewCSV').style.display = 'block'
+   document.getElementById('myDataPreviewSensor').style.display = 'block'
+}" CHECKED> <br>
+Hide: <input type=radio name="myPre" onclick="{
+   document.getElementById('myDataPreviewCSV').style.display = 'none'
+   document.getElementById('myDataPreviewSensor').style.display = 'none'
+}"><br>
    
 <input type="file" id="myDataFile" accept=".csv" multiple onChange="{
     if (!myDataFiles) {
@@ -60,7 +67,8 @@ Hide: <input type=radio name="myPre" onclick="{document.getElementById('myDataPr
 }"> 
 <br>
 
-<div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
    
 
 Machine Learning models often need very specific data.<br>
@@ -274,7 +282,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 function previewData() {
    document.getElementById("mySpanUpload").innerHTML = ''   
 
-   const preview = document.getElementById("myDataPreview");
+   const preview = document.getElementById("myDataPreviewCSV");
    preview.innerHTML = "";
   // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    const labelsInput = document.getElementById("myLabels").value;
@@ -326,7 +334,7 @@ function previewSensorData() {
    document.getElementById("myNumCount").value = myDataTotal
 
    
-   const preview = document.getElementById("myDataPreview");
+   const preview = document.getElementById("myDataPreviewSensor");
    if (myDataTotal == 1) { // if first element then no comma for labels list
       document.getElementById("myLabels").value  =   document.getElementById("mySingleLabel").value
    } else {
