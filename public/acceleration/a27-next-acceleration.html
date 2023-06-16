@@ -240,7 +240,7 @@ const labelsArray = labelsInput.split(",").map((label) => label.trim());
 //const myOldData = myDataTotal
     
 myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
-Console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
    
 document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
@@ -270,7 +270,7 @@ reader.readAsText(file);
 function previewSensorData() {
 myDataTotal += 1  // each time this function is called 
 myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
-Console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
    
 document.getElementById("myNumCount").value = myDataTotal
 const preview = document.getElementById("myDataPreview");
