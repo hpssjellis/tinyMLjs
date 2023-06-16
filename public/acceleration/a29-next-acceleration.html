@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.4-80</h6>
+<h6> Version 0.29.4-81</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -67,7 +67,7 @@ Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
    
-document.getElementById("mySpanUpload").innerHTML = ''
+document.getElementById('mySpanUpload').innerHTML = ''
    
 for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
@@ -92,20 +92,20 @@ for (let i = 0; i < myDataTotal; i++) {
    if (myDifference == 0){myDoing += 'fine,'}
    
    if (myDifference > 0) {                                     
-      for (myI = 0; myI < myDifference; myI++){                     
+      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
          myTempArray.pop()   // delete the item 
          myDoing += 'deleted,'
       }  
    }
    if (myDifference < 0) {     
       myDifference = myDifference * -1
-      for (myI=0; myI < myDifference; myI++){  // for different number of senses recorded
+      for (let myI=0; myI < myDifference; myI++){  // for different number of senses recorded
          let myTempSenses = []                                             
-         for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
-            myTempSenses[i] = 0                                        
+         for (let i2=0; i2 < parseInt(document.getElementById('myNumSenses').value); i2++){
+            myTempSenses[i2] = 0                                        
          }                                             
          myTempArray.push(myTempSenses.join(',')) 
-            myDoing += 'added,'
+         myDoing += 'added,'
       } 
     document.getElementById('mySpanUpload').innerHTML += `Data #${i} ${myDoing}<br>`        
    }       
