@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.28.2-69</h6>
+<h6> Version 0.28.3-70</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -204,6 +204,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <label for="myArea01">Enter data to classify:</label><br>
 <textarea id="myArea01" rows=10 cols=70></textarea>
+
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type="button" value="Classify Data"  style="color:red; width:200px;"  onclick="classifyData()">
@@ -225,7 +226,8 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
   }
   document.getElementById('myArea01').value = dataString + labelString;                                             
                                              
-}">    
+}"> <br>
+<span id="mySpanClassify">...</span>
     
 
 
@@ -322,7 +324,6 @@ async function loadDataToTensor() {
          dataArrays.push(dataArray);         
       }
    }
-
    console.log(dataArrays)
    // Convert data arrays to tensors
    const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
@@ -384,15 +385,17 @@ let myModelFileName = 'downloads://' + document.getElementById('myExportFileName
 await model.save(myModelFileName);
 }
 
+   
+   
 async function uploadModel() {
-const modelFile = document.getElementById("modelFile").files[0];
-const weightsFile = document.getElementById("weightsFile").files[0];
-if (!modelFile || !weightsFile) {
-alert("Please select both a model file and a weights file to upload");
-return;
-}
-// careful here somehow need labels loaded!
-model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+   const modelFile = document.getElementById("modelFile").files[0];
+   const weightsFile = document.getElementById("weightsFile").files[0];
+   if (!modelFile || !weightsFile) {
+      alert("Please select both a model file and a weights file to upload");
+      return;
+   }
+   // careful here somehow need labels loaded!
+   model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
 }
 
 async function classifyData() {
@@ -419,6 +422,7 @@ console.log('myBig-myOrig')
 console.log(myBig-myOrig)
   
 document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
+
 
 /*
 
