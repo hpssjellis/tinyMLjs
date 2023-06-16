@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.0-72</h6>
+<h6> Version 0.29.1-73</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -176,13 +176,14 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
       }  
     }
            
-    if (myDifference < 0) {       // add to the data                               
-      for (myI=0; myI < (-1 * myDifference); myI++){  
+    if (myDifference < 0) {       // add to the data 
+       myDifference *= -1  // make it positive                                                 
+      for (myI=0; myI < myDifference; myI++){  
         let myTempSenses = []                                             
         for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
             myTempSenses[i] = 0                                        
          }                                             
-         myTempArray.push(myTempSenses.join(','))                                  
+         myCountArray.push(myTempSenses.join(','))   // put them together add the extra '0,0,0' for xyz                               
       }  
     }                                               
                                                  
@@ -249,6 +250,7 @@ function previewData() {
 
    const preview = document.getElementById("myDataPreview");
    preview.innerHTML = "";
+   if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    const labelsInput = document.getElementById("myLabels").value;
    const labelsArray = labelsInput.split(",").map((label) => label.trim());
    //const myOldData = myDataTotal
