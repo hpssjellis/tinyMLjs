@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.3-79</h6>
+<h6> Version 0.29.4-80</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -66,8 +66,14 @@ Hide: <input type=radio name="myPre" onclick="{document.getElementById('myDataPr
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
+   
+document.getElementById("mySpanUpload").innerHTML = ''
+   
 for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+
 }  
 
 const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
@@ -75,30 +81,38 @@ const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) //
 console.log(`myDataTotal: ${myDataTotal}`) 
 console.log(`myTotalNumber: ${myTotalNumber}`) 
 
-for (let i = 0; i < myDataTotal; i++) {                                       
+for (let i = 0; i < myDataTotal; i++) { 
+    let myDoing = ''                 
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
 
    let myDifference =  myTempArray.length - myTotalNumber                                                 
 
    console.log(`myDifference: ${myDifference}`)  
-
+   
+   if (myDifference == 0){myDoing += 'fine,'}
+   
    if (myDifference > 0) {                                     
-      for (myI=0; myI < myDifference; myI++){                     
-         myTempArray.pop()                                  
+      for (myI = 0; myI < myDifference; myI++){                     
+         myTempArray.pop()   // delete the item 
+         myDoing += 'deleted,'
       }  
    }
-   if (myDifference < 0) {                                     
-      for (myI=0; myI < (-1 * myDifference); myI++){  
+   if (myDifference < 0) {     
+      myDifference = myDifference * -1
+      for (myI=0; myI < myDifference; myI++){  // for different number of senses recorded
          let myTempSenses = []                                             
          for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
             myTempSenses[i] = 0                                        
          }                                             
-         myTempArray.push(myTempSenses.join(','))                                  
-      }  
+         myTempArray.push(myTempSenses.join(',')) 
+            myDoing += 'added,'
+      } 
+    document.getElementById("mySpanUpload").innerHTML += `Data #${i} ${myDoing}<br>`        
    }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
- //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)      
+ //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
+            
 
 
 }                                           
@@ -294,6 +308,7 @@ function previewData() {
 
     
 function previewSensorData() {
+   document.getElementById("mySpanUpload").innerHTML = ''
  //  if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    myDataTotal += 1  // each time this function is called 
    myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
