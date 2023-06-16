@@ -309,6 +309,7 @@ preview.appendChild(container);
 }   
     
 async function loadDataToTensor() {
+   /*
    const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)      
    const myTotalSenses = parseInt(document.getElementById('myNumSensors').value)
    console.log(`myDataTotal: ${myDataTotal}`) 
@@ -319,7 +320,9 @@ async function loadDataToTensor() {
       let myTempArray = document.getElementById('myData' + i).textContent.split('\n')    
       // assume this array has each of the set of senses in the proper amount and has been trimmed or filled and no gap
       
-   }         
+   }   
+   */
+   
 }
     
  
@@ -347,10 +350,14 @@ async function loadDataToTensor() {
   for (let i = 0; i <= myDataTotal; i++) {
     const dataElement = document.getElementById('myData' + i);
     if (dataElement) {  // put all one bit of data into a group of arrays
-      const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-      dataArrays.push(dataArray);
+      const dataArrays = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+     // dataArrays.push(dataArray);
     }
   }
+     
+  });   
+     
+     
 console.log(dataArrays)
   // Convert data arrays to tensors
   const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
