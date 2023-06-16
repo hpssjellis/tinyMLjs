@@ -6,7 +6,8 @@
    let exports = {};  // really important for WebSerial and Polyfill
    
    let myDataFiles, myTensor; 
-   let myDataTotal = -1;
+   let myDataTotal = 0;
+   let myDataMcu = 0;
    let labelsArray;
    let uniqueLabels, labelsTensor;
    let model;
@@ -33,7 +34,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.1-60</h6>
+<h6> Version 0.27.2-61</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -238,7 +239,7 @@ const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 //const myOldData = myDataTotal
     
-myDataTotal += myDataFiles.length;  // keep track of how many samples
+myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded
 document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
@@ -265,7 +266,8 @@ reader.readAsText(file);
 
     
 function previewSensorData() {
- myDataTotal += 1  // each time this function is called 
+myDataTotal += 1  // each time this function is called 
+myDataMcu +=1;     // to keep track of how many times we added data from the MCU  
 document.getElementById("myNumCount").value  = myDataTotal
 const preview = document.getElementById("myDataPreview");
 
