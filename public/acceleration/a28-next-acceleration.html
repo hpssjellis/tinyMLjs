@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.28.0-67</h6>
+<h6> Version 0.28.1-68</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -66,7 +66,7 @@ Machine Learning models often need very specific data.<br>
     document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
   }  
                                                             
- const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)      
+ const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
 
    console.log(`myDataTotal: ${myDataTotal}`) 
    console.log(`myTotalNumber: ${myTotalNumber}`) 
@@ -86,7 +86,7 @@ for (let i = 0; i < myDataTotal; i++) {
      if (myDifference < 0) {                                     
       for (myI=0; myI < (-1 * myDifference); myI++){  
         let myTempSenses = []                                             
-        for (let i=0; i < parseInt(document.getElementById('myNumSensors').value); i++){
+        for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
             myTempSenses[i] = 0                                        
          }                                             
          myTempArray.push(myTempSenses.join(','))                                  
@@ -102,7 +102,7 @@ for (let i = 0; i < myDataTotal; i++) {
 
 Count: (careful) <input type=text id="myNumCount" value=0   size=4>
 Number of Samples/count: <input type=text id="myNumSamples" value=50   size=4 onChange="{myModelSamples = this.value}">
-Number of Senses/sample: <input type=text id="myNumSensors" value=3   size=4 onChange = "{myModelSenses = this.value}"><br><br>
+Number of Senses/sample: <input type=text id="myNumSenses" value=3   size=4 onChange = "{myModelSenses = this.value}"><br><br>
    
 
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
@@ -157,7 +157,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     myShowGraph() 
                                                         
     let myCountArray =  document.getElementById('myArea01').value.split('\n')   
-    myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)                          
+    myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)                          
 
     console.log(' myCountArray.length' )
     console.log( myCountArray.length )                                             
@@ -177,7 +177,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     if (myDifference < 0) {       // add to the data                               
       for (myI=0; myI < (-1 * myDifference); myI++){  
         let myTempSenses = []                                             
-        for (let i=0; i < parseInt(document.getElementById('myNumSensors').value); i++){
+        for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
             myTempSenses[i] = 0                                        
          }                                             
          myTempArray.push(myTempSenses.join(','))                                  
@@ -737,9 +737,6 @@ Aruino Nano33BleSense webSerial code that can be adapted for other microcontroll
   document.execCommand('copy');                                                                         
 }">    
 <textarea id="myCode" rows=5 cols=70 NOWRAP>
-    
-    
-    
 /*
  * webSerial for testing javascript connection with an arduino
  * 
@@ -805,7 +802,7 @@ void loop() {
      }
      if (mySendData){
        // Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
-        Serial.print( String(x) + "," + String(y) + "," +  String(z) + " "  );
+        Serial.println( String(x) + "," + String(y) + "," +  String(z) );
      } 
    }
 
@@ -839,8 +836,10 @@ void loop() {
   } 
   
 }
-
-  
+   
+   
+   
+   
     
     
     
