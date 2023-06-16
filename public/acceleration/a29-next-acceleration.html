@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.4-81</h6>
+<h6> Version 0.29.4-82</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -74,7 +74,7 @@ for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
-  document.getElementById('mySpanClassify').innerHTML = JSON.stringify(myDataTotal, null, '<br>')
+  document.getElementById('mySpanClassify').innerHTML += (document.getElementById('myData' + i).textContent + '<br>'
 }  
 
 //const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
