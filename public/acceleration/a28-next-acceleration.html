@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.28.3-70</h6>
+<h6> Version 0.28.4-71</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -408,6 +408,7 @@ myModelSenses  = parseInt(document.getElementById('myNumSenses').value)
 
 // Convert data string to array
 let dataArray = dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+   /*
 console.log(dataArray)
 let myLength = myModelSamples * myModelSenses;  // shape of final tensor
 let myOrig = dataArray[0].length
@@ -420,8 +421,8 @@ console.log('myBig')
 console.log(myBig)
 console.log('myBig-myOrig')
 console.log(myBig-myOrig)
-  
-document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
+  */
+//document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
 
 
 /*
@@ -437,14 +438,14 @@ if (dataArray.length > myLength) {
 }
    
   */ 
- document.getElementById('mySpanClassify').innerHTML += `dataArray 2nd: ${dataArray}<br>` 
+// document.getElementById('mySpanClassify').innerHTML += `dataArray 2nd: ${dataArray}<br>` 
 
 // Convert data array to tensor
 const inputTensor = tf.tensor([dataArray]); 
 console.log('inputTensor before reshape')  
 console.log(inputTensor)  
   
-const inputTensor2 = inputTensor.reshape([1,myModelSamples,myModelSenses])
+const inputTensor2 = inputTensor.reshape([1 ,myModelSamples, myModelSenses])
 //inputTensor.reshape([99,3]).print();
   
 console.log('inputTensor2 after reshape')  
@@ -455,7 +456,7 @@ const prediction = model.predict(inputTensor2);
 const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
 const predictedLabel = uniqueLabels[predictedLabelIndex];
 console.log(`Predicted label: ${predictedLabel}`);
-document.getElementById('mySpanClassify').innerHTML = `Predicted label: ${predictedLabel}<br>`
+document.getElementById('mySpanClassify').innerHTML += `Predicted label: ${predictedLabel}<br>`
 
 console.log('done predicted Label')
   
