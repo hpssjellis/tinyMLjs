@@ -289,7 +289,7 @@ function previewData() {
 
     
 function previewSensorData() {
-   if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
+ //  if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    myDataTotal += 1  // each time this function is called 
    myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
    if (myDataFiles) {   
@@ -299,9 +299,11 @@ function previewSensorData() {
    }   
    document.getElementById("myNumCount").value = myDataTotal
    const preview = document.getElementById("myDataPreview");
-
-   document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
-
+   if (myDataTotal == 1) { // if first element then no comma for labels list
+      document.getElementById("myLabels").value  =   document.getElementById("mySingleLabel").value
+   } else {
+      document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
+   }
    const container = document.createElement("div");
    container.style.display = "flex";
    container.style.flexDirection = "column";
