@@ -77,19 +77,20 @@ for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines
 
 }  
 
-const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+//const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
 
 console.log(`myDataTotal: ${myDataTotal}`) 
-console.log(`myTotalNumber: ${myTotalNumber}`) 
+//console.log(`myTotalNumber: ${myTotalNumber}`) 
 
 for (let i = 0; i < myDataTotal; i++) { 
-    let myDoing = ''                 
+   let myDoing = ''                 
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
 
    let myDifference =  myTempArray.length - myTotalNumber                                                 
 
    console.log(`myDifference: ${myDifference}`)  
    
+    document.getElementById('mySpanUpload').innerHTML += `myDifference: ${myDifference}<br>`   
    if (myDifference == 0){myDoing += 'fine,'}
    
    if (myDifference > 0) {                                     
