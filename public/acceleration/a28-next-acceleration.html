@@ -398,13 +398,15 @@ model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
 async function classifyData() {
 // Get data from input field
 
+myModelSamples = parseInt(document.getElementById('myNumSamples').value)
+myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
   
  const dataString = document.getElementById("myArea01").value;
 
 // Convert data string to array
 let dataArray = dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
 console.log(dataArray)
-let myLength = 99 * 3;  // shape of final tensor
+let myLength = myModelSamples * myModelSenses;  // shape of final tensor
 let myOrig = dataArray[0].length
 let myBig = myLength-dataArray.length
 console.log('dataArray[0].length is myOrig')
@@ -418,6 +420,8 @@ console.log(myBig-myOrig)
   
 document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
 
+/*
+
 // Problem what if incoming data is the wrong length for the ML model!
 if (dataArray.length > myLength) { 
    dataArray.length = myLength;   // reduce it if it is too big
@@ -427,6 +431,8 @@ if (dataArray.length > myLength) {
       dataArray[0].push(0)     // use push so wwe don't have to worry about the array locations
      }  
 }
+   
+  */ 
  document.getElementById('mySpanClassify').innerHTML += `dataArray 2nd: ${dataArray}<br>` 
 
 // Convert data array to tensor
@@ -434,7 +440,7 @@ const inputTensor = tf.tensor([dataArray]);
 console.log('inputTensor before reshape')  
 console.log(inputTensor)  
   
-const inputTensor2 = inputTensor.reshape([1,99,3])
+const inputTensor2 = inputTensor.reshape([1,myModelSamples,myModelSenses])
 //inputTensor.reshape([99,3]).print();
   
 console.log('inputTensor2 after reshape')  
