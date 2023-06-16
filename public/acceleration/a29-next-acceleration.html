@@ -8,7 +8,6 @@
    let myDataFiles, myTensor; 
    let myDataTotal = 0;
    let myDataMcu = 0;
-   let myDataCSV = 0;
    let labelsArray;
    let uniqueLabels, labelsTensor;
    let model;
@@ -36,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.4-82</h6>
+<h6> Version 0.29.3-79</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -46,14 +45,8 @@
     
     
 
-Show: <input type=radio name="myPre" onclick="{
-   document.getElementById('myDataPreviewCSV').style.display = 'block'
-   document.getElementById('myDataPreviewSensor').style.display = 'block'
-}" CHECKED> <br>
-Hide: <input type=radio name="myPre" onclick="{
-   document.getElementById('myDataPreviewCSV').style.display = 'none'
-   document.getElementById('myDataPreviewSensor').style.display = 'none'
-}"><br>
+Show: <input type=radio name="myPre" onclick="{document.getElementById('myDataPreview').style.display = 'block'}" CHECKED> <br>
+Hide: <input type=radio name="myPre" onclick="{document.getElementById('myDataPreview').style.display = 'none'}"><br>
    
 <input type="file" id="myDataFile" accept=".csv" multiple onChange="{
     if (!myDataFiles) {
@@ -67,64 +60,45 @@ Hide: <input type=radio name="myPre" onclick="{
 }"> 
 <br>
 
-<div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
-<div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+<div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
    
 
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
-   ///////////////////////////////////////////////////////////////////////////////////
-
- 
-document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
-   
 for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
-   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
-   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
-   document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
-   
 }  
 
-//const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
 
 console.log(`myDataTotal: ${myDataTotal}`) 
-//console.log(`myTotalNumber: ${myTotalNumber}`) 
+console.log(`myTotalNumber: ${myTotalNumber}`) 
 
-for (let i = 0; i < myDataTotal; i++) { 
-   let myDoing = ''                 
+for (let i = 0; i < myDataTotal; i++) {                                       
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
 
    let myDifference =  myTempArray.length - myTotalNumber                                                 
 
    console.log(`myDifference: ${myDifference}`)  
-   
-    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
-   if (myDifference == 0){myDoing += 'fine,'}
-   
+
    if (myDifference > 0) {                                     
-      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
-         myTempArray.pop()   // delete the item 
-         myDoing += 'deleted,'
+      for (myI=0; myI < myDifference; myI++){                     
+         myTempArray.pop()                                  
       }  
    }
-   if (myDifference < 0) {     
-      myDifference = myDifference * -1
-      for (let myI=0; myI < myDifference; myI++){  // for different number of senses recorded
+   if (myDifference < 0) {                                     
+      for (myI=0; myI < (-1 * myDifference); myI++){  
          let myTempSenses = []                                             
-         for (let i2=0; i2 < parseInt(document.getElementById('myNumSenses').value); i2++){
-            myTempSenses[i2] = 0                                        
+         for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
+            myTempSenses[i] = 0                                        
          }                                             
-         myTempArray.push(myTempSenses.join(',')) 
-         myDoing += 'added,'
-      } 
-    document.getElementById('mySpanClassify').innerHTML += `Data #${i2} ${myDoing}<br>`        
+         myTempArray.push(myTempSenses.join(','))                                  
+      }  
    }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
- //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
-            
+ //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)      
 
 
 }                                           
@@ -282,7 +256,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 function previewData() {
    document.getElementById("mySpanUpload").innerHTML = ''   
 
-   const preview = document.getElementById("myDataPreviewCSV");
+   const preview = document.getElementById("myDataPreview");
    preview.innerHTML = "";
   // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    const labelsInput = document.getElementById("myLabels").value;
@@ -313,8 +287,6 @@ function previewData() {
          //container.appendChild(labelElement);
          container.prepend(labelElement);
          preview.appendChild(container);
-         
-         console.log(preview.children[i])
          };
       reader.readAsText(file);
    }
@@ -322,7 +294,6 @@ function previewData() {
 
     
 function previewSensorData() {
-   document.getElementById("mySpanUpload").innerHTML = ''
  //  if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    myDataTotal += 1  // each time this function is called 
    myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
@@ -332,9 +303,7 @@ function previewSensorData() {
         console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
    }   
    document.getElementById("myNumCount").value = myDataTotal
-
-   
-   const preview = document.getElementById("myDataPreviewSensor");
+   const preview = document.getElementById("myDataPreview");
    if (myDataTotal == 1) { // if first element then no comma for labels list
       document.getElementById("myLabels").value  =   document.getElementById("mySingleLabel").value
    } else {
@@ -346,17 +315,15 @@ function previewSensorData() {
    container.style.alignItems = "center";
    const dataElement = document.createElement("span");
    dataElement.textContent = document.getElementById("myArea01").value;
-   // possible some feedback here
-  // document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
+   document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
    dataElement.id = "myData" + myDataTotal;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
-   labelElement.textContent =  document.getElementById("mySingleLabel").value; 
+   labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
    labelElement.id = "myLabel" + myDataTotal; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
    preview.appendChild(container);
-   console.log(preview.children[myDataTotal])
 
 }   
     
