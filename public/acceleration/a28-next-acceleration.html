@@ -367,15 +367,16 @@ const ys = labelsTensor;
 
 // Train the model
 await model.fit(xs, ys, {
-epochs:  parseInt(document.getElementById('myEpochs').value),
-batchSize: 32,
-callbacks: {
-onEpochEnd: (epoch, logs) => {
-console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
-document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`
-}
-}
+   epochs:  parseInt(document.getElementById('myEpochs').value),
+   batchSize: 32,
+   callbacks: {
+      onEpochEnd: (epoch, logs) => {
+         console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+         document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`
+      }
+   }
 });
+   model.print()
 }
 
 async function exportModel() {
