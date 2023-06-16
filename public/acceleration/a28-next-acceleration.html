@@ -246,68 +246,72 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     
 
 function previewData() {
-const preview = document.getElementById("myDataPreview");
-preview.innerHTML = "";
-const labelsInput = document.getElementById("myLabels").value;
-const labelsArray = labelsInput.split(",").map((label) => label.trim());
-//const myOldData = myDataTotal
-    
-myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
-console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
-   
-document.getElementById("myNumCount").value  = myDataTotal
-for (let i = 0; i < myDataFiles.length; i++) {
-const file = myDataFiles[i];
-const label = labelsArray[i];
-const reader = new FileReader();
-reader.onloadend = () => {
-const container = document.createElement("div");
-container.style.display = "flex";
-container.style.flexDirection = "column";
-container.style.alignItems = "center";
-const dataElement = document.createElement("span");
-dataElement.textContent = reader.result;
-dataElement.id = "myData"+i;    
-container.appendChild(dataElement);
-const labelElement = document.createElement("span");
-labelElement.textContent = label;  
-labelElement.id = "myLabel"+i;    
-//container.appendChild(labelElement);
-container.prepend(labelElement);
-preview.appendChild(container);
-};
-reader.readAsText(file);
-}
+   document.getElementById("mySpanUpload").innerHTML = ''   
+
+   const preview = document.getElementById("myDataPreview");
+   preview.innerHTML = "";
+   const labelsInput = document.getElementById("myLabels").value;
+   const labelsArray = labelsInput.split(",").map((label) => label.trim());
+   //const myOldData = myDataTotal
+
+   myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
+   console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+
+   document.getElementById("myNumCount").value  = myDataTotal
+   for (let i = 0; i < myDataFiles.length; i++) {
+      const file = myDataFiles[i];
+      const label = labelsArray[i];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+         const container = document.createElement("div");
+         container.style.display = "flex";
+         container.style.flexDirection = "column";
+         container.style.alignItems = "center";
+         const dataElement = document.createElement("span");
+         dataElement.textContent = reader.result;
+         document.getElementById("mySpanUpload").innerHTML += `# ${i}, length: ${ reader.result.length}`
+         dataElement.id = "myData"+i;    
+         container.appendChild(dataElement);
+         const labelElement = document.createElement("span");
+         labelElement.textContent = label;  
+         labelElement.id = "myLabel"+i;    
+         //container.appendChild(labelElement);
+         container.prepend(labelElement);
+         preview.appendChild(container);
+         };
+      reader.readAsText(file);
+   }
 }
 
     
 function previewSensorData() {
-myDataTotal += 1  // each time this function is called 
-myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
-if (myDataFiles) {   
-     console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
-} else {
-     console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
-}   
-document.getElementById("myNumCount").value = myDataTotal
-const preview = document.getElementById("myDataPreview");
+   myDataTotal += 1  // each time this function is called 
+   myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
+   if (myDataFiles) {   
+        console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+   } else {
+        console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
+   }   
+   document.getElementById("myNumCount").value = myDataTotal
+   const preview = document.getElementById("myDataPreview");
 
-document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
+   document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
 
-const container = document.createElement("div");
-container.style.display = "flex";
-container.style.flexDirection = "column";
-container.style.alignItems = "center";
-const dataElement = document.createElement("span");
-dataElement.textContent = document.getElementById("myArea01").value;
-dataElement.id = "myData" + myDataTotal;    
-container.appendChild(dataElement);
-const labelElement = document.createElement("span");
-labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
-labelElement.id = "myLabel" + myDataTotal; 
-//container.appendChild(labelElement);
-container.prepend(labelElement);
-preview.appendChild(container);
+   const container = document.createElement("div");
+   container.style.display = "flex";
+   container.style.flexDirection = "column";
+   container.style.alignItems = "center";
+   const dataElement = document.createElement("span");
+   dataElement.textContent = document.getElementById("myArea01").value;
+   document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}`
+   dataElement.id = "myData" + myDataTotal;    
+   container.appendChild(dataElement);
+   const labelElement = document.createElement("span");
+   labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
+   labelElement.id = "myLabel" + myDataTotal; 
+   //container.appendChild(labelElement);
+   container.prepend(labelElement);
+   preview.appendChild(container);
 
 }   
     
@@ -315,11 +319,11 @@ async function loadDataToTensor() {
    let dataArrays = []
 
    for (let i = 0; i <= myDataTotal; i++) {
-    const dataElement = document.getElementById('myData' + i);
-    if (dataElement) {  // put all one bit of data into a group of arrays
-      const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-      dataArrays.push(dataArray);         
-    }
+      const dataElement = document.getElementById('myData' + i);
+      if (dataElement) {  // put all one bit of data into a group of arrays
+         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+         dataArrays.push(dataArray);         
+      }
    }
 
    console.log(dataArrays)
