@@ -227,7 +227,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
   document.getElementById('myArea01').value = dataString + labelString;                                             
                                              
 }"> <br>
-<span id="mySpanClassify">...</span>
+<span id="mySpanResults">...</span>
     
 
 
@@ -456,7 +456,7 @@ const prediction = model.predict(inputTensor2);
 const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
 const predictedLabel = uniqueLabels[predictedLabelIndex];
 console.log(`Predicted label: ${predictedLabel}`);
-document.getElementById('mySpanClassify').innerHTML += `Predicted label: ${predictedLabel}<br>`
+document.getElementById('mySpanResults').innerHTML += `Predicted label: ${predictedLabel}<br>`
 
 console.log('done predicted Label')
   
