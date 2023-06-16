@@ -6,7 +6,8 @@
    let exports = {};  // really important for WebSerial and Polyfill
    
    let myDataFiles, myTensor; 
-   let myDataTotal = -1;
+   let myDataTotal = 0;
+   let myDataMcu = 0;
    let labelsArray;
    let uniqueLabels, labelsTensor;
    let model;
@@ -33,7 +34,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.1-60</h6>
+<h6> Version 0.27.3-65</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -59,14 +60,18 @@
 <span id="mySpanSize">...</span><br><br>
 Machine Learning models often need very specific data.<br>
 <input type=button value="Clean All" onclick="{
-  for (let i = 0; i <= myDataTotal; i++) {                                       
+  for (let i = 0; i < myDataTotal; i++) {                                       
     document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
   }                                           
 }">
 <input type=button value="Trim or Fill All" onclick="{
                                                      
  const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)      
- for (let i = 0; i <= myDataTotal; i++) {                                       
+
+   console.log(`myDataTotal: ${myDataTotal}`) 
+   console.log(`myTotalNumber: ${myTotalNumber}`) 
+                                                     
+for (let i = 0; i < myDataTotal; i++) {                                       
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
                                                                                          
    let myDifference =  myTempArray.length - myTotalNumber                                                 
@@ -166,15 +171,23 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
                                                  
     if (myDifference > 0) {                                     
       for (myI=0; myI < myDifference; myI++){                     
-         myCountArray.pop()                                  
+         myCountArray.pop()   // delete this data                                
       }  
     }
-     if (myDifference < 0) {                                     
-      for (myI=0; myI < (-1 * myDifference); myI++){                     
-         myCountArray.push('0,0,0')                                  
+           
+    if (myDifference < 0) {       // add to the data                               
+      for (myI=0; myI < (-1 * myDifference); myI++){  
+        let myTempSenses = []                                             
+        for (let i=0; i < parseInt(document.getElementById('myNumSensors').value); i++){
+            myTempSenses[i] = 0                                        
+         }                                             
+         myTempArray.push(myTempSenses.join(','))                                  
       }  
-    }       
-   console.log(myCountArray)
+    }                                               
+                                                 
+                                                                                                                      
+                                                 
+  // console.log(myCountArray)
    document.getElementById('myArea01').value = myCountArray.join('\n')      
    myShowGraph() 
    console.log('myCountArray.length')
@@ -238,7 +251,9 @@ const labelsInput = document.getElementById("myLabels").value;
 const labelsArray = labelsInput.split(",").map((label) => label.trim());
 //const myOldData = myDataTotal
     
-myDataTotal += myDataFiles.length;  // keep track of how many samples
+myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
+console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+   
 document.getElementById("myNumCount").value  = myDataTotal
 for (let i = 0; i < myDataFiles.length; i++) {
 const file = myDataFiles[i];
@@ -265,8 +280,14 @@ reader.readAsText(file);
 
     
 function previewSensorData() {
- myDataTotal += 1  // each time this function is called 
-document.getElementById("myNumCount").value  = myDataTotal
+myDataTotal += 1  // each time this function is called 
+myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
+if (myDataFiles) {   
+     console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+} else {
+     console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
+}   
+document.getElementById("myNumCount").value = myDataTotal
 const preview = document.getElementById("myDataPreview");
 
 document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
@@ -375,6 +396,8 @@ labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
 console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
 }
 
+   
+   /*
 document.getElementById("myDataFile").addEventListener("change", (event) => {
 if (!myDataFiles) {
 myDataFiles = event.target.files;
@@ -386,7 +409,7 @@ previewData();
 }
 });
   
-
+*/
   
   
   
