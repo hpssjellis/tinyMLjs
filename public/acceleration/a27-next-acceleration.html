@@ -67,7 +67,10 @@ Machine Learning models often need very specific data.<br>
 <input type=button value="Trim or Fill All" onclick="{
                                                      
  const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)      
- for (let i = 0; i <= myDataTotal; i++) {                                       
+
+   console.log(`myTotalNumber: ${myTotalNumber}`) 
+                                                     
+for (let i = 0; i <= myDataTotal; i++) {                                       
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
                                                                                          
    let myDifference =  myTempArray.length - myTotalNumber                                                 
