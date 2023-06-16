@@ -268,7 +268,7 @@ function previewData() {
          container.style.alignItems = "center";
          const dataElement = document.createElement("span");
          dataElement.textContent = reader.result;
-         document.getElementById("mySpanUpload").innerHTML += `# ${i}, length: ${ reader.result.length}<br>`
+        // document.getElementById("mySpanUpload").innerHTML += `# ${i}, length: ${ reader.result.length}<br>`
          dataElement.id = "myData"+i;    
          container.appendChild(dataElement);
          const labelElement = document.createElement("span");
