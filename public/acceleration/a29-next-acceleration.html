@@ -74,7 +74,7 @@ for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
-
+  document.getElementById('mySpanClassify').innerHTML = JSON.stringify(myDataTotal, null, '<br>')
 }  
 
 //const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
