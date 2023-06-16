@@ -309,13 +309,24 @@ preview.appendChild(container);
 }   
     
 async function loadDataToTensor() {
-          
-          
+   const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSensors').value)      
+   const myTotalSenses = parseInt(document.getElementById('myNumSensors').value)
+   console.log(`myDataTotal: ${myDataTotal}`) 
+   console.log(`myTotalNumber: ${myTotalNumber}`) 
+   console.log(`myTotalSenses: ${myTotalSenses}`) 
+
+   for (let i = 0; i < myDataTotal; i++) {                                       
+      let myTempArray = document.getElementById('myData' + i).textContent.split('\n')    
+      // assume this array has each of the set of senses in the proper amount and has been trimmed or filled and no gap
+      
+   }         
 }
     
  
   
   async function loadDataToTensorOld() {
+     
+     /*
   // Get data from uploaded files
   const dataPromise = Array.from(myDataFiles).map((file) => {
     return new Promise((resolve) => {
@@ -331,16 +342,16 @@ async function loadDataToTensor() {
   const dataArrays = dataStrings.map((dataString) => {
     return dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
   });
-
+*/
   // Get data from microcontroller
   for (let i = 0; i <= myDataTotal; i++) {
     const dataElement = document.getElementById('myData' + i);
-    if (dataElement) {
+    if (dataElement) {  // put all one bit of data into a group of arrays
       const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
       dataArrays.push(dataArray);
     }
   }
-
+console.log(dataArrays)
   // Convert data arrays to tensors
   const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
   myTensor = tf.stack(tensors);
