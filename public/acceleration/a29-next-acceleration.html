@@ -160,7 +160,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <input type=button value="Clean, Trim or Fill" onclick="{
     document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
-    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(" ", "\n"));   // convert spaces to line breaks  
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(' ', '\n'));   // convert spaces to line breaks  
     myShowGraph() 
                                                         
     let myCountArray =  document.getElementById('myArea01').value.split('\n')   
