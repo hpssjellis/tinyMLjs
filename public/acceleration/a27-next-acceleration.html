@@ -347,11 +347,14 @@ async function loadDataToTensor() {
   });
 */
   // Get data from microcontroller
+   let dataArrays = []
+     
   for (let i = 0; i <= myDataTotal; i++) {
     const dataElement = document.getElementById('myData' + i);
     if (dataElement) {  // put all one bit of data into a group of arrays
-      const dataArrays = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-     // dataArrays.push(dataArray);
+      const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+      dataArrays.push(dataArray);
+              
     }
   }
      
