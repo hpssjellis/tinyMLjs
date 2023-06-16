@@ -34,7 +34,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.3-64</h6>
+<h6> Version 0.27.3-65</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -170,15 +170,30 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
                                                  
     if (myDifference > 0) {                                     
       for (myI=0; myI < myDifference; myI++){                     
-         myCountArray.pop()                                  
+         myCountArray.pop()    a data set if needed/ delete                               
       }  
     }
+           
+          if (myDifference < 0) {                                     
+      for (myI=0; myI < (-1 * myDifference); myI++){  
+        let myTempSenses = []                                             
+        for (let i=0; i < parseInt(document.getElementById('myNumSensors').value); i++){
+            myTempSenses[i] = 0                                        
+         }                                             
+         myTempArray.push(myTempSenses.join(','))                                  
+      }  
+    }                                               
+                                                 
+                                                 
+            /*                                     
      if (myDifference < 0) {                                     
       for (myI=0; myI < (-1 * myDifference); myI++){                     
-         myCountArray.push('0,0,0')                                  
+         myCountArray.push('0,0,0')    add zeros to the data set if needed                               
       }  
-    }       
-   console.log(myCountArray)
+    }  
+          */                                       
+                                                 
+  // console.log(myCountArray)
    document.getElementById('myArea01').value = myCountArray.join('\n')      
    myShowGraph() 
    console.log('myCountArray.length')
