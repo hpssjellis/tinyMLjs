@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.2-76</h6>
+<h6> Version 0.29.2-77</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -359,8 +359,12 @@ async function trainModel() {
 myModelSamples = parseInt(document.getElementById('myNumSamples').value)
 myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
 model = tf.sequential();
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
-// add more layers here if you want  
+   
+   
+//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+ 
+model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
+model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
 
 // Compile the model
