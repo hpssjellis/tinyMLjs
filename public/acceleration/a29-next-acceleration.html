@@ -67,7 +67,8 @@ Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
    ///////////////////////////////////////////////////////////////////////////////////
-   
+
+ 
 document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
    
 for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
@@ -75,6 +76,7 @@ for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
    document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
+   
 }  
 
 //const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
@@ -303,6 +305,8 @@ function previewData() {
          //container.appendChild(labelElement);
          container.prepend(labelElement);
          preview.appendChild(container);
+         
+         console.log(preview.children[i])
          };
       reader.readAsText(file);
    }
@@ -320,6 +324,8 @@ function previewSensorData() {
         console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
    }   
    document.getElementById("myNumCount").value = myDataTotal
+
+   
    const preview = document.getElementById("myDataPreview");
    if (myDataTotal == 1) { // if first element then no comma for labels list
       document.getElementById("myLabels").value  =   document.getElementById("mySingleLabel").value
@@ -332,15 +338,17 @@ function previewSensorData() {
    container.style.alignItems = "center";
    const dataElement = document.createElement("span");
    dataElement.textContent = document.getElementById("myArea01").value;
-   document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
+   // possible some feedback here
+  // document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
    dataElement.id = "myData" + myDataTotal;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
-   labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
+   labelElement.textContent =  document.getElementById("mySingleLabel").value; 
    labelElement.id = "myLabel" + myDataTotal; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
    preview.appendChild(container);
+   console.log(preview.children[myDataTotal])
 
 }   
     
