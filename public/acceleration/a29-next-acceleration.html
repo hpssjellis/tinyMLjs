@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.29.2-75</h6>
+<h6> Version 0.29.2-76</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -45,6 +45,9 @@
     
     
 
+Show: <input type=radio name="myPre" onclick="{document.getElementById('myDataPreview').style.display = 'block'}" CHECKED> 
+Hide: <input type=radio name="myPre" onclick="{document.getElementById('myDataPreview').style.display = 'none'}">
+   
 <input type="file" id="myDataFile" accept=".csv" multiple onChange="{
     if (!myDataFiles) {
        myDataFiles = event.target.files;
@@ -55,8 +58,6 @@
       previewData();
     }                                                      
 }"> 
-Show: <input type=radio name="myPre" onclick="{alert()}" CHECKED> 
-Hide: <input type=radio name="myPre" onclick="{alert()}">
 <br>
 
 <div id="myDataPreview" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
