@@ -68,7 +68,7 @@ Machine Learning models often need very specific data.<br>
 <input type=button value="Clean, Trim or Fill All" onclick="{
    ///////////////////////////////////////////////////////////////////////////////////
    
-document.getElementById('mySpanUpload').innerHTML = 'output here....<br>'
+document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
    
 for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
@@ -90,7 +90,7 @@ for (let i = 0; i < myDataTotal; i++) {
 
    console.log(`myDifference: ${myDifference}`)  
    
-    document.getElementById('mySpanUpload').innerHTML += `myDifference: ${myDifference}<br>`   
+    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
    if (myDifference == 0){myDoing += 'fine,'}
    
    if (myDifference > 0) {                                     
@@ -109,7 +109,7 @@ for (let i = 0; i < myDataTotal; i++) {
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,'
       } 
-    document.getElementById('mySpanUpload').innerHTML += `Data #${i} ${myDoing}<br>`        
+    document.getElementById('mySpanClassify').innerHTML += `Data #${i2} ${myDoing}<br>`        
    }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
