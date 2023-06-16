@@ -171,11 +171,11 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
                                                  
     if (myDifference > 0) {                                     
       for (myI=0; myI < myDifference; myI++){                     
-         myCountArray.pop()    a data set if needed/ delete                               
+         myCountArray.pop()   // delete this data                                
       }  
     }
            
-          if (myDifference < 0) {                                     
+    if (myDifference < 0) {       // add to the data                               
       for (myI=0; myI < (-1 * myDifference); myI++){  
         let myTempSenses = []                                             
         for (let i=0; i < parseInt(document.getElementById('myNumSensors').value); i++){
@@ -185,14 +185,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
       }  
     }                                               
                                                  
-                                                 
-            /*                                     
-     if (myDifference < 0) {                                     
-      for (myI=0; myI < (-1 * myDifference); myI++){                     
-         myCountArray.push('0,0,0')    add zeros to the data set if needed                               
-      }  
-    }  
-          */                                       
+                                                                                                                      
                                                  
   // console.log(myCountArray)
    document.getElementById('myArea01').value = myCountArray.join('\n')      
