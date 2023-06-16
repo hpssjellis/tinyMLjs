@@ -272,7 +272,8 @@ container.appendChild(dataElement);
 const labelElement = document.createElement("span");
 labelElement.textContent = label;  
 labelElement.id = "myLabel"+i;    
-container.appendChild(labelElement);
+//container.appendChild(labelElement);
+container.prepend(labelElement);
 preview.appendChild(container);
 };
 reader.readAsText(file);
@@ -304,7 +305,8 @@ container.appendChild(dataElement);
 const labelElement = document.createElement("span");
 labelElement.textContent =  document.getElementById("mySingleLabel").value; ;
 labelElement.id = "myLabel" + myDataTotal; 
-container.appendChild(labelElement);
+//container.appendChild(labelElement);
+container.prepend(labelElement);
 preview.appendChild(container);
 
 }   
