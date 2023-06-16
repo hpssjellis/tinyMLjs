@@ -66,8 +66,9 @@ Hide: <input type=radio name="myPre" onclick="{document.getElementById('myDataPr
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
+   ///////////////////////////////////////////////////////////////////////////////////
    
-document.getElementById('mySpanUpload').innerHTML = ''
+document.getElementById('mySpanUpload').innerHTML = 'output here....<br>'
    
 for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
