@@ -34,7 +34,7 @@
 </head>
 <body>
 
-<h6> Version 0.27.2-62</h6>
+<h6> Version 0.27.2-63</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -270,8 +270,11 @@ reader.readAsText(file);
 function previewSensorData() {
 myDataTotal += 1  // each time this function is called 
 myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
-console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
-   
+if (myDataFiles) {   
+     console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+} else {
+     console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
+}   
 document.getElementById("myNumCount").value = myDataTotal
 const preview = document.getElementById("myDataPreview");
 
@@ -381,6 +384,8 @@ labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
 console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
 }
 
+   
+   /*
 document.getElementById("myDataFile").addEventListener("change", (event) => {
 if (!myDataFiles) {
 myDataFiles = event.target.files;
@@ -392,7 +397,7 @@ previewData();
 }
 });
   
-
+*/
   
   
   
