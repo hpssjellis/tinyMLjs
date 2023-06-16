@@ -364,9 +364,10 @@ console.log('myModelSamples')
 console.log(myModelSamples)   
 console.log('myModelSenses')   
 console.log(myModelSenses)   
-//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
  
-model.add(tf.layers.dense({ units: 30,  inputShape: [1, myModelSamples, myModelSenses] }) );  
+//model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
+model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
 
