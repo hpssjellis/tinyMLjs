@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<h6> Version 0.28.1-68</h6>
+<h6> Version 0.28.2-69</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -62,47 +62,47 @@
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
-   for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
-    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
-  }  
-                                                            
- const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+}  
 
-   console.log(`myDataTotal: ${myDataTotal}`) 
-   console.log(`myTotalNumber: ${myTotalNumber}`) 
-                                                     
+const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+
+console.log(`myDataTotal: ${myDataTotal}`) 
+console.log(`myTotalNumber: ${myTotalNumber}`) 
+
 for (let i = 0; i < myDataTotal; i++) {                                       
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
-                                                                                         
+
    let myDifference =  myTempArray.length - myTotalNumber                                                 
-      
+
    console.log(`myDifference: ${myDifference}`)  
-                                                                                                      
-    if (myDifference > 0) {                                     
+
+   if (myDifference > 0) {                                     
       for (myI=0; myI < myDifference; myI++){                     
          myTempArray.pop()                                  
       }  
-    }
-     if (myDifference < 0) {                                     
+   }
+   if (myDifference < 0) {                                     
       for (myI=0; myI < (-1 * myDifference); myI++){  
-        let myTempSenses = []                                             
-        for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
+         let myTempSenses = []                                             
+         for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
             myTempSenses[i] = 0                                        
          }                                             
          myTempArray.push(myTempSenses.join(','))                                  
       }  
-    }       
+   }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
    console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)      
-                                                                                             
-                                                     
-  }                                           
+
+
+}                                           
 }">
 
 Count: (careful) <input type=text id="myNumCount" value=0   size=4>
-Number of Samples/count: <input type=text id="myNumSamples" value=50   size=4 onChange="{myModelSamples = this.value}">
-Number of Senses/sample: <input type=text id="myNumSenses" value=3   size=4 onChange = "{myModelSenses = this.value}"><br><br>
+Number of Samples/count: <input type=text id="myNumSamples" value=50   size=4 onChange="{myModelSamples = parseInt(this.value)}">
+Number of Senses/sample: <input type=text id="myNumSenses" value=3   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
 
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
@@ -346,8 +346,8 @@ async function loadDataToTensor() {
 
 async function trainModel() {
 // Define the model architecture
-myModelSamples = document.getElementById('myNumSamples').value
-myModelSenses  = document.getElementById('myNumSenses').value 
+myModelSamples = parseInt(document.getElementById('myNumSamples').value)
+myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
 model = tf.sequential();
 model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
 // add more layers here if you want  
