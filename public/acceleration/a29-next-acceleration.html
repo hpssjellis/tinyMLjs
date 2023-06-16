@@ -143,20 +143,20 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input type=button value="Clear and send 'start' "  style="color:red; width:200px;"  onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
-    setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart
-                                                
+    setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart                                           
 }">
     
 <input type=button value="send 'stop' " onclick="{mySendIt('stop')}">  
    <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
-}"><br>
+}">
 <input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
-<input type=button value="send 'start' only " onclick="{mySendIt('start')}">     
+<input type=button value="send 'start' only " onclick="{mySendIt('start')}"><br>     
     
 
     
 
+  
 
 <input type=button value="Clean, Trim or Fill" onclick="{
     document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
@@ -488,6 +488,7 @@ inputTensor.dispose();
 }
   
   
+
   
  function myShowGraph(){ 
   
@@ -507,6 +508,8 @@ var lineZ = [];
 const dataArray = dataString2.split('\n');
 //console.log('dataArray')
 //console.log(dataArray)
+    
+document.getElementById('mySpanResults').innerHTML =  "Number of Samples:" + dataArray.length  
 
 for (let i = 0; i < dataArray.length; i++) {
 const accelerationValues = dataArray[i].split(',');
