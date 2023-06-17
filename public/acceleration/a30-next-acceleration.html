@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.3-90</h6>
+<h6> Version 0.30.4-91</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -283,7 +283,7 @@ for (let i = 0; i < myDataCSV; i++) {
 
 function myDataCheckSenses(){
 
-/*
+
  
 document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
 //document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu1').textContent +'<br>'   
@@ -297,7 +297,7 @@ for (let i = 1; i <= myDataMcu; i++) {   // careful starting at number 1 not zer
    document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData2Mcu' + i).textContent + '<br><br><br>'
    
 }  
-
+/*
 const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
 
 console.log(`myDataMcu: ${myDataMcu}`) 
