@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.1-86</h6>
+<h6> Version 0.30.1-87</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -74,60 +74,17 @@ Hide: <input type=radio name="myPre" onclick="{
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{
-   ///////////////////////////////////////////////////////////////////////////////////
-
  
-document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
+myDataCheckCSV()   //  Checks all the csv data for correct number of samples and senses  /////////////////////////////////////////////////////////////////////////////////
+myDataCheckSenses()   //  Checks all the csv data for correct number of samples and senses  /////////////////////////////////////////////////////////////////////////////////
+
+
+} 
+
+
+
+
    
-for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
-   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
-   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
-   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
-   document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
-   
-}  
-
-const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
-
-console.log(`myDataCSV: ${myDataCSV}`) 
-//console.log(`myTotalNumber: ${myTotalNumber}`) 
-
-for (let i = 0; i < myDataCSV; i++) { 
-   let myDoing = ''                 
-   let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
-
-   let myDifference =  myTempArray.length - myTotalNumber                                                 
-
-   console.log(`myDifference: ${myDifference}`)  
-   
-    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
-   if (myDifference == 0){myDoing += 'fine,'}
-   
-   if (myDifference > 0) {                                     
-      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
-         myTempArray.pop()   // delete the item 
-         myDoing += 'deleted,'
-      }  
-   }
-   if (myDifference < 0) {     
-      myDifference = myDifference * -1
-      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
-         let myTempSenses = []                                             
-         for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
-            myTempSenses[myI4] = 0                                        
-         }                                             
-         myTempArray.push(myTempSenses.join(',')) 
-         myDoing += 'added,' 
-        document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
-      }     
-   }       
-   //  console.log(myCountArray)
-   document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
- //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
-            
-
-
-}                                           
 }">
 
 Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
@@ -136,11 +93,10 @@ Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5>
 Number of Samples/count: <input type=text id="myNumSamples" value="100"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
-
-Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
-Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>    
+<input type="button" value="Convert Data to Tensor"  style="color:red; width:200px;" onclick="loadDataToTensor()"><br>
    
-<input type="button" value="Convert Data to Tensor"  style="color:red; width:200px;" onclick="loadDataToTensor()">
+Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
 <input type="button" value="Train Model"  style="color:red; width:200px;" onclick="trainModel()"> <br>
 
 <span id="mySpanClassify">...</span><br>
@@ -279,7 +235,114 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <script>
 
     
-    
+funciton myDataCheckCSV(){
+ 
+document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
+   
+for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+   document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
+   
+}  
+
+const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+
+console.log(`myDataCSV: ${myDataCSV}`) 
+//console.log(`myTotalNumber: ${myTotalNumber}`) 
+
+for (let i = 0; i < myDataCSV; i++) { 
+   let myDoing = ''                 
+   let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
+
+   let myDifference =  myTempArray.length - myTotalNumber                                                 
+
+   console.log(`myDifference: ${myDifference}`)  
+   
+    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
+   if (myDifference == 0){myDoing += 'fine,'}
+   
+   if (myDifference > 0) {                                     
+      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
+         myTempArray.pop()   // delete the item 
+         myDoing += 'deleted,'
+      }  
+   }
+   if (myDifference < 0) {     
+      myDifference = myDifference * -1
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
+         let myTempSenses = []                                             
+         for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
+            myTempSenses[myI4] = 0                                        
+         }                                             
+         myTempArray.push(myTempSenses.join(',')) 
+         myDoing += 'added,' 
+        document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
+      }     
+   }       
+   //  console.log(myCountArray)
+   document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
+ //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
+            
+}   
+
+funciton myDataCheckSenses(){
+ 
+document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
+   
+for (let i = 0; i < myDataMcu; i++) {   // clean out empty lines                                    
+   document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+   document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+   document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData2Mcu' + i).textContent + '<br><br><br>'
+   
+}  
+
+const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+
+console.log(`myDataMcu: ${myDataMcu}`) 
+//console.log(`myTotalNumber: ${myTotalNumber}`) 
+
+for (let i = 0; i < myDataMcu; i++) { 
+   let myDoing = ''                 
+   let myTempArray = document.getElementById('myData2Mcu' + i).textContent.split('\n')                    
+
+   let myDifference =  myTempArray.length - myTotalNumber                                                 
+
+   console.log(`myDifference: ${myDifference}`)  
+   
+    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
+   if (myDifference == 0){myDoing += 'fine,'}
+   
+   if (myDifference > 0) {                                     
+      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
+         myTempArray.pop()   // delete the item 
+         myDoing += 'deleted,'
+      }  
+   }
+   if (myDifference < 0) {     
+      myDifference = myDifference * -1
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
+         let myTempSenses = []                                             
+         for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
+            myTempSenses[myI4] = 0                                        
+         }                                             
+         myTempArray.push(myTempSenses.join(',')) 
+         myDoing += 'added,' 
+        document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
+      }     
+   }       
+   //  console.log(myCountArray)
+   document.getElementById('myData2Mcu' + i).textContent = myTempArray.join('\n') 
+ //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
+            
+}   
+
+
+
+
+   
 
 function previewData() {
    document.getElementById("mySpanUpload").innerHTML = ''   
@@ -357,11 +420,11 @@ function previewSensorData() {
    dataElement.textContent = document.getElementById("myArea01").value;
    // possible some feedback here
   // document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
-   dataElement.id = "myData" + myDataMcu;    
+   dataElement.id = "myData2Mcu" + myDataMcu;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
    labelElement.textContent =  document.getElementById("mySingleLabel").value; 
-   labelElement.id = "myLabel" + myDataMcu; 
+   labelElement.id = "myLabel2Mcu" + myDataMcu; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
    previewSensor.appendChild(container);
@@ -384,12 +447,22 @@ async function loadDataToTensor() {
          dataArrays.push(dataArray);         
       }
    }
+   for (let i = 0; i <= myDataMcu; i++) {
+      const dataElement = document.getElementById('myData' + i);
+      if (dataElement) {  // put all one bit of data into a group of arrays
+         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+         dataArrays.push(dataArray);         
+      }
+   }
+   
    console.log(dataArrays)
    // Convert data arrays to tensors
    const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
    myTensor = tf.stack(tensors);
    console.log('Data converted to tensor:', myTensor);
    document.getElementById("mySpanClassify").innerHTML = `myTensor.shape: ${ myTensor.shape}<br>`
+
+   
    // Create a one-hot encoded tensor for the labels
    const labelsInput = document.getElementById("myLabels").value;
    labelsArray = labelsInput.split(",").map((label) => label.trim());
