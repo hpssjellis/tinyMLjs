@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.1-85</h6>
+<h6> Version 0.30.1-86</h6>
 <h1>Upload Acceleration Data</h1>
 <label for="myLabels">Enter ALL data labels (comma-separated), before uploading CSV Files</label>
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -111,15 +111,15 @@ for (let i = 0; i < myDataCSV; i++) {
    }
    if (myDifference < 0) {     
       myDifference = myDifference * -1
-      for (let myI=0; myI < myDifference; myI++){  // for different number of senses recorded
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
          let myTempSenses = []                                             
-         for (let i2=0; i2 < parseInt(document.getElementById('myNumSenses').value); i2++){
-            myTempSenses[i2] = 0                                        
+         for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
+            myTempSenses[myI4] = 0                                        
          }                                             
          myTempArray.push(myTempSenses.join(',')) 
-         myDoing += 'added,'
-      } 
-    document.getElementById('mySpanClassify').innerHTML += `Data #${i2} ${myDoing}<br>`        
+         myDoing += 'added,' 
+        document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
+      }     
    }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
