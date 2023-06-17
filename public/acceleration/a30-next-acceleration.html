@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.4-95</h6>
+<h6> Version 0.30.5-96</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -271,7 +271,7 @@ for (let i = 0; i < myDataCSV; i++) {
          }                                             
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,' 
-        document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
+       // document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
       }     
    }       
    //  console.log(myCountArray)
@@ -331,7 +331,7 @@ for (let i = 1; i <= myDataMcu; i++) {
          }                                             
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,' 
-        document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
+         document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    // remove once working
       }  
    
    }       
