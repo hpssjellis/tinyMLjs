@@ -74,7 +74,8 @@ Hide: <input type=radio name="myPre" onclick="{
 
 Machine Learning models often need very specific data.<br>
 
-<input type=button value="Clean, Trim or Fill All" onclick="{
+<input type=button value="Clean, Trim or Fill All" onclick="{  
+   document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
    myDataCheckCSV()   //  Checks all the csv data for correct number of samples and senses  
    myDataCheckSenses()   //  Checks all the csv data for correct number of samples and senses 
 }">
@@ -229,7 +230,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     
 function myDataCheckCSV(){
 
-document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
    
 for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
@@ -286,7 +286,6 @@ function myDataCheckSenses(){
 
 
  
-document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
 //document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu1').textContent +'<br>'   
 //document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu2').textContent +'<br>'   
    
