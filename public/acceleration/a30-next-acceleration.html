@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.4-91</h6>
+<h6> Version 0.30.4-92</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -295,14 +295,15 @@ for (let i = 1; i <= myDataMcu; i++) {   // careful starting at number 1 not zer
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
    document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData2Mcu' + i).textContent + '<br><br><br>'
+   document.getElementById('mySpanClassify').innerHTML += '#:'+ i + '<br><br>'
    
 }  
-/*
+
 const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
 
 console.log(`myDataMcu: ${myDataMcu}`) 
 //console.log(`myTotalNumber: ${myTotalNumber}`) 
-
+/*
 for (let i = 0; i < myDataMcu; i++) { 
    let myDoing = ''                 
    let myTempArray = document.getElementById('myData2Mcu' + i).textContent.split('\n')                    
