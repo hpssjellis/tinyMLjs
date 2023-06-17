@@ -407,10 +407,9 @@ function previewSensorData() {
    }   
    document.getElementById("myNumCountSenses").value = myDataMcu
    document.getElementById("myNumCountTotal").value = myDataTotal
-
-   
+ 
    const previewSensor = document.getElementById("myDataPreviewSensor");
-   if (myDataTotal == 1) { // if first element then no comma for labels list
+   if (myDataMcu == 1) { // if first element then no comma for labels list
       document.getElementById("mySenseLabels").value  =   document.getElementById("mySingleLabel").value
    } else {
       document.getElementById("mySenseLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
