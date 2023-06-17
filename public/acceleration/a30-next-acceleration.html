@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.4-94</h6>
+<h6> Version 0.30.4-95</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -236,7 +236,7 @@ for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
   // document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
-   document.getElementById('mySpanClassify').innerHTML += 'CSV #:'+ i + <br><br><br>'
+   document.getElementById('mySpanClassify').innerHTML += 'CSV #:'+ i + '<br><br>'
    
 }  
 
