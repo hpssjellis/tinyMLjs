@@ -79,7 +79,7 @@ Machine Learning models often need very specific data.<br>
  
 document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
    
-for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines                                    
+for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
@@ -89,10 +89,10 @@ for (let i = 0; i < myDataTotal; i++) {   // clean out empty lines
 
 //const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
 
-console.log(`myDataTotal: ${myDataTotal}`) 
+console.log(`myDataCSV: ${myDataCSV}`) 
 //console.log(`myTotalNumber: ${myTotalNumber}`) 
 
-for (let i = 0; i < myDataTotal; i++) { 
+for (let i = 0; i < myDataCSV; i++) { 
    let myDoing = ''                 
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
 
@@ -249,7 +249,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    let dataString = '';
    let labelString = '';
    // for (let i = 0; i < myDataFiles.length; i++) {
-   for (let i = 0; i <= myDataTotal; i++) {                                       
+   for (let i = 0; i <= myDataCSV; i++) {                                       
       const dataElement = document.getElementById('myData' + i);
       const labelElement = document.getElementById('myLabel' + i);
       if (dataElement) {
@@ -282,17 +282,18 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 function previewData() {
    document.getElementById("mySpanUpload").innerHTML = ''   
 
-   const preview = document.getElementById("myDataPreviewCSV");
-   preview.innerHTML = "";
+   const previewCSV = document.getElementById("myDataPreviewCSV");
+   previewCSV.innerHTML = "";
   // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
    const labelsInput = document.getElementById("myLabels").value;
    const labelsArray = labelsInput.split(",").map((label) => label.trim());
    //const myOldData = myDataTotal
 
    myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
-   console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+   myDataCSV = myDataFiles.length
+   console.log(`myDataMcu: ${myDataMcu}, myDataCSV: ${myDataCSV}, myDataFiles.length:  ${myDataFiles.length} `)
 
-   document.getElementById("myNumCount").value  = myDataTotal
+   document.getElementById("myNumCount").value  = myDataCSV
    for (let i = 0; i < myDataFiles.length; i++) {
       const file = myDataFiles[i];
       const label = labelsArray[i];
@@ -312,29 +313,33 @@ function previewData() {
          labelElement.id = "myLabel"+i;    
          //container.appendChild(labelElement);
          container.prepend(labelElement);
-         preview.appendChild(container);
+         previewCSV.appendChild(container);
          
-         console.log(preview.children[i])
+         console.log('previewCSV.children[i]')
+         console.log(previewCSV.children[i])
          };
       reader.readAsText(file);
    }
+
+   console.log('previewCSV.children')
+   console.log(previewCSV.children)
 }
 
     
 function previewSensorData() {
    document.getElementById("mySpanUpload").innerHTML = ''
  //  if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
-   myDataTotal += 1  // each time this function is called 
+   myDataTotal += 1  // keep totalling both
    myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
    if (myDataFiles) {   
         console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
    } else {
         console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
    }   
-   document.getElementById("myNumCount").value = myDataTotal
+   document.getElementById("myNumCountSensor").value = myDataMcu
 
    
-   const preview = document.getElementById("myDataPreviewSensor");
+   const previewSensor = document.getElementById("myDataPreviewSensor");
    if (myDataTotal == 1) { // if first element then no comma for labels list
       document.getElementById("myLabels").value  =   document.getElementById("mySingleLabel").value
    } else {
@@ -348,22 +353,27 @@ function previewSensorData() {
    dataElement.textContent = document.getElementById("myArea01").value;
    // possible some feedback here
   // document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
-   dataElement.id = "myData" + myDataTotal;    
+   dataElement.id = "myData" + myDataMcu;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
    labelElement.textContent =  document.getElementById("mySingleLabel").value; 
-   labelElement.id = "myLabel" + myDataTotal; 
+   labelElement.id = "myLabel" + myDataMcu; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
-   preview.appendChild(container);
-   console.log(preview.children[myDataTotal])
+   previewSensor.appendChild(container);
+   console.log('previewSensor.children[myDataMcu]')
+   console.log(previewSensor.children[myDataMcu])
+   console.log('previewSensor.children')
+   console.log(previewSensor.children)
 
 }   
     
+   
+   // fix here needs the sensor arrays as well
 async function loadDataToTensor() {
    let dataArrays = []
 
-   for (let i = 0; i <= myDataTotal; i++) {
+   for (let i = 0; i <= myDataCSV; i++) {
       const dataElement = document.getElementById('myData' + i);
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
