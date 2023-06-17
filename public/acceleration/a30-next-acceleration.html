@@ -271,13 +271,13 @@ for (let i = 0; i < myDataCSV; i++) {
          }                                             
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,' 
-       // document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
       }     
    }       
    //  console.log(myCountArray)
    document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
  //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
-
+ // great for debugging
+  document.getElementById('mySpanClassify').innerHTML += `Data #${i} ${myDoing}<br>`    
 }
 
 }   
@@ -331,14 +331,15 @@ for (let i = 1; i <= myDataMcu; i++) {
          }                                             
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,' 
-         document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    // remove once working
       }  
    
    }       
    //  console.log(myCountArray)
    document.getElementById('myData2Mcu' + i).textContent = myTempArray.join('\n') 
- //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
+//  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
 
+   // great for debugging
+   document.getElementById('mySpanClassify').innerHTML += `Data #${i} ${myDoing}<br>`    // remove once working
 
 }
 
