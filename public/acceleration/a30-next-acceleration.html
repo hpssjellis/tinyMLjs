@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.2-88</h6>
+<h6> Version 0.30.3-89</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading CSV Files
 <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -287,6 +287,8 @@ function myDataCheckSenses(){
 
  
 document.getElementById('mySpanClassify').innerHTML = 'output here....<br>'
+document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu1').textContent +'<br>'   
+document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu2').textContent +'<br>'   
    
 for (let i = 0; i < myDataMcu; i++) {   // clean out empty lines                                    
    document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
