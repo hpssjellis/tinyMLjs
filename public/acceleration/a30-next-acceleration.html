@@ -406,9 +406,9 @@ function previewSensorData() {
    myDataTotal += 1  // keep totalling both
    myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
    if (myDataFiles) {   
-        console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+        console.log(`myDataMcu: ${myDataMcu},  myDataCSV: ${myDataCSV}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
    } else {
-        console.log(`myDataMcu: ${myDataMcu}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
+        console.log(`myDataMcu: ${myDataMcu}, myDataCSV: ${myDataCSV}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
    }   
    document.getElementById("myNumCountSenses").value = myDataMcu
    document.getElementById("myNumCountTotal").value = myDataTotal
@@ -416,9 +416,9 @@ function previewSensorData() {
    
    const previewSensor = document.getElementById("myDataPreviewSensor");
    if (myDataTotal == 1) { // if first element then no comma for labels list
-      document.getElementById("myLabels").value  =   document.getElementById("mySingleLabel").value
+      document.getElementById("mySenseLabels").value  =   document.getElementById("mySingleLabel").value
    } else {
-      document.getElementById("myLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
+      document.getElementById("mySenseLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
    }
    const container = document.createElement("div");
    container.style.display = "flex";
