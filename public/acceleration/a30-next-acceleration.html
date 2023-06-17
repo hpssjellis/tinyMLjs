@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.30.4-92</h6>
+<h6> Version 0.30.4-93</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -303,7 +303,7 @@ const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) //
 
 console.log(`myDataMcu: ${myDataMcu}`) 
 //console.log(`myTotalNumber: ${myTotalNumber}`) 
-/*
+
 for (let i = 0; i < myDataMcu; i++) { 
    let myDoing = ''                 
    let myTempArray = document.getElementById('myData2Mcu' + i).textContent.split('\n')                    
@@ -322,6 +322,7 @@ for (let i = 0; i < myDataMcu; i++) {
       }  
    }
    if (myDifference < 0) {     
+      /*
       myDifference = myDifference * -1
       for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
          let myTempSenses = []                                             
@@ -331,7 +332,8 @@ for (let i = 0; i < myDataMcu; i++) {
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,' 
         document.getElementById('mySpanClassify').innerHTML += `Data #${myI3} ${myDoing}<br>`    
-      }     
+      }  
+      */
    }       
    //  console.log(myCountArray)
    document.getElementById('myData2Mcu' + i).textContent = myTempArray.join('\n') 
@@ -340,7 +342,7 @@ for (let i = 0; i < myDataMcu; i++) {
 
 }
 
-   */
+
 }   
 
 
@@ -391,8 +393,8 @@ function previewData() {
       reader.readAsText(file);
    }
 
-   console.log('previewCSV.children')
-   console.log(previewCSV.children)
+   //console.log('previewCSV.children')
+   //console.log(previewCSV.children)
 }
 
     
@@ -431,10 +433,10 @@ function previewSensorData() {
    //container.appendChild(labelElement);
    container.prepend(labelElement);
    previewSensor.appendChild(container);
-   console.log('previewSensor.children[myDataMcu]')
-   console.log(previewSensor.children[myDataMcu])
-   console.log('previewSensor.children')
-   console.log(previewSensor.children)
+  // console.log('previewSensor.children[myDataMcu]')
+ //  console.log(previewSensor.children[myDataMcu])
+//   console.log('previewSensor.children')
+ //  console.log(previewSensor.children)
 
 }   
     
