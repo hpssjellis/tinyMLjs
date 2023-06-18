@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.5-105</h6>
+<h6> Version 0.31.5-106</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -468,14 +468,14 @@ function previewSensorData() {
 async function loadDataToTensor() {
    let dataArrays = []
 
-   for (let i = 0; i <= myDataCSV; i++) {
+   for (let i = 0; i < myDataCSV; i++) { // note different starting itterator
       const dataElement = document.getElementById('myData' + i);
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
          dataArrays.push(dataArray);         
       }
    }
-   for (let i = 0; i <= myDataMcu; i++) {
+   for (let i = 1; i <= myDataMcu; i++) { // note different starting itterator
       const dataElement = document.getElementById('myData' + i);
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
