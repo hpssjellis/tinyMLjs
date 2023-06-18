@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.3-104</h6>
+<h6> Version 0.31.5-105</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -354,7 +354,7 @@ for (let i = 1; i <= myDataMcu; i++) {
 
 function previewData() {
    document.getElementById("mySpanUpload").innerHTML = ''   
-
+   
    const previewCSV = document.getElementById("myDataPreviewCSV");
    previewCSV.innerHTML = "";
   // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
@@ -395,9 +395,12 @@ function previewData() {
          let [myFileLabelReduced, myFileNumber] = myFileLabel.split(' ');
          console.log(`myFileName: ${myFileName}, myFileLabel: ${myFileLabel}, csv: ${csv}, myFileLabelReduced:  ${myFileLabelReduced},  myFileNumber:   ${myFileNumber}    `);
 
+         if (i == 0) {
+            document.getElementById("myLabels").value = myFileLabelReduced 
+         } else {
+           document.getElementById("myLabels").value += ',' + myFileLabelReduced  
+         }  
 
-
-         
          const labelElement = document.createElement("span");
          labelElement.textContent = myFileLabelReduced;  
          labelElement.id = "myLabel"+i;    
