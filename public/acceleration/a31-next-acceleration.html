@@ -389,8 +389,12 @@ function previewData() {
          container.prepend(labelElement);
          previewCSV.appendChild(container);
          
-         console.log('previewCSV.children[i]')
-         console.log(previewCSV.children[i])
+       //  console.log('previewCSV.children[i]')
+        // console.log(previewCSV.children[i])
+                  // Extract the filename
+         let filename = file.name;
+         console.log(`Filename: ${filename}`);
+         
          };
       reader.readAsText(file);
    }
