@@ -358,8 +358,8 @@ function previewData() {
    const previewCSV = document.getElementById("myDataPreviewCSV");
    previewCSV.innerHTML = "";
   // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
-   const labelsInput = document.getElementById("myLabels").value;
-   const labelsArray = labelsInput.split(",").map((label) => label.trim());
+ //  const labelsInput = document.getElementById("myLabels").value;
+ //  const labelsArray = labelsInput.split(",").map((label) => label.trim());
    //const myOldData = myDataTotal
 
    myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
@@ -370,7 +370,7 @@ function previewData() {
    document.getElementById("myNumCountTotal").value  = myDataTotal
    for (let i = 0; i < myDataFiles.length; i++) {
       const file = myDataFiles[i];
-      const label = labelsArray[i];
+   //   const label = labelsArray[i];
       const reader = new FileReader();
       reader.onloadend = () => {
          const container = document.createElement("div");
@@ -382,16 +382,8 @@ function previewData() {
         // document.getElementById("mySpanUpload").innerHTML += `# ${i}, length: ${ reader.result.length}<br>`
          dataElement.id = "myData"+i;    
          container.appendChild(dataElement);
-         const labelElement = document.createElement("span");
-         labelElement.textContent = label;  
-         labelElement.id = "myLabel"+i;    
-         //container.appendChild(labelElement);
-         container.prepend(labelElement);
-         previewCSV.appendChild(container);
-         
-       //  console.log('previewCSV.children[i]')
-        // console.log(previewCSV.children[i])
-                  // Extract the filename
+
+         // we need the filename to grab the label
          let filename = file.name;
          console.log(`Filename: ${filename}`);
        //  filename.replace(/ \(\d+\)/g, '')   // gets rid of numbers in brackets after a space. / \(\d+\)/g, ""
@@ -402,6 +394,21 @@ function previewData() {
          
          let [myFileLabelReduced, myFileNumber] = myFileLabel.split(' ');
          console.log(`myFileName: ${myFileName}, myFileLabel: ${myFileLabel}, csv: ${csv}, myFileLabelReduced:  ${myFileLabelReduced},  myFileNumber:   ${myFileNumber}    `);
+
+
+
+         
+         const labelElement = document.createElement("span");
+         labelElement.textContent = myFileLabelReduced;  
+         labelElement.id = "myLabel"+i;    
+         //container.appendChild(labelElement);
+         container.prepend(labelElement);
+         previewCSV.appendChild(container);
+         
+       //  console.log('previewCSV.children[i]')
+        // console.log(previewCSV.children[i])
+                  // Extract the filename
+
          };
       reader.readAsText(file);
    }
