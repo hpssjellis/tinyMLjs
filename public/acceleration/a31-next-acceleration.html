@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.0-97</h6>
+<h6> Version 0.31.1-98</h6>
 <h1>Upload Acceleration Data</h1>
 Enter ALL data labels (comma-separated), before uploading <br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
@@ -394,7 +394,12 @@ function previewData() {
                   // Extract the filename
          let filename = file.name;
          console.log(`Filename: ${filename}`);
-         
+         filename.replace(/ \(\d+\)/, ""))   // gets rid of numbers in brackets after a space.
+         console.log(`cleaned Filename: ${filename}`);
+         let parts = filename.split(".");
+         let csv = parts.pop();
+         let [main, label] = parts[0].split("-");
+         console.log(`main: ${main}, label: ${label}, csv: ${csv}`);
          };
       reader.readAsText(file);
    }
