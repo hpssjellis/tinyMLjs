@@ -394,12 +394,14 @@ function previewData() {
                   // Extract the filename
          let filename = file.name;
          console.log(`Filename: ${filename}`);
-         filename.replace(/ \(\d+\)/g, '')   // gets rid of numbers in brackets after a space. / \(\d+\)/g, ""
-         console.log(`cleaned Filename: ${filename}`);
+       //  filename.replace(/ \(\d+\)/g, '')   // gets rid of numbers in brackets after a space. / \(\d+\)/g, ""
+       //  console.log(`cleaned Filename: ${filename}`);
          let parts = filename.split(".");
          let csv = parts.pop();
          let [myFileName, myFileLabel] = parts[0].split('-');
-         console.log(`myFileName: ${myFileName}, myFileLabel: ${myFileLabel}, csv: ${csv}`);
+         
+         let [myFileLabelReduced, myFileNumber] = myFileLabel.split(' ');
+         console.log(`myFileName: ${myFileName}, myFileLabel: ${myFileLabel}, csv: ${csv}, myFileLabelReduced:  ${myFileLabelReduced},  myFileNumber:   ${myFileNumber}    `);
          };
       reader.readAsText(file);
    }
