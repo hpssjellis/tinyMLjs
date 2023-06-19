@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.6-109 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version 0.31.7-110 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -413,7 +413,7 @@ function previewData() {
          }  
 
          const labelElement = document.createElement("span");
-         labelElement.textContent = `Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
+         labelElement.textContent = `<br> #: ${i},Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
          labelElement.id = "myLabel"+i;    
          //container.appendChild(labelElement);
          container.prepend(labelElement);
@@ -462,7 +462,7 @@ function previewSensorData() {
    dataElement.id = "myData2Mcu" + myDataMcu;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
-   labelElement.textContent =  document.getElementById("mySingleLabel").value; 
+   labelElement.textContent = '<br>#:'+ myDataMcu + ', ' + document.getElementById("mySingleLabel").value; 
    labelElement.id = "myLabel2Mcu" + myDataMcu; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
@@ -505,16 +505,24 @@ async function loadDataToTensor() {
    document.getElementById("mySpanClassify").innerHTML += `myTensor.shape: ${ myTensor.shape}<br>`
 
    
-   // Create a one-hot encoded tensor for the labels
+   // Create a one-hot encoded tensor for the labels or both the CSV files and the Senses data
    const labelsInput = document.getElementById("myLabels").value;   // from CSV files
-   labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+   const labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+  // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');
 
+   console.log(labelsArray1)
    
    const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
-   labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
+   const labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
+  // labelsArray2 = labelsInput2.split(",").map((label) => label.trim()).filter((label) => label !== '');
+   
+   console.log(labelsArray2)
    
    const labelsArray = labelsArray1.concat(labelsArray2)
+   console.log('labelsArray')
    console.log(labelsArray)
+
+   // possibly filter here?
    
    uniqueLabels = [...new Set(labelsArray)];
    const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
