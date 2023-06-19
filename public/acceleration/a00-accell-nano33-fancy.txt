@@ -265,7 +265,8 @@ void loop() {
                     //sound,a-x,a-y,a-z,g-x,g-y,g-z,m-x,m-y,m-z,pres,prox,gesture,R,G,B,temp,humid
        } else {
            // if neither of the fancy settings then just do acceleration
-           Serial.println( String(x) + "," + String(y) + "," +  String(z) );
+            Serial.println( String(accelerometerX,2) + "," + String(accelerometerY,2) + "," +  String(accelerometerZ,2)  );
+     
        } 
      } 
    }
@@ -319,11 +320,3 @@ void loop() {
   
 }
    
-   
-   
-   
-    
-    
-    
-    
-    
