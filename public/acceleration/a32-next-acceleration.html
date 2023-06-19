@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.9-112 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -133,7 +133,9 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     document.getElementById('myArea01').value = ''                                                                                            
 }">
 <input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
-<input type=button value="send 'start' only " onclick="{mySendIt('start')}"><br>     
+<input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
+<input type=button value="fancy1" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
+<input type=button value="fancy2" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}"><br>    
     
 
     
@@ -968,7 +970,11 @@ Aruino Nano33BleSense webSerial code that can be adapted for other microcontroll
   element.select();
   element.setSelectionRange(0, 99999);
   document.execCommand('copy');                                                                         
-}">    
+}"> <br>
+
+
+<!-- ******************************** The following sketch should be uploaded to your Arduino Nano33BleSense **************************************************************  -->
+   
 <textarea id="myCode" rows=5 cols=70 NOWRAP>
 /*
  * webSerial for testing javascript connection with an arduino
