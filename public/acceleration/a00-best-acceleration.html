@@ -4,14 +4,15 @@
 <script>  
    // Global CVariables
    let exports = {};  // really important for WebSerial and Polyfill
+   let model
    
    let myDataFiles, myTensor; 
    let myDataTotal = 0;
    let myDataMcu = 0;
    let myDataCSV = 0;
+   
    let labelsArray;
    let uniqueLabels, labelsTensor;
-   let model;
    let myModelSamples, myModelSenses
    let myMultiCSV = true
     // let myRaw = false
@@ -36,11 +37,8 @@
 </head>
 <body>
 
-<h6> Version 0.30.5-96</h6>
+<h6> Version 0.31.9-112 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
-Enter ALL data labels (comma-separated), before uploading <br>
-CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
-Senses Labels: <input type="text" id="mySenseLabels" size=80 value="" READONLY> <br>
 
 <br>
 
@@ -68,6 +66,11 @@ Hide: <input type=radio name="myPre" onclick="{
 }"> 
 <br>
 
+Following is the list of actual labels used in the same order as uploaded (comma-separated)<br>
+CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> <br>
+Senses Labels (careful): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
+
+
 <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
    
@@ -82,15 +85,17 @@ Machine Learning models often need very specific data.<br>
 
 Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
 Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
-Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5>
+Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
+   
 Number of Samples/count: <input type=text id="myNumSamples" value="100"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
-<input type="button" value="Convert Data to Tensor"  style="color:red; width:200px;" onclick="loadDataToTensor()"><br>
+<input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
    
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
 Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
-<input type="button" value="Train Model"  style="color:red; width:200px;" onclick="trainModel()"> <br>
+<input type="button" value="Train Model"  style="color:green; width:200px;" onclick="trainModel()"> 
+<input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
 
 <span id="mySpanClassify">...</span><br>
 
@@ -110,14 +115,14 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <hr>
 
 
-<button id="connectButton"  style="color:red; width:200px; ">Connect via Serial Port</button><br>
+<button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
 
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="Clear and send 'start' "  style="color:red; width:200px;"  onclick="{
+<input type=button value="Clear and send 'start' "  style="color:green; width:200px;"  onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
     setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart                                           
@@ -193,7 +198,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
-<input type="button" value="Classify Data"  style="color:red; width:200px;"  onclick="classifyData()">
+<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="classifyData()">
 <input type=button value="Show All Data" onclick="{
    document.getElementById('myArea01').value =''                                        
  
@@ -209,7 +214,18 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
       if (labelElement) {
          labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
       }
-  }
+   }
+   for (let i = 0; i <= myDataMcu; i++) {                                       
+      const dataElement = document.getElementById('myData2Mcu' + i);
+      const labelElement = document.getElementById('myLabel2Mcu' + i);
+      if (dataElement) {
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+      }
+      if (labelElement) {
+         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+      }
+   }
+
   document.getElementById('myArea01').value = dataString + labelString;                                             
                                              
 }"> <br>
@@ -283,8 +299,6 @@ for (let i = 0; i < myDataCSV; i++) {
 }   
 
 function myDataCheckSenses(){
-
-
  
 //document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu1').textContent +'<br>'   
 //document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu2').textContent +'<br>'   
@@ -353,12 +367,12 @@ for (let i = 1; i <= myDataMcu; i++) {
 
 function previewData() {
    document.getElementById("mySpanUpload").innerHTML = ''   
-
+   
    const previewCSV = document.getElementById("myDataPreviewCSV");
    previewCSV.innerHTML = "";
   // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
-   const labelsInput = document.getElementById("myLabels").value;
-   const labelsArray = labelsInput.split(",").map((label) => label.trim());
+ //  const labelsInput = document.getElementById("myLabels").value;
+ //  const labelsArray = labelsInput.split(",").map((label) => label.trim());
    //const myOldData = myDataTotal
 
    myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
@@ -369,7 +383,7 @@ function previewData() {
    document.getElementById("myNumCountTotal").value  = myDataTotal
    for (let i = 0; i < myDataFiles.length; i++) {
       const file = myDataFiles[i];
-      const label = labelsArray[i];
+   //   const label = labelsArray[i];
       const reader = new FileReader();
       reader.onloadend = () => {
          const container = document.createElement("div");
@@ -381,15 +395,36 @@ function previewData() {
         // document.getElementById("mySpanUpload").innerHTML += `# ${i}, length: ${ reader.result.length}<br>`
          dataElement.id = "myData"+i;    
          container.appendChild(dataElement);
+
+         // we need the filename to grab the label
+         let filename = file.name;
+         console.log(`Filename: ${filename}`);
+       //  filename.replace(/ \(\d+\)/g, '')   // gets rid of numbers in brackets after a space. / \(\d+\)/g, ""
+       //  console.log(`cleaned Filename: ${filename}`);
+         let parts = filename.split(".");
+         let csv = parts.pop();
+         let [myFileName, myFileLabel] = parts[0].split('-');
+         
+         let [myFileLabelReduced, myFileNumber] = myFileLabel.split(' ');
+         console.log(`myFileName: ${myFileName}, myFileLabel: ${myFileLabel}, csv: ${csv}, myFileLabelReduced:  ${myFileLabelReduced},  myFileNumber:   ${myFileNumber}    `);
+
+         if (i == 0) {
+            document.getElementById("myLabels").value = myFileLabelReduced 
+         } else {
+           document.getElementById("myLabels").value += ',' + myFileLabelReduced  
+         }  
+
          const labelElement = document.createElement("span");
-         labelElement.textContent = label;  
+         labelElement.textContent = `#:${i}, Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
          labelElement.id = "myLabel"+i;    
          //container.appendChild(labelElement);
          container.prepend(labelElement);
          previewCSV.appendChild(container);
          
-         console.log('previewCSV.children[i]')
-         console.log(previewCSV.children[i])
+       //  console.log('previewCSV.children[i]')
+        // console.log(previewCSV.children[i])
+                  // Extract the filename
+
          };
       reader.readAsText(file);
    }
@@ -429,7 +464,7 @@ function previewSensorData() {
    dataElement.id = "myData2Mcu" + myDataMcu;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
-   labelElement.textContent =  document.getElementById("mySingleLabel").value; 
+   labelElement.textContent = 'Senses #:'+ myDataMcu + ', ' + document.getElementById("mySingleLabel").value; 
    labelElement.id = "myLabel2Mcu" + myDataMcu; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
@@ -444,20 +479,23 @@ function previewSensorData() {
    
    // fix here needs the sensor arrays as well
 async function loadDataToTensor() {
+   document.getElementById("mySpanClassify").innerHTML = ''
    let dataArrays = []
 
-   for (let i = 0; i <= myDataCSV; i++) {
+   for (let i = 0; i < myDataCSV; i++) { // note different starting itterator
       const dataElement = document.getElementById('myData' + i);
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-         dataArrays.push(dataArray);         
+         dataArrays.push(dataArray);  
+         document.getElementById("mySpanClassify").innerHTML = 'DataCSV:' + i
       }
    }
-   for (let i = 0; i <= myDataMcu; i++) {
-      const dataElement = document.getElementById('myData' + i);
+   for (let i = 1; i <= myDataMcu; i++) { // note different starting itterator
+      const dataElement = document.getElementById('myData2Mcu' + i);
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-         dataArrays.push(dataArray);         
+         dataArrays.push(dataArray);   
+         document.getElementById("mySpanClassify").innerHTML = 'DataSenses:' + i      
       }
    }
    
@@ -466,12 +504,32 @@ async function loadDataToTensor() {
    const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
    myTensor = tf.stack(tensors);
    console.log('Data converted to tensor:', myTensor);
-   document.getElementById("mySpanClassify").innerHTML = `myTensor.shape: ${ myTensor.shape}<br>`
+   document.getElementById("mySpanClassify").innerHTML += `myTensor.shape: ${ myTensor.shape}<br>`
 
+    let labelsArray1 = []
+    let labelsArray2 = []
    
-   // Create a one-hot encoded tensor for the labels
-   const labelsInput = document.getElementById("myLabels").value;
-   labelsArray = labelsInput.split(",").map((label) => label.trim());
+   // Create a one-hot encoded tensor for the labels or both the CSV files and the Senses data
+   if (myDataCSV > 0){
+      const labelsInput = document.getElementById("myLabels").value;   // from CSV files
+      labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+     // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');  // get rid of blank elements using a filter
+   }
+   console.log(labelsArray1)
+   
+   if (myDataMcu > 0){
+      const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
+      labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
+   }
+   console.log(labelsArray2)
+
+   // join both sets of labels togther
+   const labelsArray = labelsArray1.concat(labelsArray2)
+   console.log('labelsArray')
+   console.log(labelsArray)
+
+   // possibly filter here?
+   
    uniqueLabels = [...new Set(labelsArray)];
    const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
    labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
@@ -510,23 +568,31 @@ model.compile({
 });
 
 // Prepare the data for training
-const xs = myTensor;
-const ys = labelsTensor;
+//const xs = myTensor;
+//const ys = labelsTensor;
 
 // Train the model
-await model.fit(xs, ys, {
+justFit()
+console.log(model)
+}
+
+async function justFit() {
+// Train the model
+//await model.fit(xs, ys, {
+await model.fit(myTensor, labelsTensor, {
    epochs:  parseInt(document.getElementById('myEpochs').value),
    batchSize: 32,
    callbacks: {
       onEpochEnd: (epoch, logs) => {
         // console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
-         console.log(logs);
+         console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
          document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`
       }
    }
 });
-  console.log(model)
-}
+
+
+}   
 
 async function exportModel() {
 let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value
