@@ -413,7 +413,7 @@ function previewData() {
          }  
 
          const labelElement = document.createElement("span");
-         labelElement.textContent = `<br> #: ${i},Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
+         labelElement.textContent = `#: ${i},Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
          labelElement.id = "myLabel"+i;    
          //container.appendChild(labelElement);
          container.prepend(labelElement);
@@ -462,7 +462,7 @@ function previewSensorData() {
    dataElement.id = "myData2Mcu" + myDataMcu;    
    container.appendChild(dataElement);
    const labelElement = document.createElement("span");
-   labelElement.textContent = '<br>#:'+ myDataMcu + ', ' + document.getElementById("mySingleLabel").value; 
+   labelElement.textContent = '#:'+ myDataMcu + ', ' + document.getElementById("mySingleLabel").value; 
    labelElement.id = "myLabel2Mcu" + myDataMcu; 
    //container.appendChild(labelElement);
    container.prepend(labelElement);
