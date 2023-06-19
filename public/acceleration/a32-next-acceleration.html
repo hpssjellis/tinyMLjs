@@ -87,7 +87,7 @@ Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
 Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
 Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
    
-Number of Samples/count: <input type=text id="myNumSamples" value="100"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
+Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
 <input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
@@ -128,14 +128,14 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart                                           
 }">
     
-<input type=button value="send 'stop' " onclick="{mySendIt('stop')}">  
+<input type=button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendIt('stop')}">  
    <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
 }">
 <input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
-<input type=button value="fancy1" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
-<input type=button value="fancy2" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}"><br>    
+<input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
+<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}"><br>    
     
 
     
