@@ -505,19 +505,23 @@ async function loadDataToTensor() {
    document.getElementById("mySpanClassify").innerHTML += `myTensor.shape: ${ myTensor.shape}<br>`
 
    
+   
    // Create a one-hot encoded tensor for the labels or both the CSV files and the Senses data
+   if (myDataCSV > 0){
    const labelsInput = document.getElementById("myLabels").value;   // from CSV files
    const labelsArray1 = labelsInput.split(",").map((label) => label.trim());
   // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');
-
+   }
    console.log(labelsArray1)
    
+   if (myDataMcu > 0){
    const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
    const labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
   // labelsArray2 = labelsInput2.split(",").map((label) => label.trim()).filter((label) => label !== '');
-   
+   }
    console.log(labelsArray2)
-   
+
+   // join both sets of labels togther
    const labelsArray = labelsArray1.concat(labelsArray2)
    console.log('labelsArray')
    console.log(labelsArray)
