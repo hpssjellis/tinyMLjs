@@ -487,7 +487,7 @@ async function loadDataToTensor() {
       }
    }
    for (let i = 1; i <= myDataMcu; i++) { // note different starting itterator
-      const dataElement = document.getElementById('myData' + i);
+      const dataElement = document.getElementById('myData2Mcu' + i);
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
          dataArrays.push(dataArray);   
