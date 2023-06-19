@@ -222,21 +222,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
       }
    }
 
-/*
-   for (let i = 1; i <= myDataMcu; i++) { // note different starting itterator
-      const dataElement = document.getElementById('myData' + i);
-      if (dataElement) {  // put all one bit of data into a group of arrays
-         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-         dataArrays.push(dataArray);   
-         document.getElementById("mySpanClassify").innerHTML = 'DataSenses:' + i      
-      }
-   }
-*/
-
-
-
-
-   
   document.getElementById('myArea01').value = dataString + labelString;                                             
                                              
 }"> <br>
