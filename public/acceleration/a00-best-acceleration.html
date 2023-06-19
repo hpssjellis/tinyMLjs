@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.9-112 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -87,7 +87,7 @@ Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
 Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
 Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
    
-Number of Samples/count: <input type=text id="myNumSamples" value="100"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
+Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
 <input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
@@ -128,12 +128,14 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart                                           
 }">
     
-<input type=button value="send 'stop' " onclick="{mySendIt('stop')}">  
+<input type=button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendIt('stop')}">  
    <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
 }">
 <input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
-<input type=button value="send 'start' only " onclick="{mySendIt('start')}"><br>     
+<input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
+<input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
+<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}"><br>    
     
 
     
@@ -962,13 +964,31 @@ async function myPoly(){
 </script>
 
 <br><br>
-Aruino Nano33BleSense webSerial code that can be adapted for other microcontrollers 
+Aruino Nano33BleSense webSerial code that can be adapted for other microcontrollers<br> 
 <input type=button value=copy onclick="{                                      
    const element = document.getElementById('myCode')
   element.select();
   element.setSelectionRange(0, 99999);
   document.execCommand('copy');                                                                         
-}">    
+}"> <br>
+The "fancy" Arduino sketch is on the github here 
+<a href="https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt">https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt</a> <br>  
+
+
+<!-- ******************************** The following sketch should be uploaded to your Arduino Nano33BleSense **************************************************************  -->
+
+
+
+
+
+
+
+
+
+
+
+
+   
 <textarea id="myCode" rows=5 cols=70 NOWRAP>
 /*
  * webSerial for testing javascript connection with an arduino
@@ -1070,14 +1090,16 @@ void loop() {
   
 }
    
+  
+</textarea> <br><br>
+
+Use at your own risk!<br>
+By Jeremy Ellis @rocksetta<br>
+Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://github.com/hpssjellis/tinyMLjs/tree/main</a><br> 
+Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
+This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
    
+
    
-   
-    
-    
-    
-    
-    
-</textarea>    
 </body>
 </html>
