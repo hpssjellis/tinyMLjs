@@ -576,7 +576,7 @@ await model.fit(xs, ys, {
    callbacks: {
       onEpochEnd: (epoch, logs) => {
         // console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
-         console.log(logs);
+         console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
          document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`
       }
    }
