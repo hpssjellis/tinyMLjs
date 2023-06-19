@@ -36,9 +36,9 @@
 </head>
 <body>
 
-<h6> Version 0.31.5-108</h6>
+<h6> Version 0.31.5-108 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
-Enter ALL data labels (comma-separated), before uploading <br>
+Following is the list of actual labels used in the same order as uploaded (comma-separated)<br>
 CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
 Senses Labels: <input type="text" id="mySenseLabels" size=80 value="" READONLY> <br>
 
@@ -402,7 +402,7 @@ function previewData() {
          }  
 
          const labelElement = document.createElement("span");
-         labelElement.textContent = myFileLabelReduced;  
+         labelElement.textContent = `Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
          labelElement.id = "myLabel"+i;    
          //container.appendChild(labelElement);
          container.prepend(labelElement);
