@@ -36,7 +36,7 @@
 </head>
 <body>
 
-<h6> Version 0.31.7-110 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version 0.31.8-111 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -89,11 +89,11 @@ Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5>
 Number of Samples/count: <input type=text id="myNumSamples" value="100"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
-<input type="button" value="Convert Data to Tensor"  style="color:red; width:200px;" onclick="loadDataToTensor()"><br>
+<input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
    
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
 Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
-<input type="button" value="Train Model"  style="color:red; width:200px;" onclick="trainModel()"> <br>
+<input type="button" value="Train Model"  style="color:green; width:200px;" onclick="trainModel()"> <br>
 
 <span id="mySpanClassify">...</span><br>
 
@@ -113,14 +113,14 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <hr>
 
 
-<button id="connectButton"  style="color:red; width:200px; ">Connect via Serial Port</button><br>
+<button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
 
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="Clear and send 'start' "  style="color:red; width:200px;"  onclick="{
+<input type=button value="Clear and send 'start' "  style="color:green; width:200px;"  onclick="{
     document.getElementById('myArea01').value = ''                                              
     mySendIt('start')
     setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart                                           
@@ -196,7 +196,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
-<input type="button" value="Classify Data"  style="color:red; width:200px;"  onclick="classifyData()">
+<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="classifyData()">
 <input type=button value="Show All Data" onclick="{
    document.getElementById('myArea01').value =''                                        
  
@@ -504,20 +504,20 @@ async function loadDataToTensor() {
    console.log('Data converted to tensor:', myTensor);
    document.getElementById("mySpanClassify").innerHTML += `myTensor.shape: ${ myTensor.shape}<br>`
 
-   
+    let labelsArray1 = []
+    let labelsArray2 = []
    
    // Create a one-hot encoded tensor for the labels or both the CSV files and the Senses data
    if (myDataCSV > 0){
-   const labelsInput = document.getElementById("myLabels").value;   // from CSV files
-   let labelsArray1 = labelsInput.split(",").map((label) => label.trim());
-  // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');
+      const labelsInput = document.getElementById("myLabels").value;   // from CSV files
+      labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+     // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');  // get rid of blank elements using a filter
    }
    console.log(labelsArray1)
    
    if (myDataMcu > 0){
-   const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
-   let labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
-  // labelsArray2 = labelsInput2.split(",").map((label) => label.trim()).filter((label) => label !== '');
+      const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
+      labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
    }
    console.log(labelsArray2)
 
