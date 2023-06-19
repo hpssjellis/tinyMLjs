@@ -36,11 +36,11 @@
 </head>
 <body>
 
-<h6> Version 0.31.5-108 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version 0.31.6-109 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 Following is the list of actual labels used in the same order as uploaded (comma-separated)<br>
-CSV Lables: <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
-Senses Labels: <input type="text" id="mySenseLabels" size=80 value="" READONLY> <br>
+CSV Lables (careful): <input type="text" id="myLabels" size=80 value="1punch,1punch,2wave,2wave"> <br>
+Senses Labels (careful): <input type="text" id="mySenseLabels" size=80 value=""> <br>
 
 <br>
 
@@ -511,7 +511,8 @@ async function loadDataToTensor() {
    const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
    labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
    
-  const labelsArray = labelsArray1.concat(labelsArray2)
+   const labelsArray = labelsArray1.concat(labelsArray2)
+   console.log(labelsArray)
    
    uniqueLabels = [...new Set(labelsArray)];
    const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
