@@ -509,14 +509,14 @@ async function loadDataToTensor() {
    // Create a one-hot encoded tensor for the labels or both the CSV files and the Senses data
    if (myDataCSV > 0){
    const labelsInput = document.getElementById("myLabels").value;   // from CSV files
-   const labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+   let labelsArray1 = labelsInput.split(",").map((label) => label.trim());
   // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');
    }
    console.log(labelsArray1)
    
    if (myDataMcu > 0){
    const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
-   const labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
+   let labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
   // labelsArray2 = labelsInput2.split(",").map((label) => label.trim()).filter((label) => label !== '');
    }
    console.log(labelsArray2)
