@@ -16,6 +16,7 @@
    let myModelSamples, myModelSenses
    let myMultiCSV = true
    let myCellPhoneOnce = false
+   let myCellPhoneEvent = true
     // let myRaw = false
    //  let myRawInterval
 
@@ -978,7 +979,11 @@ function myCellPhoneMotion(){
     if (window.DeviceMotionEvent) {
       // DeviceMotion event listener  to happen only once 
             // DeviceMotion event listener
-       window.addEventListener('devicemotion', handleMotionEvent);
+       if(myCellPhoneEvent){ // check that it is only set once
+           window.addEventListener('devicemotion', handleMotionEvent);
+           myCellPhoneEvent = false
+           myCellPhoneOnce = true
+       }
      //  window.addEventListener('devicemotion', handleMotionEvent, { once: true });
 
     } else {
@@ -990,6 +995,7 @@ function myCellPhoneMotion(){
 
     // Event handler for DeviceMotion event
     function handleMotionEvent(event) {
+      if (myCellPhoneOnce){ 
       const acceleration = event.acceleration;
       const x = acceleration.x.toFixed(2);
       const y = acceleration.y.toFixed(2);
@@ -1015,13 +1021,14 @@ function myCellPhoneMotion(){
          
       document.getElementById('myArea01').value = accelerometerData.join('\r\n')  // puts linefeed at end of data
         // try to remove event
-       event.target.removeEventListener('click', handleMotionEvent, false);
-       document.getElementById('mySpanResults').innerHTML += ' Motion even removed<br>';
+     //  event.target.removeEventListener('click', handleMotionEvent, false);
+      // document.getElementById('mySpanResults').innerHTML += ' Motion even removed<br>';
        myShowGraph() 
-         
+       myCellPhoneOnce = false  
         // Reset variables for the next data collection
        // accelerometerData = [];
        // startTime = null;  need the button to reset these values or it keeps grabbing data
+      }
       }
     }
 }
