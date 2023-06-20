@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.0.3, from 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.0.4, from 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -970,8 +970,9 @@ function myCellPhoneMotion(){
 
   // Check if the device supports the DeviceMotion event
     if (window.DeviceMotionEvent) {
-      // DeviceMotion event listener
-      window.addEventListener('devicemotion', handleMotionEvent);
+      // DeviceMotion event listener  to happen only once 
+       window.addEventListener('devicemotion', handleMotionEvent, { once: true });
+
     } else {
       document.getElementById('myArea01').innerHTML = 'DeviceMotion not supported.';
     }
@@ -998,16 +999,9 @@ function myCellPhoneMotion(){
       if (elapsedTime < 500) {
         accelerometerData.push([x, y, z]);
       } else {
-        // Preprocess the collected accelerometer data and use it for inference with TensorFlow.js
-      //  const input = tf.tensor2d(accelerometerData);
-     //   const prediction = model.predict(input);
-     //   const predictedLabel = prediction.dataSync()[0];
-      //  const result = predictedLabel === 0 ? 'punch' : 'get up';
-
-      //  document.getElementById('output').innerHTML = `<p>Prediction: ${result}</p>`;
         
       // put the data in the main textarea
-      document.getElementById('myArea01').value = accelerometerData.join('\r\n')
+      document.getElementById('myArea01').value = accelerometerData.join('\r\n')  // puts linefeed at end of data
 
         // Reset variables for the next data collection
        // accelerometerData = [];
