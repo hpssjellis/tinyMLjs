@@ -17,6 +17,10 @@
    let myMultiCSV = true
    let myCellPhoneOnce = false
    let myCellPhoneEvent = true
+   
+    let accelerometerData = [];
+    let startTime = null;
+   
     // let myRaw = false
    //  let myRawInterval
 
@@ -39,7 +43,7 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.1.4-11, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.1.4-12, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -140,8 +144,11 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}">   
     
 <input type=button value="Cell Phone Motion" title="Only Works with a cell phone" onclick="{
-   myCellPhoneOnce = true
+   myCellPhoneOnce = true  // so it will show the data
+   accelerometerData = [];
+   startTime = null;
    document.getElementById('myArea01').value = ''; 
+   
    myCellPhoneMotion(); 
 }"><br>    
 
@@ -990,8 +997,6 @@ function myCellPhoneMotion(){
       document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
     }
 
-    let accelerometerData = [];
-    let startTime = null;
 
     // Event handler for DeviceMotion event
     function handleMotionEvent(event) {
