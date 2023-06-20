@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version cell 08-0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.0.1, from 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -1007,7 +1007,7 @@ function myCellPhoneMotion(){
       //  document.getElementById('output').innerHTML = `<p>Prediction: ${result}</p>`;
         
       // put the data in the main textarea
-      document.getElementById('myArea01').value = JSON.stringify(accelerometerData,null,'\n');
+      document.getElementById('myArea01').value = accelerometerData
 
         // Reset variables for the next data collection
         accelerometerData = [];
