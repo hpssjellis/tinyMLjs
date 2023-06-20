@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.0.6, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.1.0-6, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -1004,7 +1004,8 @@ function myCellPhoneMotion(){
         
       // put the data in the main textarea
       document.getElementById('myArea01').value = accelerometerData.join('\r\n')  // puts linefeed at end of data
-
+        // try to remove event
+       event.target.removeEventListener('click', handleMotionEvent, false);
         // Reset variables for the next data collection
        // accelerometerData = [];
        // startTime = null;  need the button to reset these values or it keeps grabbing data
