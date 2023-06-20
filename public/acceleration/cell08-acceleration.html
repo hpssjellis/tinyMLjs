@@ -15,6 +15,7 @@
    let uniqueLabels, labelsTensor;
    let myModelSamples, myModelSenses
    let myMultiCSV = true
+   let myCellPhoneOnce = false
     // let myRaw = false
    //  let myRawInterval
 
@@ -137,7 +138,11 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
 <input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}">   
     
-<input type=button value="Cell Phone Motion" title="Only Works with a cell phone" onclick="{document.getElementById('myArea01').value = ''; myCellPhoneMotion(); }"><br>    
+<input type=button value="Cell Phone Motion" title="Only Works with a cell phone" onclick="{
+   myCellPhoneOnce = true
+   document.getElementById('myArea01').value = ''; 
+   myCellPhoneMotion(); 
+}"><br>    
 
     
 
@@ -1001,14 +1006,19 @@ function myCellPhoneMotion(){
       // Collect accelerometer data for 500 ms
       if (elapsedTime < 500) {
         accelerometerData.push([x, y, z]);
-      } else {
+      }
+      else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased   
+      
+      else {
         
       // put the data in the main textarea
+         
       document.getElementById('myArea01').value = accelerometerData.join('\r\n')  // puts linefeed at end of data
         // try to remove event
        event.target.removeEventListener('click', handleMotionEvent, false);
        document.getElementById('mySpanResults').innerHTML += ' Motion even removed<br>';
        myShowGraph() 
+         
         // Reset variables for the next data collection
        // accelerometerData = [];
        // startTime = null;  need the button to reset these values or it keeps grabbing data
