@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.0.4, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.0.5, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -974,7 +974,7 @@ function myCellPhoneMotion(){
        window.addEventListener('devicemotion', handleMotionEvent, { once: true });
 
     } else {
-      document.getElementById('myArea01').innerHTML = 'DeviceMotion not supported.';
+      document.getElementById('mySpanResults').innerHTML = 'Cell Phone Device Motion not supported.';
     }
 
     let accelerometerData = [];
