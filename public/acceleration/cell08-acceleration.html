@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.0.1, from 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.0.2, from 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -135,7 +135,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
 <input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
-<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}"><br>    
+<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}">   
     
 <input type=button value="Cell Phone Motion" title="Only Works with a cell phone" onclick="{ myCellPhoneMotion(); }"><br>    
 
@@ -973,7 +973,7 @@ function myCellPhoneMotion(){
       // DeviceMotion event listener
       window.addEventListener('devicemotion', handleMotionEvent);
     } else {
-      document.getElementById('output').innerHTML = 'DeviceMotion not supported.';
+      document.getElementById('myArea01').innerHTML = 'DeviceMotion not supported.';
     }
 
     let accelerometerData = [];
@@ -1007,11 +1007,11 @@ function myCellPhoneMotion(){
       //  document.getElementById('output').innerHTML = `<p>Prediction: ${result}</p>`;
         
       // put the data in the main textarea
-      document.getElementById('myArea01').value = accelerometerData
+      document.getElementById('myArea01').value = accelerometerData.join('\r\n'))
 
         // Reset variables for the next data collection
-        accelerometerData = [];
-        startTime = null;
+       // accelerometerData = [];
+       // startTime = null;  need the button to reset these values or it keeps grabbing data
       }
     }
 }
