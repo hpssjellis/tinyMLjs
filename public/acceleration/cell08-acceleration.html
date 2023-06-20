@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.1.0-6, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.1.1-8, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -985,9 +985,9 @@ function myCellPhoneMotion(){
     // Event handler for DeviceMotion event
     function handleMotionEvent(event) {
       const acceleration = event.acceleration;
-      const x = acceleration.x;
-      const y = acceleration.y;
-      const z = acceleration.z;
+      const x = acceleration.x.toFixed(2);
+      const y = acceleration.y.toFixed(2);
+      const z = acceleration.z.toFixed(2);
 
       // Start collecting data if startTime is null
       if (startTime === null) {
