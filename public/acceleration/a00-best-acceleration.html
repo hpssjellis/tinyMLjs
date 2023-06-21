@@ -15,6 +15,12 @@
    let uniqueLabels, labelsTensor;
    let myModelSamples, myModelSenses
    let myMultiCSV = true
+   let myCellPhoneOnce = false
+   let myCellPhoneEvent = true
+   
+    let accelerometerData = [];
+    let startTime = null;
+   
     // let myRaw = false
    //  let myRawInterval
 
@@ -37,7 +43,7 @@
 </head>
 <body>
 
-<h6> Version 0.32.0-114 Note: works on Chrome or Edge for Mac or Windows, only on Edge for Linux</h6>
+<h6> Version cell 0.8.1.4-12, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
 <h1>Upload Acceleration Data</h1>
 
 <br>
@@ -135,8 +141,16 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
 <input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
-<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}"><br>    
+<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}">   
     
+<input type=button value="Cell Phone Motion" title="Only Works with a cell phone" onclick="{
+   myCellPhoneOnce = true  // so it will show the data
+   accelerometerData = [];
+   startTime = null;
+   document.getElementById('myArea01').value = ''; 
+   
+   myCellPhoneMotion(); 
+}"><br>    
 
     
 
@@ -961,6 +975,73 @@ async function myPoly(){
 } 
   
 /////////////////////////////////////// end Polyfill for Android ////////////////////////////////  
+
+//////////////////////////// Cell Phone Motion Code ///////////////////////////////////////////////
+
+
+function myCellPhoneMotion(){
+
+      document.getElementById('mySpanResults').innerHTML += 'Checking if using a cell phone!<br>';
+  // Check if the device supports the DeviceMotion event
+    if (window.DeviceMotionEvent) {
+      // DeviceMotion event listener  to happen only once 
+            // DeviceMotion event listener
+       if(myCellPhoneEvent){ // check that it is only set once
+           window.addEventListener('devicemotion', handleMotionEvent);
+           myCellPhoneEvent = false
+           myCellPhoneOnce = true
+       }
+     //  window.addEventListener('devicemotion', handleMotionEvent, { once: true });
+
+    } else {
+      document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
+    }
+
+
+    // Event handler for DeviceMotion event
+    function handleMotionEvent(event) {
+      if (myCellPhoneOnce){ 
+      const acceleration = event.acceleration;
+      const x = acceleration.x.toFixed(2);
+      const y = acceleration.y.toFixed(2);
+      const z = acceleration.z.toFixed(2);
+
+      // Start collecting data if startTime is null
+      if (startTime === null) {
+        startTime = performance.now();
+      }
+
+      // Calculate elapsed time in milliseconds
+      const elapsedTime = performance.now() - startTime;
+
+      // Collect accelerometer data for 500 ms
+      if (elapsedTime < 500) {
+        accelerometerData.push([x, y, z]);
+      }
+      else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased   
+      
+      else {
+        
+      // put the data in the main textarea
+         
+      document.getElementById('myArea01').value = accelerometerData.join('\r\n')  // puts linefeed at end of data
+        // try to remove event
+     //  event.target.removeEventListener('click', handleMotionEvent, false);
+      // document.getElementById('mySpanResults').innerHTML += ' Motion even removed<br>';
+       myShowGraph() 
+       myCellPhoneOnce = false  
+        // Reset variables for the next data collection
+       // accelerometerData = [];
+       // startTime = null;  need the button to reset these values or it keeps grabbing data
+      }
+      }
+    }
+}
+
+
+
+
+////////////////////////////////////////////////////////  END OF SCRIPT TAG //////////////////////////////////////////////////////////////  
 </script>
 
 <br><br>
