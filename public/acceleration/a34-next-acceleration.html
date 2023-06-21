@@ -43,7 +43,7 @@
 </head>
 <body>
 
-<h6> Version 0.34.0-115 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.34.1-116 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>Upload and ML train Sensor Data </h1>
  On a single Vanilla Javascript webpage!  
 
@@ -982,8 +982,8 @@ async function myPoly(){
 
 function myCellPhoneMotion(){
 
-      document.getElementById('mySpanResults').innerHTML += 'Checking if using a cell phone!<br>';
-  // Check if the device supports the DeviceMotion event
+    document.getElementById('mySpanResults').innerHTML += ' Checking if using a cell phone!<br>';
+    // Check if the device supports the DeviceMotion event
     if (window.DeviceMotionEvent) {
       // DeviceMotion event listener  to happen only once 
             // DeviceMotion event listener
@@ -1003,10 +1003,16 @@ function myCellPhoneMotion(){
     function handleMotionEvent(event) {
       if (myCellPhoneOnce){ 
       const acceleration = event.acceleration;
+         /*
       const x = acceleration.x.toFixed(2);
       const y = acceleration.y.toFixed(2);
       const z = acceleration.z.toFixed(2);
-
+         */
+         if ( !isNaN(acceleration.x) ){  // if one of them is a number they all are numbers
+      const x = acceleration.x.toFixed(2);
+      const y = acceleration.y.toFixed(2);
+      const z = acceleration.z.toFixed(2);
+         }
       // Start collecting data if startTime is null
       if (startTime === null) {
         startTime = performance.now();
