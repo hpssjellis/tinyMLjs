@@ -1016,7 +1016,7 @@ function myCellPhoneMotion(){
       const elapsedTime = performance.now() - startTime;
 
       // Collect accelerometer data for 500 ms
-      if (elapsedTime < 500) {
+      if (elapsedTime < 417) {  // 500 ~ 30 samples, I want 25 samples
         accelerometerData.push([x, y, z]);
       }
       else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased   
