@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.35.4-133 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.35.5-134 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -719,9 +719,14 @@ const predictedArray = prediction.arraySync()
 console.log('predictedArray')
 console.log(predictedArray)  
 
+for (let myLabelCount = 0; myLabelCount < uniqueLabels.length; myLabelCount++){
+   let myPercent = Math.round(predictedArray[0][myLabelCount] * 100  )
+   document.getElementById('mySpanResults').innerHTML += `${uniqueLabels[myLabelCount]}: ${myPercent}%<br>`    
+}
+   
 
-document.getElementById('mySpanResults').innerHTML += `predictedArray[0][0]: ${predictedArray[0][0]}<br>`
-document.getElementById('mySpanResults').innerHTML += `predictedArray[0][1]: ${predictedArray[0][1]}<br>`
+//document.getElementById('mySpanResults').innerHTML += `predictedArray[0][0]: ${predictedArray[0][0]}<br>`
+//document.getElementById('mySpanResults').innerHTML += `predictedArray[0][1]: ${predictedArray[0][1]}<br>`
    
   
 console.log(predictedLabel)
