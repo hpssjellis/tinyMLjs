@@ -186,7 +186,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input id="myOutFilename" type=text value="myCSV-myLabel.csv"><br>
 
 
-<textarea id="myArea01" rows=25 cols=120></textarea>
+<textarea id="myArea01" rows=6 cols=120></textarea>
 
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
@@ -1111,7 +1111,7 @@ async function myPoly(){
 
 function myCellPhoneMotion(){
 
-    document.getElementById('mySpanResults').innerHTML += ' Checking if using a cell phone!<br>';
+    document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
     // Check if the device supports the DeviceMotion event
     if (window.DeviceMotionEvent) {
       // DeviceMotion event listener  to happen only once 
