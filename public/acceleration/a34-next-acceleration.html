@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.34.5-122 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.34.5-123 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>Upload and ML train Sensor Data </h1>
  On a single Vanilla Javascript webpage!  
 
@@ -162,7 +162,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    accelerometerData = [];
    startTime = null;
    document.getElementById('myArea01').value = '' 
-   if (mySendFirstLine) { mySendIt('firstline'); }
+   if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }
    setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
    
