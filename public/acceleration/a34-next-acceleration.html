@@ -708,10 +708,16 @@ document.getElementById('mySpanResults').innerHTML = `Predicted label: ${predict
 
 console.log('prediction')
 console.log(prediction)
-console.log('prediction[0]')
-console.log(prediction[0])
-console.log('prediction[1].fixed(3)')
-console.log(prediction[1].fixed(3))
+
+const predictedArray = prediction.arraySync()
+ 
+console.log('predictedArray')
+console.log(predictedArray)  
+
+
+document.getElementById('mySpanResults').innerHTML += `predictedArray[0]: ${predictedArray[0]}<br>`
+document.getElementById('mySpanResults').innerHTML += `predictedArray[1]: ${predictedArray[1]}<br>`
+   
   
 console.log(predictedLabel)
 // Dispose the input tensor to free up memory
