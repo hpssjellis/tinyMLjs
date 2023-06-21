@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.35.2-131 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.35.3-132 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -175,49 +175,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
   
 
 <input type=button value="Clean, Trim or Fill" onclick="{
-    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
-    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
-    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
-    // not setup to replacve individual empty entires. Perhaps test for that later 
-                                                        
-    myShowGraph() 
-                                                        
-    let myCountArray =  document.getElementById('myArea01').value.split('\n')   
-    myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)                          
-
-    console.log(' myCountArray.length' )
-    console.log( myCountArray.length )                                             
-    console.log( 'myTotalNumber ' )
-    console.log( myTotalNumber  )
-                                                 
-    myDifference = myCountArray.length - myTotalNumber                                                 
-    console.log('myDifference')            
-    console.log(myDifference)  
-                                                 
-    if (myDifference > 0) {                                     
-      for (myI=0; myI < myDifference; myI++){                     
-         myCountArray.pop()   // delete this data                                
-      }  
-    }
-           
-    if (myDifference < 0) {       // add to the data 
-       myDifference *= -1  // make it positive                                                 
-      for (myI=0; myI < myDifference; myI++){  
-        let myTempSenses = []                                             
-        for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
-            myTempSenses[i] = 0                                        
-         }                                             
-         myCountArray.push(myTempSenses.join(','))   // put them together add the extra '0,0,0' for xyz                               
-      }  
-    }                                               
-                                                 
-                                                                                                                      
-                                                 
-  // console.log(myCountArray)
-   document.getElementById('myArea01').value = myCountArray.join('\n')      
-   myShowGraph() 
-   console.log('myCountArray.length')
-   console.log(myCountArray.length)
+  cleanFillTrim()
 }">
   
     
@@ -232,7 +190,8 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
-<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="classifyData()">
+<input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
+<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
 <input type=button value="Show All Data" onclick="{
    document.getElementById('myArea01').value =''                                        
  
@@ -395,7 +354,53 @@ for (let i = 1; i <= myDataMcu; i++) {
 }   
 
 
+function cleanFillTrim(){
 
+   document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+    // not setup to replacve individual empty entires. Perhaps test for that later 
+                                                        
+    myShowGraph() 
+                                                        
+    let myCountArray =  document.getElementById('myArea01').value.split('\n')   
+    myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)                          
+
+    console.log(' myCountArray.length' )
+    console.log( myCountArray.length )                                             
+    console.log( 'myTotalNumber ' )
+    console.log( myTotalNumber  )
+                                                 
+    myDifference = myCountArray.length - myTotalNumber                                                 
+    console.log('myDifference')            
+    console.log(myDifference)  
+                                                 
+    if (myDifference > 0) {                                     
+      for (myI=0; myI < myDifference; myI++){                     
+         myCountArray.pop()   // delete this data                                
+      }  
+    }
+           
+    if (myDifference < 0) {       // add to the data 
+       myDifference *= -1  // make it positive                                                 
+      for (myI=0; myI < myDifference; myI++){  
+        let myTempSenses = []                                             
+        for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
+            myTempSenses[i] = 0                                        
+         }                                             
+         myCountArray.push(myTempSenses.join(','))   // put them together add the extra '0,0,0' for xyz                               
+      }  
+    }                                               
+                                                 
+                                                                                                                      
+                                                 
+  // console.log(myCountArray)
+   document.getElementById('myArea01').value = myCountArray.join('\n')      
+   myShowGraph() 
+   console.log('myCountArray.length')
+   console.log(myCountArray.length)
+   
+}
 
    
 
