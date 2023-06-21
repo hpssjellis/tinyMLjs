@@ -570,6 +570,8 @@ async function loadDataToTensor() {
    // possibly filter here?
    
    uniqueLabels = [...new Set(labelsArray)];
+   console.log('uniqueLabels')
+   console.log(uniqueLabels)
    const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
    labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
    console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
