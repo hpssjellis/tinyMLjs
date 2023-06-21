@@ -720,8 +720,8 @@ console.log('predictedArray')
 console.log(predictedArray)  
 
 
-document.getElementById('mySpanResults').innerHTML += `predictedArray[0]: ${predictedArray[0]}<br>`
-document.getElementById('mySpanResults').innerHTML += `predictedArray[1]: ${predictedArray[1]}<br>`
+document.getElementById('mySpanResults').innerHTML += `predictedArray[0][0]: ${predictedArray[0][0]}<br>`
+document.getElementById('mySpanResults').innerHTML += `predictedArray[0][1]: ${predictedArray[0][1]}<br>`
    
   
 console.log(predictedLabel)
@@ -801,118 +801,6 @@ document.getElementById('myNumSenses').value  = myModelSenses
   Plotly.newPlot('myChart', lineTraces, layout);
 }
 
-
-   /*
- function myShowGraph(){ 
-  
- 
- myModelSenses  = parseInt(document.getElementById('myNumSenses').value)   
- const dataString2 = document.getElementById("myArea01").value;
-
-// Convert data string to array
-let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
-  
-console.log(inputArray)
-// Assuming your input array is named 'inputArray'
-
-// Split the input array into three separate arrays
-//var lineX = [];
-//var lineY = [];
-//var lineZ = [];
-const lineTraces = [];
-const dataArray = dataString2.split('\n');
-//console.log('dataArray')
-//console.log(dataArray)
-    
-document.getElementById('mySpanResults').innerHTML =  "Number of Samples:" + dataArray.length  
-
-const lineData = [];
-    
-for (let i = 0; i < dataArray.length; i++) {
-const accelerationValues = dataArray[i].split(',');
-
-const x = parseFloat(accelerationValues[0]);
-const y = parseFloat(accelerationValues[1]);
-const z = parseFloat(accelerationValues[2]);
-
-//lineX.push(x);
-//lineY.push(y);
-//lineZ.push(z);
-lineData.push([x, y, z]);
-}   
-    
-     
-for (let i = 0; i < myModelSenses; i++) {
-    const trace = {
-        x: Array.from(Array(lineData.length).keys()),
-        y: lineData.map(data => data[i]),
-        mode: 'lines',
-        name: `Line ${i + 1}`,
-        line: { color: getRandomColor() }, // Generate a random color for each line
-    };
-
-    lineTraces.push(trace);
-}
-   
-     
-    // Create traces for x, y, and z acceleration data
-    const traceX = {
-     //   x: Array.from(Array(accelerometerData.length).keys()),
-        x: Array.from(Array(lineX.length).keys()),
-        y: lineX,
-
-        mode: 'lines',
-        name: 'X',
-        line: { color: 'red' },
-    };
-    
-    const traceY = {
-      //  x: Array.from(Array(accelerometerData.length).keys()),
-      //  y: accelerometerData.map(data => data[1]),
-        x: Array.from(Array(lineY.length).keys()),
-        y: lineY, 
-        mode: 'lines',
-        name: 'Y',
-        line: { color: 'blue' },
-    };
-    
-    const traceZ = {
-      //  x: Array.from(Array(accelerometerData.length).keys()),
-     //   y: accelerometerData.map(data => data[2]),
-        
-        x: Array.from(Array(lineZ.length).keys()),
-      //  y: inputArray.map(data => data[2]),
-        y: lineZ,
-        mode: 'lines',
-        name: 'Z',
-        line: { color: 'green' },
-    };
-
-
-
-    // Define the layout for the chart
-    const layout = {
-        title: "Cool Chart",
-        xaxis: {
-            title: 'Time (ms)',
-            fixedrange: true,
-        },
-        yaxis: {
-            title: 'Acceleration (m/s^2)',
-            range: [-100, 100],
-            fixedrange: true,
-        },
-    };   
-     //  console.log(traceX)        
-     //  console.log(traceY)        
-     //  console.log(traceZ)   
-    
-  //  Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
-    Plotly.newPlot('myChart', lineTraces, layout);
- }  
-
-
-*/
 
 
    
