@@ -44,10 +44,10 @@
 </head>
 <body>
 
-<h6> Version 0.35.0-127 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.35.0-128 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
-Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all of this on a single vanilla Javascript webpage! <br>
+Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all of this on a single vanilla Javascript webpage! <br><br>
 
     
     
@@ -724,11 +724,19 @@ inputTensor.dispose();
 }
   
   
-
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
   
  function myShowGraph(){ 
   
-   
+ 
+ myModelSenses  = parseInt(document.getElementById('myNumSenses').value)   
  const dataString2 = document.getElementById("myArea01").value;
 
 // Convert data string to array
@@ -738,15 +746,17 @@ inputTensor.dispose();
 // Assuming your input array is named 'inputArray'
 
 // Split the input array into three separate arrays
-var lineX = [];
-var lineY = [];
-var lineZ = [];
+//var lineX = [];
+//var lineY = [];
+//var lineZ = [];
+const lineTraces = [];
 const dataArray = dataString2.split('\n');
 //console.log('dataArray')
 //console.log(dataArray)
     
 document.getElementById('mySpanResults').innerHTML =  "Number of Samples:" + dataArray.length  
 
+    /*
 for (let i = 0; i < dataArray.length; i++) {
 const accelerationValues = dataArray[i].split(',');
 
@@ -757,10 +767,21 @@ const z = parseFloat(accelerationValues[2]);
 lineX.push(x);
 lineY.push(y);
 lineZ.push(z);
-}     
+}   
+    */
      
+for (let i = 0; i < myModelSenses; i++) {
+    const trace = {
+        x: Array.from(Array(lineData.length).keys()),
+        y: lineData.map(data => data[i]),
+        mode: 'lines',
+        name: `Line ${i + 1}`,
+        line: { color: getRandomColor() }, // Generate a random color for each line
+    };
 
-   
+    lineTraces.push(trace);
+}
+   /*
      
     // Create traces for x, y, and z acceleration data
     const traceX = {
@@ -794,7 +815,9 @@ lineZ.push(z);
         name: 'Z',
         line: { color: 'green' },
     };
-    
+
+
+    */
     // Define the layout for the chart
     const layout = {
         title: "Cool Chart",
@@ -810,8 +833,10 @@ lineZ.push(z);
     };   
      //  console.log(traceX)        
      //  console.log(traceY)        
-     //  console.log(traceZ)        
-    Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
+     //  console.log(traceZ)   
+    
+  //  Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
+    Plotly.newPlot('myChart', lineTraces, layout);
  }  
    
 
