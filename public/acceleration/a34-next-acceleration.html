@@ -1062,7 +1062,7 @@ function myCellPhoneMotion(){
         
       // put the data in the main textarea
       if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
-      document.getElementById('myArea01').value = accelerometerData.join('\r\n')  // puts linefeed at end of data
+      document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
         // try to remove event
      //  event.target.removeEventListener('click', handleMotionEvent, false);
       // document.getElementById('mySpanResults').innerHTML += ' Motion even removed<br>';
