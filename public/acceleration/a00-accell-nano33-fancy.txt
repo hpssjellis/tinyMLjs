@@ -312,8 +312,14 @@ void loop() {
     }
     if (readString == "firstline"){
      // Serial.println("accX,accY,accZ");  // CSV file heading titles
-      Serial.println("sound,a-x,a-y,a-z,g-x,g-y,g-z,m-x,m-y,m-z,pres,prox,gesture,R,G,B,temp,humid");
-
+       if (mySendFancy1){
+          Serial.println("gestures");
+       } else if (mySendFancy2){
+          Serial.println("sound,a-x,a-y,a-z,g-x,g-y,g-z,m-x,m-y,m-z,pres,prox,gesture,R,G,B,temp,humid");
+       }
+       else {
+          Serial.println("accX,accY,accZ");
+       }
     }
     readString="";
   } 
