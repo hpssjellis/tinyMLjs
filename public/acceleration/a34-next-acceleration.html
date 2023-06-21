@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.34.5-123 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.34.5-124 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>Upload and ML train Sensor Data </h1>
  On a single Vanilla Javascript webpage!  
 
@@ -147,14 +147,16 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 }">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
 <input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
+    document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
 }"> 
 <input type=button value="fancy2" title="18 sensor fusion example" onclick="{ 
+    document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
 }">   
     
 <input type=button value="Cell Phone Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
@@ -164,7 +166,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    document.getElementById('myArea01').value = '' 
    if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }
    setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
-   setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
+   setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart        
    
 }"><br>    
 
