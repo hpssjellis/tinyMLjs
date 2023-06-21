@@ -10,6 +10,7 @@
    let myDataTotal = 0;
    let myDataMcu = 0;
    let myDataCSV = 0;
+   let mySendFirstLine = false
    
    let labelsArray;
    let uniqueLabels, labelsTensor;
@@ -18,8 +19,8 @@
    let myCellPhoneOnce = false
    let myCellPhoneEvent = true
    
-    let accelerometerData = [];
-    let startTime = null;
+   let accelerometerData = [];
+   let startTime = null;
    
     // let myRaw = false
    //  let myRawInterval
@@ -43,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.34.4-121 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.34.5-122 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>Upload and ML train Sensor Data </h1>
  On a single Vanilla Javascript webpage!  
 
@@ -130,16 +131,20 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
 <input type=button value="Clear and send 'start' "  style="color:green; width:200px;"  onclick="{
-    document.getElementById('myArea01').value = ''                                              
-    mySendIt('start')
-    setTimeout(function() { myShowGraph() }, 2500); // give the data a few seconds to load before drawing chart                                           
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
 }">
     
 <input type=button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendIt('stop')}">  
    <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
 }">
-<input type=button value="send 'firstline' " onclick="{mySendIt('firstline')}">   
+<input type=button value="send 'firstline' " onclick="{
+   mySendFirstLine = true
+   mySendIt('firstline')
+}">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
 <input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy1')}"> 
 <input type=button value="fancy2" title="18 sensor fusion example" onclick="{ document.getElementById('myArea01').value = ''; mySendIt('fancy2')}">   
