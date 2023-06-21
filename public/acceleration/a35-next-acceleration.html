@@ -724,7 +724,7 @@ console.log(predictedLabel)
 inputTensor.dispose();
 }
   
-  
+// for the plotlyjs graphing code below it  
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -741,9 +741,9 @@ function getRandomColor() {
  const dataString2 = document.getElementById("myArea01").value;
 
 // Convert data string to array
-//let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+let inputArray = dataString2.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
   
-//console.log(inputArray)
+console.log(inputArray)
 // Assuming your input array is named 'inputArray'
 
 // Split the input array into three separate arrays
@@ -757,7 +757,7 @@ const dataArray = dataString2.split('\n');
     
 document.getElementById('mySpanResults').innerHTML =  "Number of Samples:" + dataArray.length  
 
-    /*
+    
 for (let i = 0; i < dataArray.length; i++) {
 const accelerationValues = dataArray[i].split(',');
 
@@ -765,11 +765,12 @@ const x = parseFloat(accelerationValues[0]);
 const y = parseFloat(accelerationValues[1]);
 const z = parseFloat(accelerationValues[2]);
 
-lineX.push(x);
-lineY.push(y);
-lineZ.push(z);
+//lineX.push(x);
+//lineY.push(y);
+//lineZ.push(z);
+lineData.push([x, y, z]);
 }   
-    */
+    
      
 for (let i = 0; i < myModelSenses; i++) {
     const trace = {
