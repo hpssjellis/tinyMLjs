@@ -704,7 +704,12 @@ const predictedLabel = uniqueLabels[predictedLabelIndex];
 console.log(`Predicted label: ${predictedLabel}`);
 document.getElementById('mySpanResults').innerHTML = `Predicted label: ${predictedLabel}<br>`
 
-console.log('done predicted Label')
+console.log('prediction')
+console.log(prediction)
+console.log('prediction[0]')
+console.log(prediction[0])
+console.log('prediction[1].fixed(3)')
+console.log(prediction[1].fixed(3))
   
 console.log(predictedLabel)
 // Dispose the input tensor to free up memory
