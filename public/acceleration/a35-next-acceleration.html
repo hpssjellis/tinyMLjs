@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.35.0-129 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.35.1-130 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -228,7 +228,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <input id="myOutFilename" type=text value="myCSV-myLabel.csv"><br>
 
 
-<textarea id="myArea01" rows=20 cols=100></textarea>
+<textarea id="myArea01" rows=25 cols=120></textarea>
 
 <br>
 <input type="button" value="Show Graph" onclick="myShowGraph()">
@@ -733,7 +733,71 @@ function getRandomColor() {
     }
     return color;
 }
-  
+
+function myShowGraph() {
+  const dataString2 = document.getElementById("myArea01").value;
+
+  // Convert data string to array
+  const dataArray = dataString2.split("\n").map(row => row.split(",").map(value => parseFloat(value)));
+
+  // Extract the number of senses (columns) from the first row of data
+  const myModelSenses = dataArray[0].length;
+
+  // Create an array to store line data
+  const lineData = [];
+
+  // Initialize lineData array with empty arrays for each sense
+  for (let i = 0; i < myModelSenses; i++) {
+    lineData.push([]);
+  }
+
+  // Push the data into the lineData array
+  for (let i = 0; i < dataArray.length; i++) {
+    for (let j = 0; j < myModelSenses; j++) {
+      const value = parseFloat(dataArray[i][j]);
+      lineData[j].push(value);
+    }
+  }
+
+  // Create an array to store line traces
+  const lineTraces = [];
+
+  // Generate traces for each line
+  for (let i = 0; i < myModelSenses; i++) {
+    const trace = {
+      x: Array.from(Array(lineData[i].length).keys()),
+      y: lineData[i],
+      mode: 'lines',
+      name: `Line ${i + 1}`,
+      line: { color: getRandomColor() }, // Generate a random color for each line
+    };
+
+    lineTraces.push(trace);
+  }
+
+  // Define the layout for the chart
+  const layout = {
+    title: "Cool Chart",
+    xaxis: {
+      title: 'Time (ms)',
+      fixedrange: true,
+    },
+    yaxis: {
+      title: 'Acceleration (m/s^2)',
+      range: [-100, 100],
+      fixedrange: true,
+    },
+  };
+
+  // Clear the existing chart
+  Plotly.purge('myChart');
+
+  // Create the new chart with the line traces
+  Plotly.newPlot('myChart', lineTraces, layout);
+}
+
+
+   /*
  function myShowGraph(){ 
   
  
@@ -784,7 +848,7 @@ for (let i = 0; i < myModelSenses; i++) {
 
     lineTraces.push(trace);
 }
-   /*
+   
      
     // Create traces for x, y, and z acceleration data
     const traceX = {
@@ -820,7 +884,7 @@ for (let i = 0; i < myModelSenses; i++) {
     };
 
 
-    */
+
     // Define the layout for the chart
     const layout = {
         title: "Cool Chart",
@@ -841,6 +905,11 @@ for (let i = 0; i < myModelSenses; i++) {
   //  Plotly.newPlot('myChart', [traceX, traceY, traceZ], layout);  // Stable chart on screen
     Plotly.newPlot('myChart', lineTraces, layout);
  }  
+
+
+*/
+
+
    
 
 
