@@ -43,8 +43,9 @@
 </head>
 <body>
 
-<h6> Version cell 0.8.1.4-12, from 0.32.0-114 Note: works on Chrome or Edge for Mac, Android or Windows, only on Edge for Linux</h6>
-<h1>Upload Acceleration Data</h1>
+<h6> Version 0.34.0-115 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h1>Upload and ML train Sensor Data </h1>
+ On a single Vanilla Javascript webpage!  
 
 <br>
 
@@ -85,8 +86,8 @@ Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{  
    document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
-   myDataCheckCSV()   //  Checks all the csv data for correct number of samples and senses  
-   myDataCheckSenses()   //  Checks all the csv data for correct number of samples and senses 
+   myDataCheckCSV()   /// ~line 264  Checks all the csv data for correct number of samples and senses  
+   myDataCheckSenses()   /// ~line 318  Checks all the csv data for correct number of samples and senses 
 }">
 
 Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
