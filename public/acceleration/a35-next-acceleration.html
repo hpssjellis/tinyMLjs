@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.35.1-130 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.35.2-131 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -742,7 +742,7 @@ function myShowGraph() {
 
   // Extract the number of senses (columns) from the first row of data
   const myModelSenses = dataArray[0].length;
-
+document.getElementById('myNumSenses').value  = myModelSenses
   // Create an array to store line data
   const lineData = [];
 
@@ -777,15 +777,15 @@ function myShowGraph() {
 
   // Define the layout for the chart
   const layout = {
-    title: "Cool Chart",
+    title: "Chart",
     xaxis: {
       title: 'Time (ms)',
-      fixedrange: true,
+    //  fixedrange: true,
     },
     yaxis: {
-      title: 'Acceleration (m/s^2)',
-      range: [-100, 100],
-      fixedrange: true,
+      title: 'Value',
+    //  range: [-100, 100],
+    //  fixedrange: true,
     },
   };
 
