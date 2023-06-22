@@ -11,6 +11,9 @@ function myiPhone() {
           }
         })
         .catch(console.error);
+    } else {
+      window.addEventListener('devicemotion', handleMotionEvent);
+      isListening = true;
     } 
 } 
 
