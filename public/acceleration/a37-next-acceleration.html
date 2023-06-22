@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.6-150 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.6-151 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1020,10 +1020,10 @@ async function myPoly(){
 
 
 async function myCellPhoneMotion(){
-  document.getElementById('mySpanResults').innerHTML = `Checking if using a cell phone!<br>`;
-  document.getElementById('mySpanResults').innerHTML += `/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}<br>`;
-  document.getElementById('mySpanResults').innerHTML += `/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}<br>`;
-  document.getElementById('mySpanResults').innerHTML += `navigator.userAgent: ${navigator.userAgent}<br>`
+  document.getElementById('mySpanExport').innerHTML = `Checking if using a cell phone!<br>`;
+  document.getElementById('mySpanExport').innerHTML += `/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanExport').innerHTML += `/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanExport').innerHTML += `navigator.userAgent: ${navigator.userAgent}<br>`
   if (typeof DeviceMotionEvent.requestPermission === 'function') {
     try {
       const permissionState = await DeviceMotionEvent.requestPermission();
