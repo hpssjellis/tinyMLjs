@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.1-137 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.2-138 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -159,7 +159,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
 }">   
     
-<input type=button value="Android Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
+<input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
    myCellPhoneOnce = true  // so it will show the data
    accelerometerData = [];
    startTime = null;
@@ -1017,6 +1017,7 @@ async function myPoly(){
 
 
 function myCellPhoneMotion() {
+   accelerometerData = [];
   document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
 
   // Check if the device supports the DeviceMotion event
