@@ -257,7 +257,10 @@ console.log(`myDataCSV: ${myDataCSV}`)
 for (let i = 0; i < myDataCSV; i++) { 
    let myDoing = ''                 
    let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
-
+  // check if last value is empty
+   if (myTempArray[myTempArray.length - 1] === '') {
+     myTempArray.pop();
+   }   
    let myDifference =  myTempArray.length - myTotalNumber                                                 
 
    console.log(`myDifference: ${myDifference}`)  
@@ -314,7 +317,10 @@ console.log(`myDataMcu: ${myDataMcu}`)
 for (let i = 1; i <= myDataMcu; i++) { 
    let myDoing = ''                 
    let myTempArray = document.getElementById('myData2Mcu' + i).textContent.split('\n')                    
-
+  // check if last value is empty
+   if (myTempArray[myTempArray.length - 1] === '') {
+     myTempArray.pop();
+   }  
    let myDifference =  myTempArray.length - myTotalNumber                                                 
 
    console.log(`myDifference: ${myDifference}`)  
@@ -366,7 +372,6 @@ function cleanFillTrim(){
     let myCountArray =  document.getElementById('myArea01').value.split('\n')   
   // check if last value is empty
    if (myCountArray[myCountArray.length - 1] === '') {
-     // Delete the empty last value
      myCountArray.pop();
    }   
     myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)                          
