@@ -1,5 +1,5 @@
 <html>
-<h6> Version 0.0.2-5</h6>
+<h6> Version 0.0.2-6</h6>
 
 <script>
 async function myiPhone() {
@@ -13,21 +13,24 @@ async function myiPhone() {
       console.log(error)
       document.getElementById('myDiv01').innerHTML = `Error: ${error}`;
     }
-  }
+  } else {
+      window.addEventListener('devicemotion', handleMotionEvent);
+      isListening = true;
+    }
 }
 
 function handleMotionEvent(event) {
-  const { accelerationIncludingGravity } = event;
-  const { x, y, z } = accelerationIncludingGravity;
-  document.getElementById('myDiv01').innerHTML = `iPhone x: ${x.toFixed(2)}, y: ${y.toFixed(2)}, z: ${z.toFixed(2)}`;
+const { accelerationIncludingGravity } = event;
+const { x, y, z } = accelerationIncludingGravity;
+document.getElementById('myDiv01').innerHTML = `iPhone x: ${x.toFixed(2)}, y: ${y.toFixed(2)}, z: ${z.toFixed(2)}`;
 }
 </script>
 
 <body>
-  <input type="button" value="iPhone" onclick="myiPhone()">
-  <input type="button" value="Stop" onclick="{
-     window.removeEventListener('devicemotion', handleMotionEvent); 
-  }"><br>
-  <div id="myDiv01">...</div>
+<input type="button" value="iPhone" onclick="myiPhone()">
+<input type="button" value="Stop" onclick="{
+   window.removeEventListener('devicemotion', handleMotionEvent); 
+}"><br>
+<div id="myDiv01">...</div>
 </body>
 </html>
