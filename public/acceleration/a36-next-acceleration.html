@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.35.7-135 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.0-136 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1015,6 +1015,60 @@ async function myPoly(){
 //////////////////////////// Cell Phone Motion Code ///////////////////////////////////////////////
 
 
+
+function myCellPhoneMotion() {
+  document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
+
+  // Check if the device supports the DeviceMotion event
+  if (window.DeviceMotionEvent) {
+    // DeviceMotion event listener to happen only once
+    if (myCellPhoneOnce) { // check that it is only set once
+      window.addEventListener('devicemotion', handleMotionEvent);
+      myCellPhoneOnce = false;
+    }
+  } else {
+    document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
+  }
+
+  // Event handler for DeviceMotion event
+  function handleMotionEvent(event) {
+    const acceleration = event.acceleration || event.accelerationIncludingGravity;
+
+    const x = acceleration.x.toFixed(2);
+    const y = acceleration.y.toFixed(2);
+    const z = acceleration.z.toFixed(2);
+
+    // Start collecting data if startTime is null
+    if (startTime === null) {
+      startTime = performance.now();
+    }
+
+    // Calculate elapsed time in milliseconds
+    const elapsedTime = performance.now() - startTime;
+
+    // Collect accelerometer data for 500 ms
+    if (elapsedTime < 410) { // 500 ~ 30 samples, I want 25 samples
+      accelerometerData.push([x, y, z]);
+    } else if (elapsedTime > 1000) {
+      // Essentially do nothing if the event handler does not get erased
+    } else {
+      // Put the data in the main textarea
+      if (mySendFirstLine) {
+        document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n'; // Prints first line for CSV saving
+      }
+      document.getElementById('myArea01').value += accelerometerData.join('\r\n'); // Puts line feed at the end of data
+      myShowGraph();
+      myCellPhoneOnce = false;
+    }
+  }
+}
+
+
+
+
+   
+/*
+
 function myCellPhoneMotion(){
 document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
 // Check if the device supports the DeviceMotion event
@@ -1063,7 +1117,7 @@ if (window.DeviceMotionEvent) {
    }
 }
 
-
+*/
 
 
 ////////////////////////////////////////////////////////  END OF SCRIPT TAG //////////////////////////////////////////////////////////////  
