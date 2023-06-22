@@ -1224,11 +1224,11 @@ Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://git
 Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
 This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
    
-<ol>A couple of gotchas (as of Jun 22, 2023):
-   <li>. File names have to be in the format name-lable.csv  name-lable (1).csv  name-lable (2) which Android and iPhone don't auto make for you. 
-   <li>. Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table x=0,y=0, z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2 
-   <li>. Real data has lots of erros, Machine Learning models do not like missing data. If your results show "NaN" Either your training data or classification data has errors. The clean,trim,fill buttons might help.
-   <li>. Presently a label CSV upload but is around. easy to fix by entering a few more labels. I will try to get to it
+<ol><br>A couple of gotchas (as of Jun 22, 2023):</b>
+   <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
+   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
+   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
+   <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
 </ol>   
 </body>
 </html>
