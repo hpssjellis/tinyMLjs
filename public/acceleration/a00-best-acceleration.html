@@ -17,7 +17,7 @@
    let myModelSamples, myModelSenses
    let myMultiCSV = true
    let myCellPhoneOnce = false
-   let myCellPhoneEvent = true
+ //  let myCellPhoneEvent = true
    
    let accelerometerData = [];
    let startTime = null;
@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.35.7-135 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.7-154 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -74,15 +74,15 @@ Hide: <input type=radio name="myPre" onclick="{
 }"> 
 <br>
 
-Following is the list of actual labels used in the same order as uploaded (comma-separated)<br>
+Following is the list of actual labels used in the same order as uploaded (comma-separated)
+Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
+   
 CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> <br>
 Senses Labels (careful): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
-
 
 <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
    
-
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{  
@@ -122,7 +122,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <hr>
 
-
 <button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
@@ -150,45 +149,41 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }"> 
 <input type=button value="fancy2" title="18 sensor fusion example" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }">   
     
-<input type=button value="Android Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
+<input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
    myCellPhoneOnce = true  // so it will show the data
    accelerometerData = [];
    startTime = null;
    document.getElementById('myArea01').value = '' 
    if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }  // actually this is deleted, also done in the next function
    setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
-   setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart        
+   setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
    
-}"><br>    
-
-    
-
-  
+}"> 
+<!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
+<br>    
 
 <input type=button value="Clean, Trim or Fill" onclick="{
   cleanFillTrim()
 }">
-  
-    
+      
 <input type=text id="mySingleLabel" placeholder="1lable" value="1label">  
 <input type=button value="Keep" onclick="{previewSensorData()}">   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 <input id="myOutFilename" type=text value="myCSV-myLabel.csv"><br>
 
-
 <textarea id="myArea01" rows=6 cols=120></textarea>
-
 <br>
+   
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
 <input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
@@ -224,8 +219,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 }"> <br>
 <span id="mySpanResults">...</span>
     
-
-
 
 <!-- <canvas id="myChart" width="700" height="300"></canvas> -->
 <div id="myChart" style="width:1000px; height:300px"></div>
@@ -719,9 +712,17 @@ console.log(inputTensor2)
 // Make a prediction using the trained model
 const prediction = model.predict(inputTensor2);
 const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+console.log('predictedLabelIndex')   
+console.log(predictedLabelIndex)   
+if (predictedLabelIndex == 0){   // if the first item then LED activate
+   mySendIt('a') // turn on/off Microcontroller LED
+}  else {
+  mySendIt('b') // turn off/on Microcontroller LED
+}
+   
 const predictedLabel = uniqueLabels[predictedLabelIndex];
 console.log(`Predicted label: ${predictedLabel}`);
-document.getElementById('mySpanResults').innerHTML = `Predicted label: ${predictedLabel}<br>`
+document.getElementById('mySpanResults').innerHTML = `predictedLabelIndex: ${predictedLabelIndex},  Predicted label: ${predictedLabel} <br>`
 
 console.log('prediction')
 console.log(prediction)
@@ -735,12 +736,12 @@ for (let myLabelCount = 0; myLabelCount < uniqueLabels.length; myLabelCount++){
    let myPercent = Math.round(predictedArray[0][myLabelCount] * 100  )
    document.getElementById('mySpanResults').innerHTML += `${uniqueLabels[myLabelCount]}: ${myPercent}%<br>`    
 }
-   
 
+
+   
 //document.getElementById('mySpanResults').innerHTML += `predictedArray[0][0]: ${predictedArray[0][0]}<br>`
 //document.getElementById('mySpanResults').innerHTML += `predictedArray[0][1]: ${predictedArray[0][1]}<br>`
-   
-  
+     
 console.log(predictedLabel)
 // Dispose the input tensor to free up memory
 inputTensor.dispose();
@@ -1015,52 +1016,72 @@ async function myPoly(){
 //////////////////////////// Cell Phone Motion Code ///////////////////////////////////////////////
 
 
-function myCellPhoneMotion(){
-document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
-// Check if the device supports the DeviceMotion event
-if (window.DeviceMotionEvent) {
-   // DeviceMotion event listener  to happen only once 
-         // DeviceMotion event listener
-   if(myCellPhoneEvent){ // check that it is only set once
-      window.addEventListener('devicemotion', handleMotionEvent);
-      myCellPhoneEvent = false
-      myCellPhoneOnce = true
-   }
-    } else {
-      document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
-    }
 
-    // Event handler for DeviceMotion event
-    function handleMotionEvent(event) {
-      if (myCellPhoneOnce){ 
-         const acceleration = event.acceleration;
-            
-         const x = acceleration.x.toFixed(2);
-         const y = acceleration.y.toFixed(2);
-         const z = acceleration.z.toFixed(2);
-            
-         // Start collecting data if startTime is null
-         if (startTime === null) {
-           startTime = performance.now();
-         }
+
+
+
+async function myCellPhoneMotion(){
+  document.getElementById('mySpanExport').innerHTML = `Checking if using a cell phone!<br>`;
+  document.getElementById('mySpanExport').innerHTML += `/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanExport').innerHTML += `/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanExport').innerHTML += `navigator.userAgent: ${navigator.userAgent}<br>`
    
-         // Calculate elapsed time in milliseconds
-         const elapsedTime = performance.now() - startTime;
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    try {
+      const permissionState = await DeviceMotionEvent.requestPermission();
+      if (permissionState === 'granted') {
+        window.addEventListener('devicemotion', handleMotionEvent);
+      //  myCellPhoneEvent = false
+        myCellPhoneOnce = true
+      }
+    } catch (error) {
+      console.log(error);
+      document.getElementById('mySpanResults').innerHTML = `Error: ${error}`;
+    }
+  } else {  // if things are already setup then just add the event listener
+    window.addEventListener('devicemotion', handleMotionEvent);
+  }
+}
+
+function handleMotionEvent(event) {
+if (myCellPhoneOnce){    
+  const { accelerationIncludingGravity } = event;
+  let { x, y, z } = accelerationIncludingGravity;
    
-         // Collect accelerometer data for 500 ms
-         if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
-           accelerometerData.push([x, y, z]);
-         }
-         else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased         
-         else {
-               // put the data in the main textarea
-               if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
-               document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
-               myShowGraph() 
-               myCellPhoneOnce = false  
-            }
-         }
+   if ( /Android/i.test(navigator.userAgent) ) {  // correct only if not on desktop setting. Android orientation is opposite apple
+      x *= -1;
+      y *= -1;
+      z *= -1;
    }
+   
+  const formattedX = typeof x === 'number' ? x.toFixed(2) : 'NaN';
+  const formattedY = typeof y === 'number' ? y.toFixed(2) : 'NaN';
+  const formattedZ = typeof z === 'number' ? z.toFixed(2) : 'NaN';
+
+ // document.getElementById('myDiv01').innerHTML = `iPhone x: ${formattedX}, y: ${formattedY}, z: ${formattedZ}`;
+   // Start collecting data if startTime is null
+   if (startTime === null) {
+     startTime = performance.now();
+   }
+   
+   // Calculate elapsed time in milliseconds
+   const elapsedTime = performance.now() - startTime;
+   
+   // Collect accelerometer data for 500 ms
+   if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
+     accelerometerData.push([formattedX, formattedY, formattedZ]);
+   }
+   else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased         
+   else {
+      // put the data in the main textarea
+      if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
+        document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
+        myShowGraph() 
+        myCellPhoneOnce = false  
+        window.removeEventListener('devicemotion', handleMotionEvent); 
+      }
+   
+   } 
 }
 
 
@@ -1203,9 +1224,13 @@ Use at your own risk!<br>
 By Jeremy Ellis @rocksetta<br>
 Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://github.com/hpssjellis/tinyMLjs/tree/main</a><br> 
 Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
-This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
+This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> <br><br>
    
-
-   
+<ol><b>A couple of gotchas (as of Jun 22, 2023):</b><br>
+<br>  <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
+<br>   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
+<br>   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
+<br>  <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
+</ol>   
 </body>
 </html>
