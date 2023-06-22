@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.6-151 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.7-152 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -712,16 +712,17 @@ console.log(inputTensor2)
 // Make a prediction using the trained model
 const prediction = model.predict(inputTensor2);
 const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
-   
+console.log('predictedLabelIndex')   
+console.log(predictedLabelIndex)   
 if (predictedLabelIndex == 0){   // if the first item then LED activate
    mySendIt('a') // turn on/off Microcontroller LED
-}   else {
+}  else {
   mySendIt('b') // turn off/on Microcontroller LED
 }
    
 const predictedLabel = uniqueLabels[predictedLabelIndex];
 console.log(`Predicted label: ${predictedLabel}`);
-document.getElementById('mySpanResults').innerHTML = `Predicted label: ${predictedLabel}<br>`
+document.getElementById('mySpanResults').innerHTML = `predictedLabelIndex: ${predictedLabelIndex},  Predicted label: ${predictedLabel} <br>`
 
 console.log('prediction')
 console.log(prediction)
@@ -1224,7 +1225,7 @@ Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://git
 Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
 This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
    
-<ol><br>A couple of gotchas (as of Jun 22, 2023):</b>
+<ol><b>A couple of gotchas (as of Jun 22, 2023):</b>
    <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
    <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
    <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
