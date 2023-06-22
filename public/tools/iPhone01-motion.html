@@ -2,6 +2,37 @@
   <h6> Version 0.0.1-2</h6>
 
   <script>
+
+ let isListening = false; // flag to track if event listener is active
+
+    function myiPhone() {
+      if (!isListening) {
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+          DeviceMotionEvent.requestPermission()
+            .then(permissionState => {
+              if (permissionState === 'granted') {
+                window.addEventListener('devicemotion', handleMotionEvent);
+                isListening = true;
+              }
+            })
+            .catch(console.error);
+        } else {
+          window.addEventListener('devicemotion', handleMotionEvent);
+          isListening = true;
+        }
+      } else {
+        window.removeEventListener('devicemotion', handleMotionEvent);
+        isListening = false;
+      }
+    }
+
+    function handleMotionEvent(event) {
+      const { accelerationIncludingGravity } = event;
+      const { x, y, z } = accelerationIncludingGravity;
+      document.getElementById('myDiv01').innerHTML = `iPhone x: ${x}, y: ${y}, z: ${z}`;
+    }
+
+    /*
     function myiPhone() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         DeviceMotionEvent.requestPermission()
@@ -21,6 +52,15 @@
       const { x, y, z } = accelerationIncludingGravity;
       document.getElementById('myDiv01').innerHTML = `iPhone x: ${x}, y: ${y}, z: ${z}`;
     }
+
+*/
+
+
+
+
+
+
+    
   </script>
   <body>
     <input type="button" value="iPhone" onclick="myiPhone()">
