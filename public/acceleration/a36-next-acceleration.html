@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.5-145 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.5-146 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1480,7 +1480,11 @@ Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://git
 Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
 This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
    
-
+A couple of gotchas (as of Jun 22, 2023):
+   1. File names have to be in the format name-lable.csv  name-lable (1).csv  name-lable (2) which Android and iPhone don't auto make for you. <br>
+   2. Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table x=0,y=0, z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2 <br>
+   3. Real data has lots of erros, Machine Learning models do not like missing data. If your results show "NaN" Either your training data or classification data has errors. The clean,trim,fill buttons might help.<br>
+   4. Presently a label CSV upload but is around. easy to fix by entering a few more labels. I will try to get to it
    
 </body>
 </html>
