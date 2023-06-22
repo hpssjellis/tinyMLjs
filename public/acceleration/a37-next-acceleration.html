@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.5-148 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.6-149 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -76,14 +76,13 @@ Hide: <input type=radio name="myPre" onclick="{
 
 Following is the list of actual labels used in the same order as uploaded (comma-separated)
 Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
+   
 CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> <br>
 Senses Labels (careful): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
-
 
 <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
    
-
 Machine Learning models often need very specific data.<br>
 
 <input type=button value="Clean, Trim or Fill All" onclick="{  
@@ -122,7 +121,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <span id="mySpanUpload">...</span>
 
 <hr>
-
 
 <button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
@@ -173,25 +171,19 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
 <br>    
 
-    
-
-  
-
 <input type=button value="Clean, Trim or Fill" onclick="{
   cleanFillTrim()
 }">
-  
-    
+      
 <input type=text id="mySingleLabel" placeholder="1lable" value="1label">  
 <input type=button value="Keep" onclick="{previewSensorData()}">   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 <input id="myOutFilename" type=text value="myCSV-myLabel.csv"><br>
 
-
 <textarea id="myArea01" rows=6 cols=120></textarea>
-
 <br>
+   
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
 <input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
@@ -227,8 +219,6 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 }"> <br>
 <span id="mySpanResults">...</span>
     
-
-
 
 <!-- <canvas id="myChart" width="700" height="300"></canvas> -->
 <div id="myChart" style="width:1000px; height:300px"></div>
@@ -1047,7 +1037,7 @@ async function myCellPhoneMotion(){
 function handleMotionEvent(event) {
 if (myCellPhoneOnce){    
   const { accelerationIncludingGravity } = event;
-  const { x, y, z } = accelerationIncludingGravity;
+  let { x, y, z } = accelerationIncludingGravity;
    
    if ( /Android/i.test(navigator.userAgent) ) {  // android orientation is opposite apple
       x *= -1;
