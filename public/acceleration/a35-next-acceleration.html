@@ -364,6 +364,11 @@ function cleanFillTrim(){
     myShowGraph() 
                                                         
     let myCountArray =  document.getElementById('myArea01').value.split('\n')   
+  // check if last value is empty
+   if (myCountArray[myCountArray.length - 1] === '') {
+     // Delete the empty last value
+     myCountArray.pop();
+   }   
     myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)                          
 
     console.log(' myCountArray.length' )
