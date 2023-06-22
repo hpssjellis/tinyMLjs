@@ -1,0 +1,36 @@
+<html>
+<h6> Version 0.0.2-5</h6>
+
+<script>
+function myiPhone() {
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('devicemotion', handleMotionEvent);
+          }
+        })
+        .catch(console.error);
+    } 
+} 
+
+function handleMotionEvent(event) {
+  const { accelerationIncludingGravity } = event;
+  const { x, y, z } = accelerationIncludingGravity;
+  document.getElementById('myDiv01').innerHTML = `iPhone x: ${x}, y: ${y}, z: ${z}`;
+}
+
+   
+
+    
+  </script>
+  <body>
+    <input type="button" value="iPhone" onclick="myiPhone()">
+    <input type="button" value="Stop" onclick="{
+       window.removeEventListener('devicemotion', handleMotionEvent); 
+      // isListening = false; 
+    }"><br>
+    <div id="myDiv01">...</div>
+  </body>
+</html>
+
