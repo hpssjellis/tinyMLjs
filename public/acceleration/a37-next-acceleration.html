@@ -150,13 +150,13 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }"> 
 <input type=button value="fancy2" title="18 sensor fusion example" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart   
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }">   
     
 <input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
@@ -166,7 +166,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    document.getElementById('myArea01').value = '' 
    if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }  // actually this is deleted, also done in the next function
    setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
-   setTimeout(function() { myShowGraph() }, 1000);      // give the data a few seconds to load before drawing chart        
+   setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
    
 }"> 
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
@@ -1019,231 +1019,13 @@ async function myPoly(){
 
 
 
-/*
-function myCellPhoneMotion() {
-  accelerometerData = [];
-  document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
-
-  // Check if the device supports the DeviceMotion event
-  if (window.DeviceMotionEvent) {
-    // DeviceMotion event listener to happen only once
-    if (myCellPhoneOnce) { // check that it is only set once
-      if (typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission()
-          .then(permissionState => {
-            if (permissionState === 'granted') {
-              window.addEventListener('devicemotion', handleMotionEvent);
-              myCellPhoneOnce = false;
-            } else {
-              document.getElementById('mySpanResults').innerHTML += ' Permission denied for Device Motion.<br>';
-            }
-          })
-          .catch(console.error);
-      } else {
-        window.addEventListener('devicemotion', handleMotionEvent);
-        myCellPhoneOnce = false;
-      }
-    }
-  } else {
-    document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
-  }
-
-  // Event handler for DeviceMotion event
-  function handleMotionEvent(event) {
-    const acceleration = event.accelerationIncludingGravity;
-
-    const x = acceleration.x.toFixed(2);
-    const y = acceleration.y.toFixed(2);
-    const z = acceleration.z.toFixed(2);
-
-    // Start collecting data if startTime is null
-    if (startTime === null) {
-      startTime = performance.now();
-    }
-
-    // Calculate elapsed time in milliseconds
-    const elapsedTime = performance.now() - startTime;
-
-    // Collect accelerometer data for 500 ms
-    if (elapsedTime < 410) { // 500 ~ 30 samples, I want 25 samples
-      accelerometerData.push([x, y, z]);
-    } else if (elapsedTime > 1000) {
-      // Essentially do nothing if the event handler does not get erased
-    } else {
-      // Put the data in the main textarea
-      if (mySendFirstLine) {
-        document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n'; // Prints first line for CSV saving
-      }
-      document.getElementById('myArea01').value += accelerometerData.join('\r\n'); // Puts line feed at the end of data
-      myShowGraph();
-      myCellPhoneOnce = false;
-    }
-  }
-}
-
-
-
-   
-
-
-function myCellPhoneMotion() {
-   accelerometerData = [];
-  document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
-
-  // Check if the device supports the DeviceMotion event
-  if (window.DeviceMotionEvent) {
-    // DeviceMotion event listener to happen only once
-    if (myCellPhoneOnce) { // check that it is only set once
-      window.addEventListener('devicemotion', handleMotionEvent);
-      myCellPhoneOnce = false;
-    }
-  } else {
-    document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
-  }
-
-  // Event handler for DeviceMotion event
-  function handleMotionEvent(event) {
-    const acceleration = event.acceleration || event.accelerationIncludingGravity;
-
-    const x = acceleration.x.toFixed(2);
-    const y = acceleration.y.toFixed(2);
-    const z = acceleration.z.toFixed(2);
-
-    // Start collecting data if startTime is null
-    if (startTime === null) {
-      startTime = performance.now();
-    }
-
-    // Calculate elapsed time in milliseconds
-    const elapsedTime = performance.now() - startTime;
-
-    // Collect accelerometer data for 500 ms
-    if (elapsedTime < 410) { // 500 ~ 30 samples, I want 25 samples
-      accelerometerData.push([x, y, z]);
-    } else if (elapsedTime > 1000) {
-      // Essentially do nothing if the event handler does not get erased
-    } else {
-      // Put the data in the main textarea
-      if (mySendFirstLine) {
-        document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n'; // Prints first line for CSV saving
-      } else {document.getElementById('myArea01').value = '';}   // just empty the other stuff
-      document.getElementById('myArea01').value += accelerometerData.join('\r\n'); // Puts line feed at the end of data
-      myShowGraph();
-      myCellPhoneOnce = false;
-    }
-  }
-}
-
-
-
-function myIphoneMotion() {
-  document.getElementById('mySpanResults').innerHTML = 'Checking if using a cell phone!<br>';
-
-  // Check if the device supports the DeviceMotion event
-  if (window.DeviceMotionEvent) {
-    // DeviceMotion event listener to happen only once
-    if (myCellPhoneEvent) {
-      window.addEventListener('devicemotion', handleMotionEvent);
-      myCellPhoneEvent = false;
-      myCellPhoneOnce = true;
-    }
-  } else {
-    document.getElementById('mySpanResults').innerHTML += 'Cell Phone Device Motion not supported.<br>';
-  }
-
-  // Event handler for DeviceMotion event
-  function handleMotionEvent(event) {
-    if (myCellPhoneOnce) {
-      const acceleration = event.accelerationIncludingGravity;
-
-      const x = acceleration.x.toFixed(2);
-      const y = acceleration.y.toFixed(2);
-      const z = acceleration.z.toFixed(2);
-
-      // Start collecting data if startTime is null
-      if (startTime === null) {
-        startTime = performance.now();
-      }
-
-      // Calculate elapsed time in milliseconds
-      const elapsedTime = performance.now() - startTime;
-
-      // Collect accelerometer data for 500 ms
-      if (elapsedTime < 410) { // 500 ~ 30 samples, I want 25 samples
-        accelerometerData.push([x, y, z]);
-      } else if (elapsedTime > 1000) {
-        // Essentially do nothing if the event handler does not get erased
-      } else {
-        // Put the data in the main textarea
-        if (mySendFirstLine) {
-          document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';
-        } // Prints first line for CSV saving
-        document.getElementById('myArea01').value += accelerometerData.join('\r\n'); // Puts line feed at the end of data
-        myShowGraph();
-        myIphoneOnce = false;
-      }
-    }
-  }
-}
-
-
-function myCellPhoneMotion(){
-document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
-// Check if the device supports the DeviceMotion event
-if (window.DeviceMotionEvent) {
-   // DeviceMotion event listener  to happen only once 
-         // DeviceMotion event listener
-   if(myCellPhoneEvent){ // check that it is only set once
-      window.addEventListener('devicemotion', handleMotionEvent);
-      myCellPhoneEvent = false
-      myCellPhoneOnce = true
-   }
-    } else {
-      document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
-    }
-
-    // Event handler for DeviceMotion event
-    function handleMotionEvent(event) {
-      if (myCellPhoneOnce){ 
-         const acceleration = event.acceleration;
-            
-         const x = acceleration.x.toFixed(2);
-         const y = acceleration.y.toFixed(2);
-         const z = acceleration.z.toFixed(2);
-            
-         // Start collecting data if startTime is null
-         if (startTime === null) {
-           startTime = performance.now();
-         }
-   
-         // Calculate elapsed time in milliseconds
-         const elapsedTime = performance.now() - startTime;
-   
-         // Collect accelerometer data for 500 ms
-         if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
-           accelerometerData.push([x, y, z]);
-         }
-         else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased         
-         else {
-               // put the data in the main textarea
-               if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
-               document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
-               myShowGraph() 
-               myCellPhoneOnce = false  
-            }
-         }
-   }
-}
-
-
-
-
-
- */  
 
 
 async function myCellPhoneMotion(){
-document.getElementById('mySpanResults').innerHTML = 'Checking if using a cell phone!<br>';
+  document.getElementById('mySpanResults').innerHTML = `Checking if using a cell phone!<br>`;
+  document.getElementById('mySpanResults').innerHTML += `/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanResults').innerHTML += `/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanResults').innerHTML += `navigator.userAgent: ${navigator.userAgent}<br>`
   if (typeof DeviceMotionEvent.requestPermission === 'function') {
     try {
       const permissionState = await DeviceMotionEvent.requestPermission();
@@ -1302,42 +1084,6 @@ if (myCellPhoneOnce){
    } 
 }
 
-   
-
-  /* 
-    // Event handler for DeviceMotion event
-    function handleMotionEvent(event) {
-      if (myCellPhoneOnce){ 
-         const acceleration = event.acceleration;
-            
-         const x = acceleration.x.toFixed(2);
-         const y = acceleration.y.toFixed(2);
-         const z = acceleration.z.toFixed(2);
-            
-         // Start collecting data if startTime is null
-         if (startTime === null) {
-           startTime = performance.now();
-         }
-   
-         // Calculate elapsed time in milliseconds
-         const elapsedTime = performance.now() - startTime;
-   
-         // Collect accelerometer data for 500 ms
-         if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
-           accelerometerData.push([x, y, z]);
-         }
-         else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased         
-         else {
-               // put the data in the main textarea
-               if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
-               document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
-               myShowGraph() 
-               myCellPhoneOnce = false  
-            }
-         }
-   }
-}
-*/
 
 
 
@@ -1480,11 +1226,11 @@ Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://git
 Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
 This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
    
-A couple of gotchas (as of Jun 22, 2023):
-   1. File names have to be in the format name-lable.csv  name-lable (1).csv  name-lable (2) which Android and iPhone don't auto make for you. <br>
-   2. Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table x=0,y=0, z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2 <br>
-   3. Real data has lots of erros, Machine Learning models do not like missing data. If your results show "NaN" Either your training data or classification data has errors. The clean,trim,fill buttons might help.<br>
-   4. Presently a label CSV upload but is around. easy to fix by entering a few more labels. I will try to get to it
-   
+<ol>A couple of gotchas (as of Jun 22, 2023):
+   <li>. File names have to be in the format name-lable.csv  name-lable (1).csv  name-lable (2) which Android and iPhone don't auto make for you. 
+   <li>. Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table x=0,y=0, z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2 
+   <li>. Real data has lots of erros, Machine Learning models do not like missing data. If your results show "NaN" Either your training data or classification data has errors. The clean,trim,fill buttons might help.
+   <li>. Presently a label CSV upload but is around. easy to fix by entering a few more labels. I will try to get to it
+</ol>   
 </body>
 </html>
