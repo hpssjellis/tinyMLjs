@@ -1016,71 +1016,51 @@ async function myPoly(){
 
 
 function myCellPhoneMotion(){
-
-    document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
-    // Check if the device supports the DeviceMotion event
-    if (window.DeviceMotionEvent) {
-      // DeviceMotion event listener  to happen only once 
-            // DeviceMotion event listener
-       if(myCellPhoneEvent){ // check that it is only set once
-           window.addEventListener('devicemotion', handleMotionEvent);
-           myCellPhoneEvent = false
-           myCellPhoneOnce = true
-       }
-     //  window.addEventListener('devicemotion', handleMotionEvent, { once: true });
-
+document.getElementById('mySpanResults').innerHTML = ' Checking if using a cell phone!<br>';
+// Check if the device supports the DeviceMotion event
+if (window.DeviceMotionEvent) {
+   // DeviceMotion event listener  to happen only once 
+         // DeviceMotion event listener
+   if(myCellPhoneEvent){ // check that it is only set once
+      window.addEventListener('devicemotion', handleMotionEvent);
+      myCellPhoneEvent = false
+      myCellPhoneOnce = true
+   }
     } else {
       document.getElementById('mySpanResults').innerHTML += ' Cell Phone Device Motion not supported.<br>';
     }
 
-
     // Event handler for DeviceMotion event
     function handleMotionEvent(event) {
       if (myCellPhoneOnce){ 
-      const acceleration = event.acceleration;
-         
-      const x = acceleration.x.toFixed(2);
-      const y = acceleration.y.toFixed(2);
-      const z = acceleration.z.toFixed(2);
-         /*
-         // getting an error on the desktop stie when clicking the cell phone button
-         // this does not help
-         if ( !isNaN(acceleration.x) ){  // if one of them is a number they all are numbers
-      const x = acceleration.x.toFixed(2);
-      const y = acceleration.y.toFixed(2);
-      const z = acceleration.z.toFixed(2);
+         const acceleration = event.acceleration;
+            
+         const x = acceleration.x.toFixed(2);
+         const y = acceleration.y.toFixed(2);
+         const z = acceleration.z.toFixed(2);
+            
+         // Start collecting data if startTime is null
+         if (startTime === null) {
+           startTime = performance.now();
          }
-         */
-      // Start collecting data if startTime is null
-      if (startTime === null) {
-        startTime = performance.now();
-      }
-
-      // Calculate elapsed time in milliseconds
-      const elapsedTime = performance.now() - startTime;
-
-      // Collect accelerometer data for 500 ms
-      if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
-        accelerometerData.push([x, y, z]);
-      }
-      else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased   
-      
-      else {
-        
-      // put the data in the main textarea
-      if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
-      document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
-        // try to remove event
-     //  event.target.removeEventListener('click', handleMotionEvent, false);
-      // document.getElementById('mySpanResults').innerHTML += ' Motion even removed<br>';
-       myShowGraph() 
-       myCellPhoneOnce = false  
-        // Reset variables for the next data collection
-       // accelerometerData = [];
-       // startTime = null;  need the button to reset these values or it keeps grabbing data
-      }
-      }
-    }
+   
+         // Calculate elapsed time in milliseconds
+         const elapsedTime = performance.now() - startTime;
+   
+         // Collect accelerometer data for 500 ms
+         if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
+           accelerometerData.push([x, y, z]);
+         }
+         else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased         
+         else {
+               // put the data in the main textarea
+               if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
+               document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
+               myShowGraph() 
+               myCellPhoneOnce = false  
+            }
+         }
+   }
 }
 
 
