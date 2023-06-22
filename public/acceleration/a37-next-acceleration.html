@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.7-152 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.36.7-153 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1025,6 +1025,7 @@ async function myCellPhoneMotion(){
   document.getElementById('mySpanExport').innerHTML += `/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}<br>`;
   document.getElementById('mySpanExport').innerHTML += `/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}<br>`;
   document.getElementById('mySpanExport').innerHTML += `navigator.userAgent: ${navigator.userAgent}<br>`
+   
   if (typeof DeviceMotionEvent.requestPermission === 'function') {
     try {
       const permissionState = await DeviceMotionEvent.requestPermission();
@@ -1047,7 +1048,7 @@ if (myCellPhoneOnce){
   const { accelerationIncludingGravity } = event;
   let { x, y, z } = accelerationIncludingGravity;
    
-   if ( /Android/i.test(navigator.userAgent) ) {  // android orientation is opposite apple
+   if ( /Android/i.test(navigator.userAgent) ) {  // correct only if not on desktop setting. Android orientation is opposite apple
       x *= -1;
       y *= -1;
       z *= -1;
@@ -1225,11 +1226,11 @@ Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://git
 Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
 This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> 
    
-<ol><b>A couple of gotchas (as of Jun 22, 2023):</b>
-   <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
-   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
-   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
-   <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
+<ol><b>A couple of gotchas (as of Jun 22, 2023):</b><br>
+<br>  <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
+<br>   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
+<br>   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
+<br>  <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
 </ol>   
 </body>
 </html>
