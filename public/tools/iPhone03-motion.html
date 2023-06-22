@@ -10,27 +10,32 @@ async function myiPhone() {
         window.addEventListener('devicemotion', handleMotionEvent);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       document.getElementById('myDiv01').innerHTML = `Error: ${error}`;
     }
   } else {
-      window.addEventListener('devicemotion', handleMotionEvent);
-      isListening = true;
-    }
+    window.addEventListener('devicemotion', handleMotionEvent);
+    isListening = true;
+  }
 }
 
 function handleMotionEvent(event) {
-const { accelerationIncludingGravity } = event;
-const { x, y, z } = accelerationIncludingGravity;
-document.getElementById('myDiv01').innerHTML = `iPhone x: ${x.toFixed(2)}, y: ${y.toFixed(2)}, z: ${z.toFixed(2)}`;
+  const { accelerationIncludingGravity } = event;
+  const { x, y, z } = accelerationIncludingGravity;
+
+  const formattedX = typeof x === 'number' ? x.toFixed(2) : 'N/A';
+  const formattedY = typeof y === 'number' ? y.toFixed(2) : 'N/A';
+  const formattedZ = typeof z === 'number' ? z.toFixed(2) : 'N/A';
+
+  document.getElementById('myDiv01').innerHTML = `iPhone x: ${formattedX}, y: ${formattedY}, z: ${formattedZ}`;
 }
 </script>
 
 <body>
-<input type="button" value="iPhone" onclick="myiPhone()">
-<input type="button" value="Stop" onclick="{
-   window.removeEventListener('devicemotion', handleMotionEvent); 
-}"><br>
-<div id="myDiv01">...</div>
+  <input type="button" value="iPhone" onclick="myiPhone()">
+  <input type="button" value="Stop" onclick="{
+    window.removeEventListener('devicemotion', handleMotionEvent); 
+  }"><br>
+  <div id="myDiv01">...</div>
 </body>
 </html>
