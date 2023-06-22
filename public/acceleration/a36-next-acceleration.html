@@ -1265,7 +1265,13 @@ function handleMotionEvent(event) {
 if (myCellPhoneOnce){    
   const { accelerationIncludingGravity } = event;
   const { x, y, z } = accelerationIncludingGravity;
-
+   
+   if ( /Android/i.test(navigator.userAgent) ) {  // android orientation is opposite apple
+      x *= -1;
+      y *= -1;
+      z *= -1;
+   }
+   
   const formattedX = typeof x === 'number' ? x.toFixed(2) : 'NaN';
   const formattedY = typeof y === 'number' ? y.toFixed(2) : 'NaN';
   const formattedZ = typeof z === 'number' ? z.toFixed(2) : 'NaN';
