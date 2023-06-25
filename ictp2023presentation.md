@@ -34,6 +34,7 @@ Finding the fun teaching machine learning with microcontrollers
 .....
 
 </a>
+
 ### page-3-me
 
 
@@ -55,6 +56,7 @@ Finding the fun teaching machine learning with microcontrollers
 .....
 
 </a>
+
 ### page-4-progress
 
 
@@ -77,6 +79,7 @@ Finding the fun teaching machine learning with microcontrollers
 
 
 </a>
+
 ### page-5-acceleration-data
 
 
@@ -91,6 +94,7 @@ Finding the fun teaching machine learning with microcontrollers
 .....
 
 </a>
+
 ### page-6-conclusion
 
 .....
