@@ -22,8 +22,8 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 <a href="#page-3-me"> Next Page </a>
 
 1. When I heard of the ICTP <a href="https://indico.ictp.it/event/10185">Workshop on Widening Access to TinyML Network by Establishing Best Practices in Education</a> I wanted to find a group of like minded Educators
-who could work for a year on creating a method to teach machine learning on microcontrollers more fun for the general population.
-1. And by fun I mean: passion for learning, proof of concept, cheap, fast, easy, client-side, secure, powerful, full process, hardware independent and internet/cloud independent
+who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.
+1. And by fun I mean: creating a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent
 
 .
 
