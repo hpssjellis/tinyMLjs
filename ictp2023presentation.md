@@ -9,11 +9,13 @@ Finding the fun, while teaching machine learning with microcontrollers to the ge
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c1ebc04f-cf69-40fb-b662-1b828558fa25" width=500 />
 
+QR Code is for this link <https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html> To the main acceleration TinyMLjs webpage
 
+TinyMLjs by Jeremy Ellis. Github Rofile at <https://github.com/hpssjellis>
 
 <a href="#page-2-intro"> Next Page </a>
 
-TinyMLjs by Jeremy Ellis
+
 
 ### page-2-intro
 
