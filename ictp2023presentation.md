@@ -3,17 +3,17 @@
 ### page-1-qrcode
 <a href="#page-2-intro"> Next Page </a>
 
-TinyMLjs by Jeremy Ellis
 
-Finding the fun teaching machine learning with microcontrollers
+
+Finding the fun, while teaching machine learning with microcontrollers to the general population.
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c1ebc04f-cf69-40fb-b662-1b828558fa25" width=500 />
 
 
-Finding the fun teaching machine learning with microcontrollers
 
+<a href="#page-2-intro"> Next Page </a>
 
-
+TinyMLjs by Jeremy Ellis
 
 ### page-2-intro
 
@@ -34,6 +34,7 @@ Finding the fun teaching machine learning with microcontrollers
 .....
 
 
+<a href="#page-3-me"> Next Page </a>
 
 ### page-3-me
 
@@ -57,6 +58,7 @@ Finding the fun teaching machine learning with microcontrollers
 
 
 
+<a href="#page-4-progress"> Next Page </a>
 ### page-4-progress
 
 
@@ -78,6 +80,7 @@ Finding the fun teaching machine learning with microcontrollers
 .....
 
 
+<a href="#page-5-acceleration-data"> Next Page </a>
 
 
 ### page-5-acceleration-data
@@ -94,7 +97,8 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 
 .....
 
-</a>
+
+<a href="#page-6-Conclusion"> Next Page </a>
 
 ### page-6-conclusion
 
@@ -151,3 +155,4 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 .
 
 
+<a href="#page-1-qrcode"> Back to the top</a>
