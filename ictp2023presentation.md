@@ -59,7 +59,7 @@ who could work for a year on creating a method to teach machine learning on micr
 
 1. I am Jeremy Ellis (@rocksetta, jerteach, hpssjellis) machine learning self taught and questionably intelligent. I have computer programmed for 48 years, taught high school coding for 35,
 made neural networks for 20, and taught tensorflow/TensorflowJS on microcontrollers for 8 with the last 3 years using [EdgeImpulse.com](https://www.edgeimpulse.com/)
-1. The only consistent thing about teaching coding for that long is the amount of times all my work has been deprecated. It doesn't matter if the cloud platform has been sold: (Cloud9 to AWS) or the software has been updated: (Too many to mention), or the IDE has changed (Arduino IDE 1.8.19 to 2.10), the board has changed (too many to mention) the software has changed (Python 2 to Python 3), and each deprecation destroys our lesson plans and videos.
+1. The only consistent thing about teaching coding for that long is the amount of times all my work has been deprecated. It doesn't matter if the cloud platform has been sold: (Cloud9 to AWS) or the software has been updated: (Too many to mention), or the IDE has changed (Arduino IDE 1.8.19 to 2.10), the board has changed (too many to mention) the software has changed (Python 2 to Python 3), and each deprecation destroys any relevant lesson plans or videos.
 1. One of the methods that has been reasonably stable is Javascript becuase of it's script tag versioning system
    &#60;script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0"> </script>
 1. But Javascript can't do microcontroller ML? 
