@@ -36,8 +36,11 @@ who could work for a year on creating a method to teach machine learning on micr
 1. I am Jeremy Ellis (@rocksetta, jerteach, hpssjellis) ML self taught and questionably intelligent. I have computer programmed for 48 years, have taught coding for 35,
 made neural networks for 20, and taught tensorflow/TensorflowJS on microcontrollers for 8 with the last 3 years using <EdgeImpulse.com>
 2. The only consistent thing about teaching coding for that long is the amount of times all my work has been deprecated. It does not matter if the cloud platform has been sold: (Cloud9 to AWS) or the software has been updated: (Too many to mention), or the IDE has changed (Arduino IDE 1.8.19 to 2.10), the board has changed (too many to mention) the software has changed (Python 2 to Python 3), and each deprecation destroys your lesson plans and videos.
-3. One of the methods that has been reasonably stable is Javascript becuase of it's script tag versioning system  &#60;script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0"&#62; &#60;/script&#62;
-4. 
+3. One of the methods that has been reasonably stable is Javascript becuase of it's script tag versioning system
+   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0"> </script>
+
+5. &#60;
+6. 
 .....
 
 .....
