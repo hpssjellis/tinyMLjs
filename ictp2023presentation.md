@@ -11,7 +11,7 @@ Finding the fun, while teaching machine learning with microcontrollers to the ge
 
 QR Code is for this link <https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html> To the main acceleration TinyMLjs webpage
 
-TinyMLjs by Jeremy Ellis. Github Rofile at <https://github.com/hpssjellis>
+TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 
 
 
