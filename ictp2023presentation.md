@@ -29,7 +29,7 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 
 1. When I heard of the ICTP <a href="https://indico.ictp.it/event/10185">Workshop on Widening Access to TinyML Network by Establishing Best Practices in Education</a> I wanted to find a group of like minded Educators
 who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.
-1. And by fun I mean: creating a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent
+1. And by fun I mean: open-source, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent
 
 .
 
@@ -89,8 +89,8 @@ made neural networks for 20, and taught tensorflow/TensorflowJS on microcontroll
 
 ### page-4-progress
 
-1. At the start of June 2023 I had webSerial/polyfill and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.
-1. Long sotry short I made a webpage that can load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)
+1. At the start of June 2023 I had webSerial/polyfill (Android pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.
+1. Long sotry short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)
 1. ~1000 lines of code to completely on a single webpage to completely test your theory about a sensor being able to be used with Machine learning.
 1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.
 
