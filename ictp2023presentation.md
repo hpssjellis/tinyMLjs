@@ -13,7 +13,7 @@ QR Code is for this link <https://hpssjellis.github.io/tinyMLjs/public/accelerat
 
 TinyMLjs by Jeremy Ellis. Github Rofile at <https://github.com/hpssjellis>
 
-<a href="#page-2-intro"> Next Page </a>
+
 
 
 
@@ -36,7 +36,7 @@ TinyMLjs by Jeremy Ellis. Github Rofile at <https://github.com/hpssjellis>
 .....
 
 
-<a href="#page-3-me"> Next Page </a>
+
 
 ### page-3-me
 
@@ -60,7 +60,7 @@ TinyMLjs by Jeremy Ellis. Github Rofile at <https://github.com/hpssjellis>
 
 
 
-<a href="#page-4-progress"> Next Page </a>
+
 ### page-4-progress
 
 
@@ -82,7 +82,7 @@ TinyMLjs by Jeremy Ellis. Github Rofile at <https://github.com/hpssjellis>
 .....
 
 
-<a href="#page-5-acceleration-data"> Next Page </a>
+
 
 
 ### page-5-acceleration-data
@@ -100,7 +100,7 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 .....
 
 
-<a href="#page-6-Conclusion"> Next Page </a>
+
 
 ### page-6-conclusion
 
