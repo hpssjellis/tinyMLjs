@@ -89,6 +89,7 @@ Finding the fun teaching machine learning with microcontrollers
 
 .....
 
+The github is at: <https://github.com/hpssjellis/tinyMLjs>
 .....
 
 .....
@@ -106,3 +107,45 @@ Finding the fun teaching machine learning with microcontrollers
 
 
 <a href="#page-1-qrcode"> Back to the top</a>
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+
