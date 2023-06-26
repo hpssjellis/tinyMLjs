@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mouse Location Tracker</title>
+  <style>
+    #myDiv01 {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="myDiv01"></div>
+
+  <script>
+    var counter = 0; // Tracks the number of times the mouse coordinates have been recorded
+
+    // Function to track mouse movement
+    function trackMouse(event) {
+      counter++;
+      var x = event.clientX; // Mouse X coordinate
+      var y = event.clientY; // Mouse Y coordinate
+      
+      // Create a new <p> element to display the coordinates
+      var coordinateElement = document.createElement("p");
+      coordinateElement.textContent = "#:"+counter+", X: " + x + ", Y: " + y;
+      
+      // Append the new <p> element to the myDiv01 element
+      var myDiv01 = document.getElementById("myDiv01");
+      myDiv01.appendChild(coordinateElement);
+      
+      // Stop tracking after 25 times
+      if (counter === 25) {
+        document.removeEventListener("mousemove", trackMouse);
+      }
+    }
+
+    // Event listener to track mouse movement
+    document.addEventListener("mousemove", trackMouse);
+  </script>
+</body>
+</html>
