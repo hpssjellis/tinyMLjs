@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <h6>Version 0.0.2-4</h6>
+  <input type="button" value="Motion Capture" onClick="startMotionTracking();"><br>
+  <textarea id="myArea01" rows="30" cols="60"></textarea>
+
+  <script>
+    function startMotionTracking() {
+      let motionCount = 0;
+      let motionX; // X coordinate
+      let motionY; // Y coordinate
+
+      function handleMotionEvent(event) {
+        if (event.type === 'touchmove') {
+          motionX = event.touches[0].clientX; // Touch X coordinate
+          motionY = event.touches[0].clientY; // Touch Y coordinate
+        } else {
+          motionX = event.clientX; // Mouse X coordinate
+          motionY = event.clientY; // Mouse Y coordinate
+        }
+
+        document.getElementById('myArea01').value += `${motionX}, ${motionY}\r\n`;
+
+        if (++motionCount >= 25) {
+          document.removeEventListener("mousemove", handleMotionEvent);
+          document.removeEventListener("touchmove", handleMotionEvent);
+          trimTrailingWhitespace();
+        }
+      }
+
+      function trimTrailingWhitespace() {
+        var textarea = document.getElementById('myArea01');
+        textarea.value = textarea.value.replace(/\s+$/, '');
+      }
+
+      document.addEventListener("mousemove", handleMotionEvent);
+      document.addEventListener("touchmove", handleMotionEvent);
+    }
+  </script>
+</body>
+
+</html>
