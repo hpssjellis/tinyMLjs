@@ -360,7 +360,7 @@ for (let i = 1; i <= myDataMcu; i++) {
 
 function cleanFillTrim(){
 
-   document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
     document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
     document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
     // not setup to replacve individual empty entires. Perhaps test for that later 
@@ -1103,6 +1103,7 @@ if (myCellPhoneOnce){
 
         if (++myMouseCount >= 25) {
           document.removeEventListener("mousemove", myMouseMove);
+           document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines  
         }
       }
 
