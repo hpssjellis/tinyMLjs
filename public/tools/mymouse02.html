@@ -2,7 +2,7 @@
 <html>
 
 <body>
-<h6>Version 0.0.1-1</h6></h6>
+<h6>Version 0.0.1-2</h6></h6>
 <input type=button value="mouse motion" onClick="document.getElementById('myArea01').value =''; myMouseMove(event); "><br>
 <textarea id="myArea01" rows=5 cols=100></textarea>
   
@@ -17,17 +17,17 @@ function myMouseMove(event){
   let myMouseY = event.clientY; // Mouse Y coordinate
   document.getElementById('myArea01').value += `${myMouseX}, ${myMouseY}<br>`
   
-  if (++myMouseCount < 25)  // number is how many mouse captures to do
-    { 
+  if (++myMouseCount < 25) { // number is how many mouse captures to do
         setTimeout(myMouseMove, 10);  // larger numnber slows down the mouse capture
-    }
   }
+  
+}
  
 
 
 
   
-}
+
 
 
 
