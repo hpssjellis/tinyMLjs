@@ -3,7 +3,7 @@
 
 <body>
 
-  <input type=button value="mouse motion" onClick="document.getElementById('myArea01').value =''; myMouseMove(); ">
+  <input type=button value="mouse motion" onClick="document.getElementById('myArea01').value =''; myMouseMove(); "><br>
   <textarea id="myArea01" ></textarea>
   
 
@@ -12,9 +12,9 @@
 let myMouseCount = 0;
 function myMouseMove(event){
 
-let myMouseX = event.clientX; // Mouse X coordinate
-let myMouseY = event.clientY; // Mouse Y coordinate
-document.getElementById('myArea01').value =   `${ myMouseX},${ myMouseY}<br>`
+  let myMouseX = event.clientX; // Mouse X coordinate
+  let myMouseY = event.clientY; // Mouse Y coordinate
+  document.getElementById('myArea01').value += `${myMouseX}, ${myMouseY}<br>`
   
   if (++myMouseCount < 25)  // number is how many mouse captures to do
     { 
