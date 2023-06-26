@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.38.5-161 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.38.6-162 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1100,8 +1100,8 @@ if (myCellPhoneOnce){
       
       function handleMotionEvent(event) {
         if (event.type === 'touchmove') {
-          myMouseX = event.touches[0].clientX; // Touch X coordinate
-          myMouseY = event.touches[0].clientY; // Touch Y coordinate
+          myMouseX = Math.round(event.touches[0].clientX); // Touch X coordinate
+          myMouseY = Math.round(event.touches[0].clientY); // Touch Y coordinate
         } else {
           myMouseX = event.clientX; // Mouse X coordinate
           myMouseY = event.clientY; // Mouse Y coordinate
