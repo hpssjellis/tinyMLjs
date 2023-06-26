@@ -240,6 +240,7 @@ function myDataCheckCSV(){
    
 for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\r\n\r\n/g, '\r\n') // remove blank lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
   // document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
@@ -300,6 +301,7 @@ function myDataCheckSenses(){
 //for (let i = 0; i < myDataMcu; i++) {   // clean out empty lines        
 for (let i = 1; i <= myDataMcu; i++) {   // careful starting at number 1 not zero                                
    document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/\r\n\r\n/g, '\r\n') // remove blank lines
    //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
    document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
   // document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData2Mcu' + i).textContent + '<br><br><br>'
