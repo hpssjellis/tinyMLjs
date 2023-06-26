@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <h6>Version 0.0.3-5</h6></h6>
+  <input type="button" value="Mouse Motion" onClick="document.getElementById('myArea01').value =''; myMouseMove();"><br>
+  <textarea id="myArea01" rows="30" cols="60"></textarea>
+
+  <script>
+    let myMouseCount = 0;
+
+    function myMouseMove() {
+      let myMouseX; // Mouse X coordinate
+      let myMouseY; // Mouse Y coordinate
+      
+      document.onmousemove = function(event) {
+        myMouseX = event.clientX; // Mouse X coordinate
+        myMouseY = event.clientY; // Mouse Y coordinate
+        document.getElementById('myArea01').value += `${myMouseX}, ${myMouseY}\r\n`;
+        
+        if (++myMouseCount < 25) { // Number of mouse captures
+          setTimeout(myMouseMove, 10); // Delay between each capture in milliseconds
+        }
+      };
+    }
+  </script>
+</body>
+
+</html>
