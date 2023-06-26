@@ -19,3 +19,4 @@ https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse01.html
 https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse02.html  
 https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse03.html  
 https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse04.html  
+https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse05.html  
