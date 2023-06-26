@@ -90,13 +90,14 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 ### page-4-progress
 
+<a href="#page-5-tinyMLjs-1"> Next Page </a>
+
 1. At the start of June 2023 I had webSerial/polyfill (Android pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.
 1. Long sotry short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)
 1. ~1000 lines of code to completely on a single webpage to completely test your theory about a sensor being able to be used with Machine learning.
 1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.
 
 
-<a href="#page-5-acceleration-data"> Next Page </a>
 .
 
 
@@ -116,98 +117,23 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 .
 
 
-### page-5-acceleration-data
+### page-5-tinyMLjs-1
 
-
-<a href="#page-6-Conclusion"> Next Page </a>
-
-
-The github is at: <https://github.com/hpssjellis/tinyMLjs>
-
-
-.
-
-
-.
-
-.
-
-.
-
-
-.
-
-.
-
-
-### page-6-conclusion
-
-
-<a href="#page-1-qrcode"> Back to the top</a>
-
-
-.
-
-
-.
-
-.
-
-.
-
-
-.
-
-.
-
-
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-
-<a href="#page-1-qrcode"> Back to the top</a>
-
+<a href="#page-6-tinyMLjs-2"> Next Page </a>
 
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47)
+
+
+
+
+
+
+### page-6-tinyMLjs-2
+
+<a href="#page-7-tinyMLjs-3"> Next Page </a>
+
+
 
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0)
@@ -215,8 +141,67 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 
 
 
+### page-7-tinyMLjs-3
+
+<a href="#page-8-tinyMLjs-4"> Next Page </a>
+
+
+
+
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d)
+
+
+
+### page-8-tinyMLjs-4
+
+<a href="#page-9-conclusion"> Next Page </a>
+
+
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699)
 
+
+
+### page-9-tinyMLjs-5
+
+<a href="#page-10-conclusion"> Next Page </a>
+
+
+
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592)
+
+
+
+
+
+.
+
+.
+
+.
+
+
+
+
+### page-10-conclusion
+
+
+<a href="#page-1-qrcode"> Back to the top</a>
+
+
+The github is at: <https://github.com/hpssjellis/tinyMLjs>
+
+The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a>
+
+
+.
+
+.
+
+.
+
+
+<a href="#page-1-qrcode"> Back to the top</a>
+
+
+
