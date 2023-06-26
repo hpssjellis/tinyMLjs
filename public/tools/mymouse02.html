@@ -3,15 +3,25 @@
 
 <body>
 
-  <input type=button value="mouse motion" onClick="myMouseMove()">
-  <div id="myDiv01"></div>
+  <input type=button value="mouse motion" onClick="document.getElementById('myArea01').value =''; myMouseMove(); ">
+  <textarea id="myArea01" ></textarea>
   
 
   <script>
 
+let myMouseCount = 0;
+function myMouseMove(event){
 
-function myMouseMove(){
-
+let myMouseX = event.clientX; // Mouse X coordinate
+let myMouseY = event.clientY; // Mouse Y coordinate
+document.getElementById('myArea01').value =   `${ myMouseX},${ myMouseY}<br>`
+  
+  if (++myMouseCount < 25)  // number is how many mouse captures to do
+    { 
+        setTimeout(myMouseMove, 10);  // larger numnber slows down the mouse capture
+    }
+  }
+ 
 
 
 
@@ -20,6 +30,20 @@ function myMouseMove(){
 
 
 
+/*
+
+
+    
+var i = 0; // counter for the timer
+function doSomething() {
+    console.log("1 second"); // your actual code here, alternatively call an other function here
+    if (++i < 10)
+    {   // only reset the timer when maximum of 10 times it is fired 
+        console.log("reset the timer");
+        setTimeout(doSomething, 1000); // reset the timer
+    }
+}
+setTimeout(doSomething, 1000);  // init the first
 
 
 
@@ -50,6 +74,9 @@ function myMouseMove(){
     document.addEventListener("mousemove", trackMouse);
 
     }
+
+
+    */
   </script>
 </body>
 </html>
