@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.38.3-159 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.38.4-160 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1107,7 +1107,7 @@ if (myCellPhoneOnce){
            // data collection done, so lets clean up a bit.
            document.removeEventListener("mousemove", myMouseMove);
            document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+$/, '') // remove blank lines 
-           showGraph()
+           myShowGraph()
            //  document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines  
            //  document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\r\n\r\n/g, '\r\n') // remove blank lines  
         }
