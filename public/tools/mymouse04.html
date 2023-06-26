@@ -16,7 +16,7 @@
       function myMouseMove(event) {
         myMouseX = event.clientX; // Mouse X coordinate
         myMouseY = event.clientY; // Mouse Y coordinate
-        document.getElementById('myArea01').value += `${myMouseX}, ${myMouseY}\r\n`;
+        document.getElementById('myArea01').value += `${myMouseX},${myMouseY}\r\n`;
 
         if (++myMouseCount >= 25) {
           document.removeEventListener("mousemove", myMouseMove);
