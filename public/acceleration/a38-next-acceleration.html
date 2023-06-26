@@ -1104,11 +1104,12 @@ if (myCellPhoneOnce){
         document.getElementById('myArea01').value += `${myMouseX},${myMouseY}\r\n`;
 
         if (++myMouseCount >= 25) {
-          document.removeEventListener("mousemove", myMouseMove);
-           
+           // data collection done, so lets clean up a bit.
+           document.removeEventListener("mousemove", myMouseMove);
            document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+$/, '') // remove blank lines 
-         //  document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines  
-         //  document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\r\n\r\n/g, '\r\n') // remove blank lines  
+           showGraph()
+           //  document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines  
+           //  document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\r\n\r\n/g, '\r\n') // remove blank lines  
         }
       }
 
