@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <h6>Version 0.0.3-6</h6></h6>
+  <input type="button" value="Mouse Motion" onClick="startMouseTracking();"><br>
+  <textarea id="myArea01" rows="30" cols="60"></textarea>
+
+  <script>
+    function startMouseTracking() {
+      let myMouseCount = 0;
+      let myMouseX; // Mouse X coordinate
+      let myMouseY; // Mouse Y coordinate
+      
+      function myMouseMove(event) {
+        myMouseX = event.clientX; // Mouse X coordinate
+        myMouseY = event.clientY; // Mouse Y coordinate
+        document.getElementById('myArea01').value += `${myMouseX}, ${myMouseY}\r\n`;
+
+        if (++myMouseCount >= 25) {
+          document.removeEventListener("mousemove", myMouseMove);
+        }
+      }
+
+      document.addEventListener("mousemove", myMouseMove);
+    }
+  </script>
+</body>
+
+</html>
