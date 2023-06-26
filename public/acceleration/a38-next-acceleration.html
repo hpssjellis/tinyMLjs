@@ -169,7 +169,10 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    
 }"> 
 
-<input type="button" value="Mouse Motion" onClick="startMouseTracking();"><br>   
+<input type="button" value="Mouse Motion" onClick="{
+   document.getElementById('myNumSenses').value = 2  // x and y from the mouse
+   startMouseTracking();
+}"><br>   
 
 <br>    
 
