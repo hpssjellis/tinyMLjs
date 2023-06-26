@@ -5,7 +5,6 @@
 <h6>Version 0.0.2-4</h6></h6>
 <input type=button value="mouse motion" onClick="document.getElementById('myArea01').value =''; myMouseMove(); "><br>
 <textarea id="myArea01" rows=30 cols=60></textarea>
-  
 
 <script>
 
@@ -26,61 +25,6 @@ function myMouseMove(){
   
 }
  
-
-
-
-  
-
-
-
-
-/*
-
-
-    
-var i = 0; // counter for the timer
-function doSomething() {
-    console.log("1 second"); // your actual code here, alternatively call an other function here
-    if (++i < 10)
-    {   // only reset the timer when maximum of 10 times it is fired 
-        console.log("reset the timer");
-        setTimeout(doSomething, 1000); // reset the timer
-    }
-}
-setTimeout(doSomething, 1000);  // init the first
-
-
-
-    function old(){
-    var counter = 0; // Tracks the number of times the mouse coordinates have been recorded
-
-    // Function to track mouse movement
-    function trackMouse(event) {
-      counter++;
-      var x = event.clientX; // Mouse X coordinate
-      var y = event.clientY; // Mouse Y coordinate
-      
-      // Create a new <p> element to display the coordinates
-      var coordinateElement = document.createElement("p");
-      coordinateElement.textContent = "#:"+counter+", X: " + x + ", Y: " + y;
-      
-      // Append the new <p> element to the myDiv01 element
-      var myDiv01 = document.getElementById("myDiv01");
-      myDiv01.appendChild(coordinateElement);
-      
-      // Stop tracking after 25 times
-      if (counter === 25) {
-        document.removeEventListener("mousemove", trackMouse);
-      }
-    }
-
-    // Event listener to track mouse movement
-    document.addEventListener("mousemove", trackMouse);
-
-    }
-
-
-    */
   </script>
 </body>
 </html>
