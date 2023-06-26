@@ -204,3 +204,19 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 
 
 <a href="#page-1-qrcode"> Back to the top</a>
+
+
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47)
+
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0)
+
+
+
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d)
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699)
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592)
