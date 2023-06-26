@@ -17,3 +17,4 @@ Demo mouse at
 
 https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse01.html  
 https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse02.html  
+https://hpssjellis.github.io/tinyMLjs/public/tools/mymouse03.html  
