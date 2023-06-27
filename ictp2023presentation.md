@@ -15,13 +15,14 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 
 
 
-
-.
-
-
-.
-
-.
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### intro
 
@@ -31,26 +32,19 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.
 1. And by fun I mean: open-source, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent
 
-.
 
-.
-
-
-.
-
-
-.
-
-.
-
-
-.
-
-
-.
-
-.
-
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### me
@@ -66,26 +60,17 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 1. But Javascript can't do microcontroller ML? 
 1. Yes it can [here](https://github.com/hpssjellis/my-examples-for-the-arduino-portentaH7/tree/master/m09-Tensoflow/tfjs-convert-to-arduino-header) but perhaps that is not needed, if the data can be saved as a CSV file, it can then later be loaded onto your favorite cloud platform.
 
-.
 
-
-.
-
-.
-
-.
-
-.
-
-
-.
-
-.
-
-
-.
-
-.
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### progress
@@ -98,26 +83,18 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.
 
 
-.
+
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
-.
-
-
-.
-
-
-.
-
-
-.
-
-.
-
-.
-
-
-### page-5-tinyMLjs-csv
+### tinyMLjs-csv
 
 <a href="#tinymljs-tensor"> Next Page </a>
 
@@ -129,21 +106,59 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### page-6-tinyMLjs-tensor
+### tinyMLjs-tensor
+
+<a href="#vision-model"> Next Page </a>
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0)
+
+
+</br>  
+</br>  
+</br>  
+</br>  
+
+
+### vision-model
+
+<a href="#sound-model"> Next Page </a>
+
+
+
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="700px" />
+
+</br>  
+</br>  
+</br>  
+</br>  
+
+
+
+
+### sound-model
+
+<a href="#sensor-model"> Next Page </a>
+
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="700px" />
+
+</br>  
+</br>  
+</br>  
+</br>  
+
+
+### sensor-model
 
 <a href="#tinymljs-webserial"> Next Page </a>
 
 
-
-
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0)
-
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="700px" />
 
 
 
 ### tinyMLjs-webserial
 
-<a href="#tinymljs-4"> Next Page </a>
+<a href="#tinymljs-chart"> Next Page </a>
 
 
 
@@ -152,9 +167,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### page-8-tinyMLjs-4
+### tinyMLjs-chart
 
-<a href="#page-9-tinymljs-5"> Next Page </a>
+<a href="#tinymljs-gotchas"> Next Page </a>
 
 
 
@@ -162,9 +177,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### page-9-tinyMLjs-5
+### tinymljs-gotchas
 
-<a href="#page-10-conclusion"> Next Page </a>
+<a href="#conclusion"> Next Page </a>
 
 
 
@@ -174,16 +189,17 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-.
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
-.
-
-.
 
 
 
-
-### page-10-conclusion
+### conclusion
 
 
 <a href="#qrcode"> Back to the top</a>
@@ -194,27 +210,23 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a>
 
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+
+<a href="#qrcode"> Back to the top</a>
+
+
+
+
 .
 
 .
 
-.
 
 
-<a href="#page-1-qrcode"> Back to the top</a>
-
-
-
-
-.
-
-.
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="700px" />
-
-
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="700px" />
-
-
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="700px" />
 
 
