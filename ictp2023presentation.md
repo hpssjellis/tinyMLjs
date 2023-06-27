@@ -1,4 +1,5 @@
 # ICTP Presentation July 2023
+Version 0.0.1  
 
 ### qrcode
 <a href="#intro"> Next Page </a>
@@ -24,9 +25,9 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 </br>  
 </br>  
 
-### intro
+### Intro
 
-<a href="#me"> Next Page </a>
+<a href="#j-ellis"> Next Page </a>
 
 1. When I heard of the ICTP <a href="https://indico.ictp.it/event/10185">Workshop on Widening Access to TinyML Network by Establishing Best Practices in Education</a> I wanted to find a group of like minded Educators
 who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.
@@ -47,7 +48,7 @@ who could work for a year on creating a method to teach machine learning on micr
 </br>  
 
 
-### me
+### J-Ellis
 
 <a href="#progress"> Next Page </a>
 
@@ -73,7 +74,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 
 
-### progress
+### Progress
 
 <a href="#tinymljs-csv"> Next Page </a>
 
@@ -118,8 +119,10 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
+</br>  
+</br>  
 
-### vision-model
+### Vision-Model
 
 <a href="#sound-model"> Next Page </a>
 
@@ -133,9 +136,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 
 
+</br>  
+</br>  
 
 
-### sound-model
+### Sound-Model
 
 <a href="#sensor-model"> Next Page </a>
 
@@ -146,8 +151,10 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
+</br>  
+</br>  
 
-### sensor-model
+### Sensor-Model
 
 <a href="#tinymljs-webserial"> Next Page </a>
 
@@ -177,7 +184,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### tinymljs-gotchas
+### tinyMLjs-gotchas
 
 <a href="#conclusion"> Next Page </a>
 
@@ -199,7 +206,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### conclusion
+### Conclusion
 
 
 <a href="#qrcode"> Back to the top</a>
@@ -210,6 +217,10 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a>
 
 
+</br>  
+</br>  
+</br>  
+</br>  
 </br>  
 </br>  
 </br>  
