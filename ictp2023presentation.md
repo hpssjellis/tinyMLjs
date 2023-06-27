@@ -226,3 +226,6 @@ General Sensor such as Acceleration   ![image](https://github.com/hpssjellis/tin
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f)
 
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953)
+
