@@ -214,7 +214,7 @@ Now tuning a model becomes very evident. This is a Sound model.
 
 And here is a vision model 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="800px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="700px" />
 
 </br>  
 </br>  
