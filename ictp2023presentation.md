@@ -204,23 +204,18 @@ The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/in
 <a href="#page-1-qrcode"> Back to the top</a>
 
 
-sound   ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/4f21f80d-dcc9-48a4-8eb1-e836eb5dc906)
-
-Vison   ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c85f39e3-07a1-4310-828e-9952e2dbf153)
-
-General Sensor such as Acceleration   ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/ffc0eff8-f491-4a88-8a2d-0600306b04fd)
 
 
 .
 
 .
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/4f21f80d-dcc9-48a4-8eb1-e836eb5dc906"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f"  width="700px" />
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c85f39e3-07a1-4310-828e-9952e2dbf153"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953"  width="700px" />
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/ffc0eff8-f491-4a88-8a2d-0600306b04fd"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a"  width="700px" />
 
 
 
@@ -229,3 +224,6 @@ General Sensor such as Acceleration   ![image](https://github.com/hpssjellis/tin
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953)
 
+
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a)
