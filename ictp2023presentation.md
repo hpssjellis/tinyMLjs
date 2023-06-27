@@ -100,8 +100,8 @@ who could work for a year on creating a method to teach machine learning on micr
 <a href="#tinymljs-csv"> Next Page </a>
 
 1. At the start of June 2023 I had webSerial/polyfill (Android Pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.<br><br>
-1. Long story short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop.
-   Clean the data if needed. Then convert that data to a tensor, then train a machine learning model, then load more data, clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)<br><br>
+1. Long story short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's ```println();``` command to a webpage on a desktop/laptop computer.
+   Clean the data if needed. Then convert that data to a tensor, then train a machine learning model, then load more data, clean and classify that data. If needed send the classification results back to the microcontroller (Turn on an LED etc)<br><br>
 1. ~1000 lines of code on a single webpage to load any sensor data from any microcontroller to quickly test if machine learning is a viable option.<br><br>
 1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.<br><br>
 
@@ -128,8 +128,11 @@ who could work for a year on creating a method to teach machine learning on micr
 
 ### tinyMLjs-csv
 
-<a href="#tinymljs-tensor"> Next Page </a>
+<a href="#tinymljs-tensor"> Next Page </a>  
 
+Let's have a look at sections of the webpage:
+
+Click ```Choose Files```. Presently the file name is important and no column headings just raw, cleaned data   
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47" alt="tensor" title="tensor"  width="900px" />
 
@@ -157,6 +160,8 @@ who could work for a year on creating a method to teach machine learning on micr
 
 <a href="#vision-model"> Next Page </a>
 
+Information here about number of samples, and sensors. Click ```Convert Data to Tensor``` then ```Train Model```. <br>
+Here we can save the model or upload a previously saved model. Note: Labels are not loaded with the model. This is a work in progress.<br>
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0" alt="model" title="model"  width="900px" />
 
 
@@ -184,8 +189,8 @@ who could work for a year on creating a method to teach machine learning on micr
 ### Vision-Model
 
 <a href="#sound-model"> Next Page </a>
-
-
+   
+Now tuning a model becomes very evident. This is a Sound model.
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="500px" />
 
@@ -206,6 +211,8 @@ who could work for a year on creating a method to teach machine learning on micr
 ### Sound-Model
 
 <a href="#sensor-model"> Next Page </a>
+
+And here is a vision model 
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="800px" />
 
@@ -231,6 +238,7 @@ who could work for a year on creating a method to teach machine learning on micr
 
 <a href="#tinymljs-webserial"> Next Page </a>
 
+and here is what we are interested in the Acceleration or any sensor combination model<br>
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="900px" />
 
@@ -255,6 +263,12 @@ who could work for a year on creating a method to teach machine learning on micr
 
 <a href="#tinymljs-chart"> Next Page </a>
 
+Here is where we connect a microcontroller ```Connect via Serial Port``` Then ```Clear and send Start ```<br>
+```Clean``` check the label name and ```Keep``` and/or ```Save CSV``` checking the file name.<br>
+
+When done more than 2 labels you can go back to the model training part of the webpage and train your model.
+
+
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d" alt="webserial" title="webserial"  width="900px" />
 
 
@@ -277,6 +291,8 @@ who could work for a year on creating a method to teach machine learning on micr
 ### tinyMLjs-Chart
 
 <a href="#tinymljs-gotchas"> Next Page </a>
+
+Now it is time to test your model. Load more datz
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699" alt="chart" title="chart"  width="900px" />
 
