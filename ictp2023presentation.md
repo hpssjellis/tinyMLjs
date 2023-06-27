@@ -1,7 +1,7 @@
 # ICTP Presentation July 2023
 
-### page-1-qrcode
-<a href="#page-2-intro"> Next Page </a>
+### qrcode
+<a href="#intro"> Next Page </a>
 
 
 
@@ -23,9 +23,9 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 
 .
 
-### page-2-intro
+### intro
 
-<a href="#page-3-me"> Next Page </a>
+<a href="#me"> Next Page </a>
 
 1. When I heard of the ICTP <a href="https://indico.ictp.it/event/10185">Workshop on Widening Access to TinyML Network by Establishing Best Practices in Education</a> I wanted to find a group of like minded Educators
 who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.
@@ -53,9 +53,9 @@ who could work for a year on creating a method to teach machine learning on micr
 
 
 
-### page-3-me
+### me
 
-<a href="#page-4-progress"> Next Page </a>
+<a href="#progress"> Next Page </a>
 
 1. I am Jeremy Ellis (@rocksetta, jerteach, hpssjellis) machine learning self taught and questionably intelligent. I have computer programmed for 48 years, taught high school coding for 35,
 made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on microcontrollers for 8 with the last 3 years using [EdgeImpulse.com](https://www.edgeimpulse.com/)
@@ -88,9 +88,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 .
 
 
-### page-4-progress
+### progress
 
-<a href="#page-5-tinymljs-1"> Next Page </a>
+<a href="#tinymljs-csv"> Next Page </a>
 
 1. At the start of June 2023 I had webSerial/polyfill (Android pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.
 1. Long sotry short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)
@@ -117,9 +117,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 .
 
 
-### page-5-tinyMLjs-1
+### page-5-tinyMLjs-csv
 
-<a href="#page-6-tinymljs-2"> Next Page </a>
+<a href="#tinymljs-tensor"> Next Page </a>
 
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47)
@@ -129,9 +129,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### page-6-tinyMLjs-2
+### page-6-tinyMLjs-tensor
 
-<a href="#page-7-tinymljs-3"> Next Page </a>
+<a href="#tinymljs-webserial"> Next Page </a>
 
 
 
@@ -141,9 +141,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-### page-7-tinyMLjs-3
+### tinyMLjs-webserial
 
-<a href="#page-8-tinymljs-4"> Next Page </a>
+<a href="#tinymljs-4"> Next Page </a>
 
 
 
@@ -186,7 +186,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 ### page-10-conclusion
 
 
-<a href="#page-1-qrcode"> Back to the top</a>
+<a href="#qrcode"> Back to the top</a>
 
 
 The github is at: <https://github.com/hpssjellis/tinyMLjs>
@@ -218,12 +218,3 @@ The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/in
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="700px" />
 
 
-
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f)
-
-
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953)
-
-
-
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a)
