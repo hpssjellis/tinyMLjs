@@ -98,9 +98,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 <a href="#tinymljs-csv"> Next Page </a>
 
 1. At the start of June 2023 I had webSerial/polyfill (Android pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.<br><br>
-1. Long sotry short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)
-1. ~1000 lines of code to completely on a single webpage to completely test your theory about a sensor being able to be used with Machine learning.
-1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.
+1. Long sotry short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)<br><br>
+1. ~1000 lines of code to completely on a single webpage to completely test your theory about a sensor being able to be used with Machine learning.<br><br>
+1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.<br><br>
 
 
 
