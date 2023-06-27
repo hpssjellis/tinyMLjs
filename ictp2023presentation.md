@@ -1,5 +1,5 @@
 # ICTP Presentation July 2023
-Version 0.1.2  
+Version 0.2.0-7  
 
 ### qrcode
 <a href="#intro"> Next Page </a>
@@ -35,7 +35,7 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 
 1. When I heard of the ICTP <a href="https://indico.ictp.it/event/10185">Workshop on Widening Access to TinyML Network by Establishing Best Practices in Education</a> I wanted to find a group of like minded Educators
 who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.<br><br>
-1. And by fun I mean: open-source, powerful, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, full process, would need to be hardware independent and also internet/cloud independent<br><br>
+1. And by fun I mean: open-source, powerful, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, full process, future edge devices now, is hardware independent and also internet/cloud independent<br><br>
 
 
 </br>  
@@ -318,6 +318,7 @@ Note: The code to be loaded onto the Nano33BleSense (Rev1) is in the textarea so
 
 <a href="#conclusion"> Next Page </a>
 
+This is just a rough proof of concept, hopefully with some help it can become a useful tool for helping create some passion for beginning with machine learning on microcontrollers
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592" alt="gotchas" title="gotchas"  width="900px" />
 
@@ -349,7 +350,12 @@ The github is at: <https://github.com/hpssjellis/tinyMLjs>
 
 The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a>
 
+This is just a starting point, but shows that powerful full process machine learning on edge devices does not have to be cloud or hardware dependent, and could be done in the field or in a classroom without internet.<br><br>
 
+
+By Jeremy Ellis @rocksetta  
+
+Github Profile at <https://github.com/hpssjellis>
 </br>  
 </br>  
 </br>  
