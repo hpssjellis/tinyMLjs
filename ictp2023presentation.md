@@ -292,7 +292,8 @@ When done more than 2 labels you can go back to the model training part of the w
 
 <a href="#tinymljs-gotchas"> Next Page </a>
 
-Now it is time to test your model. Load more datz
+Now it is time to test your model. Load more data, clean if needed and click ```Classify Data```<br>
+Note: The code to be loaded onto the Nano33BleSense (Rev1) is in the textarea so it is easy to copy<br>
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699" alt="chart" title="chart"  width="900px" />
 
