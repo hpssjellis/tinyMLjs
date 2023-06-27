@@ -116,9 +116,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 <a href="#tinymljs-tensor"> Next Page </a>
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47" alt="tensor" title="tensor"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47" alt="tensor" title="tensor"  width="900px" />
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/faf822e4-3080-4e21-ac9a-efe8e8e42d47)
+
 
 
 
@@ -137,9 +137,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 <a href="#vision-model"> Next Page </a>
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0" alt="model" title="model"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0" alt="model" title="model"  width="900px" />
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/0d185e27-94dd-4461-b7b3-2f1da75acfc0)
+
 
 
 </br>  
@@ -180,7 +180,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 <a href="#sensor-model"> Next Page </a>
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="800px" />
 
 </br>  
 </br>  
@@ -199,7 +199,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 <a href="#tinymljs-webserial"> Next Page </a>
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="900px" />
 
 </br>  
 </br>  
@@ -215,9 +215,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 <a href="#tinymljs-chart"> Next Page </a>
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d" alt="webserial" title="webserial"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d" alt="webserial" title="webserial"  width="900px" />
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d)
+
 
 </br>  
 </br>  
@@ -233,9 +233,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 <a href="#tinymljs-gotchas"> Next Page </a>
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699" alt="chart" title="chart"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699" alt="chart" title="chart"  width="900px" />
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699)
+
 
 </br>  
 </br>  
@@ -252,9 +252,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 <a href="#conclusion"> Next Page </a>
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592" alt="gotchas" title="gotchas"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592" alt="gotchas" title="gotchas"  width="900px" />
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592)
+
 
 
 
