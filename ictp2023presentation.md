@@ -1,5 +1,5 @@
 # ICTP Presentation July 2023
-Version 0.0.1  
+Version 0.1.0  
 
 ### qrcode
 <a href="#intro"> Next Page </a>
@@ -24,6 +24,10 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 </br>  
 </br>  
 </br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### Intro
 
@@ -34,6 +38,10 @@ who could work for a year on creating a method to teach machine learning on micr
 1. And by fun I mean: open-source, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent
 
 
+</br>  
+</br>  
+</br>  
+</br>  
 </br>  
 </br>  
 </br>  
@@ -72,6 +80,10 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 </br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### Progress
@@ -93,6 +105,10 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 </br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### tinyMLjs-csv
@@ -104,6 +120,14 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 
@@ -121,6 +145,10 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 </br>  
 </br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### Vision-Model
 
@@ -128,13 +156,17 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="500px" />
 
 </br>  
 </br>  
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
 
 </br>  
 </br>  
@@ -153,6 +185,10 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 </br>  
 </br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### Sensor-Model
 
@@ -161,27 +197,46 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="700px" />
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### tinyMLjs-webserial
 
 <a href="#tinymljs-chart"> Next Page </a>
 
-
-
-
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/234de628-32be-46a1-b63e-d3413d0e1b8d)
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### tinyMLjs-chart
 
 <a href="#tinymljs-gotchas"> Next Page </a>
 
-
-
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/3fcb12d2-67f4-4f32-ad52-55c0ae58b699)
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 ### tinyMLjs-gotchas
@@ -189,11 +244,14 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 <a href="#conclusion"> Next Page </a>
 
 
-
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/90ea5bfa-ac04-4042-9319-83e340e33592)
 
 
 
+</br>  
+</br>  
+</br>  
+</br>  
 
 
 </br>  
@@ -208,9 +266,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 ### Conclusion
 
-
 <a href="#qrcode"> Back to the top</a>
-
 
 The github is at: <https://github.com/hpssjellis/tinyMLjs>
 
@@ -222,21 +278,20 @@ The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/in
 </br>  
 </br>  
 </br>  
+
 </br>  
 </br>  
 </br>  
 </br>  
 </br>  
+
+</br>  
+</br>  
+</br>  
+</br>  
+
 
 <a href="#qrcode"> Back to the top</a>
-
-
-
-
-.
-
-.
-
 
 
 
