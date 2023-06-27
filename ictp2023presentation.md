@@ -204,4 +204,9 @@ The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/in
 <a href="#page-1-qrcode"> Back to the top</a>
 
 
+sound   ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/4f21f80d-dcc9-48a4-8eb1-e836eb5dc906)
+
+Vison   ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c85f39e3-07a1-4310-828e-9952e2dbf153)
+
+General Sensor such as Acceleration   ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/ffc0eff8-f491-4a88-8a2d-0600306b04fd)
 
