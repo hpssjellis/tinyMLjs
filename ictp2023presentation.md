@@ -1,5 +1,5 @@
 # ICTP Presentation July 2023
-Version 0.1.0  
+Version 0.1.1  
 
 ### qrcode
 <a href="#intro"> Next Page </a>
@@ -44,17 +44,24 @@ who could work for a year on creating a method to teach machine learning on micr
 </br>  
 </br>  
 </br>  
-</br>  
-</br>  
-</br>  
-</br>  
-</br>  
+
 </br>  
 </br>  
 </br>  
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### J-Ellis
 
@@ -110,6 +117,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### tinyMLjs-csv
 
@@ -132,6 +144,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### tinyMLjs-tensor
 
@@ -153,6 +170,13 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 </br>  
+
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
+
 
 ### Vision-Model
 
@@ -194,6 +218,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 ### Sensor-Model
 
 <a href="#tinymljs-webserial"> Next Page </a>
@@ -211,6 +240,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 ### tinyMLjs-webserial
 
 <a href="#tinymljs-chart"> Next Page </a>
@@ -228,6 +262,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### tinyMLjs-chart
 
@@ -246,6 +285,11 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 ### tinyMLjs-gotchas
 
@@ -300,6 +344,11 @@ The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/in
 </br>  
 </br>  
 
+</br>  
+</br>  
+</br>  
+</br>  
+</br>  
 
 <a href="#qrcode"> Back to the top</a>
 
