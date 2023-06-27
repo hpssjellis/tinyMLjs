@@ -209,13 +209,13 @@ The index webpage is at <a href="https://hpssjellis.github.io/tinyMLjs/public/in
 .
 
 .
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/07125d95-adba-4dd2-810d-61105aa7658f" alt="sensor" title="sensor"  width="700px" />
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c9698885-aea6-470e-87b1-8da57aa1a953" alt="sound" title="sound"  width="700px" />
 
 
-<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a"  width="700px" />
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/c40ba2f5-6634-4df1-830e-3b4d7b261c2a" alt="vision" title="vision" width="700px" />
 
 
 
