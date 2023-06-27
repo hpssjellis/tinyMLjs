@@ -34,8 +34,8 @@ TinyMLjs by Jeremy Ellis. Github Profile at <https://github.com/hpssjellis>
 <a href="#j-ellis"> Next Page </a>
 
 1. When I heard of the ICTP <a href="https://indico.ictp.it/event/10185">Workshop on Widening Access to TinyML Network by Establishing Best Practices in Education</a> I wanted to find a group of like minded Educators
-who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.
-1. And by fun I mean: open-source, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent
+who could work for a year on creating a method to teach machine learning on microcontrollers while making it more fun for the general population.<br><br>
+1. And by fun I mean: open-source, can create a passion for learning, building proof of concepts, cheap, fast, easy, client-side, secure, powerful, full process, would need to be hardware independent and also internet/cloud independent<br><br>
 
 
 </br>  
@@ -68,12 +68,12 @@ who could work for a year on creating a method to teach machine learning on micr
 <a href="#progress"> Next Page </a>
 
 1. I am Jeremy Ellis (@rocksetta, jerteach, hpssjellis) machine learning self taught and questionably intelligent. I have computer programmed for 48 years, taught high school coding for 35,
-made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on microcontrollers for 8 with the last 3 years using [EdgeImpulse.com](https://www.edgeimpulse.com/)
-1. My Robotics course is called [Maker100](https://github.com/hpssjellis/maker100) and the corresponding PortentaH7 library is called the [Portenta Pro Community Solutions](https://github.com/hpssjellis/portenta-pro-community-solutions) with over 100 of my examples relevant to my course.
-1. The only consistent thing about teaching coding for that long is the amount of times all my work has been deprecated. It doesn't matter if the cloud platform has been sold: (Cloud9 to AWS) or the software has been updated: (Too many to mention), or the IDE has changed (Arduino IDE 1.8.19 to 2.10), the board has changed (too many to mention) the software has changed (Python 2 to Python 3), and each deprecation destroys any relevant lesson plans or videos.
+made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on microcontrollers for 8 with the last 3 years using [EdgeImpulse.com](https://www.edgeimpulse.com/)<br><br>
+1. My Robotics course is called [Maker100](https://github.com/hpssjellis/maker100) and the corresponding PortentaH7 library is called the [Portenta Pro Community Solutions](https://github.com/hpssjellis/portenta-pro-community-solutions) with over 100 of my examples relevant to my course.<br><br>
+1. The only consistent thing about teaching coding for that long is the amount of times all my work has been deprecated. It doesn't matter if the cloud platform has been sold: (Cloud9 to AWS) or the software has been updated: (Too many to mention), or the IDE has changed (Arduino IDE 1.8.19 to 2.10), the board has changed (too many to mention) the software has changed (Python 2 to Python 3), and each deprecation destroys any relevant lesson plans or videos.<br><br>
 1. One of the methods that has been reasonably stable is Javascript becuase of it's script tag versioning system  
-   &#60;script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0"> </script>
-1. But Javascript can't do microcontroller ML? 
+   &#60;script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0"> </script><br><br>
+1. But Javascript can't do microcontroller ML? <br><br>
 1. Yes it can [here](https://github.com/hpssjellis/my-examples-for-the-arduino-portentaH7/tree/master/m09-Tensoflow/tfjs-convert-to-arduino-header) but perhaps that is not needed, if the data can be saved as a CSV file, it can then later be loaded onto your favorite cloud platform.
 
 
@@ -97,7 +97,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 
 <a href="#tinymljs-csv"> Next Page </a>
 
-1. At the start of June 2023 I had webSerial/polyfill (Android pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.
+1. At the start of June 2023 I had webSerial/polyfill (Android pixel Phones) and microcontroller data to CSV files working and was messing around with pitting coPilot, against chatGPT and BingChat.<br><br>
 1. Long sotry short, I got done what I thought would take a year to do. On a webpage we can now load CSV raw data, or load data directly from a connected microcontroller's println() command to a webpage on a desktop/laptop. Clean the data if needed. Then convert that data to a tensor, then train a model, then load more data clean and classify the data. If needed send the classification results back to the microcontroller (Turn LED on)
 1. ~1000 lines of code to completely on a single webpage to completely test your theory about a sensor being able to be used with Machine learning.
 1. Since you can save the CSV files you can now load that data onto your favorite Cloud platform for programming to the microcontroller.
@@ -223,6 +223,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 </br>  
+
 ### Sensor-Model
 
 <a href="#tinymljs-webserial"> Next Page </a>
@@ -245,7 +246,9 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 </br>  
-### tinyMLjs-webserial
+
+
+### tinyMLjs-webSerial
 
 <a href="#tinymljs-chart"> Next Page </a>
 
@@ -268,7 +271,7 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
-### tinyMLjs-chart
+### tinyMLjs-Chart
 
 <a href="#tinymljs-gotchas"> Next Page </a>
 
@@ -291,7 +294,8 @@ made neural networks for 20, and taught Robotics, tensorflow/TensorflowJS on mic
 </br>  
 </br>  
 
-### tinyMLjs-gotchas
+### tinyMLjs-G
+otchas
 
 <a href="#conclusion"> Next Page </a>
 
