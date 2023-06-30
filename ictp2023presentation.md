@@ -1,4 +1,4 @@
-# ICTP Presentation July 2023
+# ICTP Presentation July 2023 by Jeremy Ellis about tinyMLjs
 Version 0.2.0-7  
 
 ### qrcode
