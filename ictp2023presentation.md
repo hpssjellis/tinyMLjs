@@ -340,10 +340,12 @@ Note that the code to be loaded onto the Nano33BleSense (Rev1) is displayed in t
 
 <a href="#qrcode"> Back to the top</a>
 
-Tutorial Video [here](https://www.youtube.com/watch?v=3f4led32SL8&list=PL57Dnr1H_egsQPnEObWHPhK1Q4g_IDWcR&index=18&pp=iAQB) direct link [https://youtu.be/3f4led32SL8](https://youtu.be/3f4led32SL8)
+Tutorial playlist Video [here](https://www.youtube.com/watch?v=3f4led32SL8&list=PL57Dnr1H_egsQPnEObWHPhK1Q4g_IDWcR&index=18&pp=iAQB)  
+ 
+Direct link [https://youtu.be/3f4led32SL8](https://youtu.be/3f4led32SL8)
 
 
-<a href="https://youtu.be/3f4led32SL8"><img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/f591c01e-50f1-4f7d-be9d-6341b2ba45dd" alt="gotchas" title="gotchas"  width="900px" /></a>
+<img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/f591c01e-50f1-4f7d-be9d-6341b2ba45dd" alt="tinyMLjs" title="tinyMLjs"  width="600px" />
 
 
 
