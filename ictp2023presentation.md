@@ -259,7 +259,7 @@ This section demonstrates the model for acceleration or any other sensor combina
 <a href="#tinymljs-chart"> Next Page </a>
 
 Here is where we connect a microcontroller ```Connect via Serial Port``` Then ```Clear and send Start ```<br>
-```Clean``` check the label name and ```Keep``` and/or ```Save CSV``` checking the file name.<br>
+If needed ```Clean``` the data and check the label name and ```Keep``` and/or ```Save CSV``` checking the file name.<br>
 
 When using more than two labels, you can return to the model training part of the webpage to train your model.<br>
 
