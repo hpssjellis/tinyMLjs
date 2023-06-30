@@ -340,6 +340,10 @@ Note that the code to be loaded onto the Nano33BleSense (Rev1) is displayed in t
 
 <a href="#qrcode"> Back to the top</a>
 
+Tutorial Video [here](https://www.youtube.com/watch?v=3f4led32SL8&list=PL57Dnr1H_egsQPnEObWHPhK1Q4g_IDWcR&index=18&pp=iAQB) direct link [https://youtu.be/3f4led32SL8](https://youtu.be/3f4led32SL8)
+
+
+ <iframe width="600" height="400" src="https://www.youtube.com/watch?v=3f4led32SL8&list=PL57Dnr1H_egsQPnEObWHPhK1Q4g_IDWcR&index=18&pp=iAQB" frameborder="2" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
 The github is at: <https://github.com/hpssjellis/tinyMLjs>
