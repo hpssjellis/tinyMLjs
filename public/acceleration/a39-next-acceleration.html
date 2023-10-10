@@ -175,7 +175,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    let myMouseCount = 0;
    let myMouseOutput = ''
    let myNumberOfSamples  = parseInt(document.getElementById('myNumSamples').value)
-   document.getElementById('myArea01').value = ''
+   document.getElementById('myArea01').value = 'Move the Mouse!'
 
   const myInterval = setInterval(function () {
        myMouseOutput += `${event.clientX},${event.clientY}\r\n`;
@@ -184,7 +184,7 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
           document.getElementById('myArea01').value = myMouseOutput
           myShowGraph()
       }
-   }, 30);
+   }, 300);
 
 
 
