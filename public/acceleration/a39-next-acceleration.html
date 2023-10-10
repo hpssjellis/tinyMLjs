@@ -1098,11 +1098,11 @@ Aruino Nano33BleSense webSerial code that can be adapted for other microcontroll
   element.setSelectionRange(0, 99999);
   document.execCommand('copy');                                                                         
 }"> <br>
-The "fancy" Arduino sketch is on the github here 
+The "fancy" Arduino sketch for the Nano33BleSense is on the github here 
 <a href="https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt">https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt</a> <br>  
 
 
-<!-- ******************************** The following sketch should be uploaded to your Arduino Nano33BleSense **************************************************************  -->
+<!-- ******************************** The following sketch should be uploaded to your Arduino NiclaVision **************************************************************  -->
 
 
 
@@ -1133,7 +1133,8 @@ The "fancy" Arduino sketch is on the github here
 
 
 #include <Arduino.h> // Only needed for https://platformio.org/
-#include <Arduino_LSM9DS1.h>
+//#include <Arduino_LSM9DS1.h> 
+#include <Arduino_LSM6DSOX.h>
 
 
 #define FREQUENCY_HZ        50     // how many samples per second 
@@ -1171,18 +1172,19 @@ void loop() {
   if ( (millis() - myStart ) >= myDelay) {       
      myStart = millis();      //  reset the delay time
      myCount += 1;
-     IMU.readAcceleration(x, y, z);
-     // convert raw acceleration to acceleration due to gravity
-     x *= CONVERT_G_TO_MS2;
-     y *= CONVERT_G_TO_MS2;
-     z *= CONVERT_G_TO_MS2;
-     //Serial.println( String(myStart)+ "," + String(analogRead(A0)) + "," + String(analogRead(A1)) + "," +  String(analogRead(A2))  );
+  if (IMU.accelerationAvailable()) {
+    IMU.readAcceleration(x, y, z);
+    x *= 9.81;
+    y *= 9.81;
+    z *= 9.81;
+
+  }
+
      if (myCount >= myMaxData){
         mySendData = false;   // stop sending data when amount reached
      }
      if (mySendData){
-       // Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
-        Serial.println( String(x) + "," + String(y) + "," +  String(z) );
+        Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
      } 
    }
 
@@ -1216,8 +1218,8 @@ void loop() {
   } 
   
 }
-   
-  
+
+    
 </textarea> <br><br>
 
 Use at your own risk!<br>
