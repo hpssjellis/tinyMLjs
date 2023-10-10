@@ -174,13 +174,12 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    //  startMouseTracking();
    let myMouseCount = 0;
    let myMouseOutput = ''
-   let myMouseX; // Mouse X coordinate
-   let myMouseY; // Mouse Y coordinate
+   let myNumberOfSamples  = parseInt(document.getElementById('myNumSamples').value)
    document.getElementById('myArea01').value = ''
 
   const myInterval = setInterval(function () {
        myMouseOutput += `${event.clientX},${event.clientY}\r\n`;
-       if (++myMouseCount >= 25) {
+       if (++myMouseCount > myNumberOfSamples) {
           clearInterval(myInterval);
           document.getElementById('myArea01').value = myMouseOutput
           myShowGraph()
