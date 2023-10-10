@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.36.7-154 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.38.0-155 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -168,6 +168,26 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
    
 }"> 
+
+<input type="button" value="Mouse Motion" onClick="{
+   document.getElementById('myNumSenses').value = 2  // x and y from the mouse
+   //  startMouseTracking();
+   let myMouseCount = 0;
+   let myMouseX; // Mouse X coordinate
+   let myMouseY; // Mouse Y coordinate
+   document.getElementById('myArea01').value = ''
+   myMouseX = event.clientX; // Mouse X coordinate
+   myMouseY = event.clientY; // Mouse Y coordinate
+   document.getElementById('myArea01').value += `${myMouseX},${myMouseY}\r\n`;
+   if (++myMouseCount >= 25) {
+     // data collection done, so lets clean up a bit.
+     document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+$/, '') // remove blank lines 
+     myShowGraph()
+  }
+   
+}"><br>   
+
+   
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
 <br>    
 
@@ -1091,7 +1111,7 @@ if (myCellPhoneOnce){
 </script>
 
 <br><br>
-Aruino Nano33BleSense webSerial code that can be adapted for other microcontrollers<br> 
+Aruino NiclaVision webSerial code that can be adapted for other microcontrollers<br> 
 <input type=button value=copy onclick="{                                      
    const element = document.getElementById('myCode')
   element.select();
