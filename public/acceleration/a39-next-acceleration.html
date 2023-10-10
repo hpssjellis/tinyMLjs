@@ -370,9 +370,9 @@ for (let i = 1; i <= myDataMcu; i++) {
 
    if (myDifference < 0) {          
       myDifference = myDifference * -1
-      const lastValue = myCountArray[myCountArray.length - 1]; // Get the last value
+      const lastValue = myTempArray[myTempArray.length - 1]; // Get the last value
       for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
-         myCountArray.push(lastValue);   // Duplicate the last value                               
+         myTempArray.push(lastValue);   // Duplicate the last value                               
          myDoing += 'added,' 
       }  
    }   
