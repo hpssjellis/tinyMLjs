@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.38.4-160 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.38.5-161 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -1188,8 +1188,8 @@ The "fancy" Arduino sketch for the Nano33BleSense is on the github here
 #include <Arduino_LSM6DSOX.h>
 
 
-#define FREQUENCY_HZ        50     // how many samples per second 
-#define COLLECTION_SECONDS  2     // how many seconds to collect samples
+#define FREQUENCY_HZ        25     // how many samples per second 
+#define COLLECTION_SECONDS  1     // how many seconds to collect samples
 #define INTERVAL_MS  (1000 / (FREQUENCY_HZ + 1)) // need for the timer 
 #define CONVERT_G_TO_MS2    9.80665f   // accleration conversion
 
