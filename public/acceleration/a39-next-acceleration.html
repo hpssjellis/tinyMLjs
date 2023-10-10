@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.38.1-156 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.38.2-157 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -170,15 +170,21 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 }"> 
 
 <input type="button" value="Mouse Motion" onClick="{
+   function getMousePos(e) {
+      return {x:e.clientX,y:e.clientY};
+   }
+   
    document.getElementById('myNumSenses').value = 2  // x and y from the mouse
    //  startMouseTracking();
    let myMouseCount = 0;
    let myMouseOutput = ''
+   let myMouse;
    let myNumberOfSamples  = parseInt(document.getElementById('myNumSamples').value)
    document.getElementById('myArea01').value = 'Move the Mouse!'
 
   const myInterval = setInterval(function () {
-       myMouseOutput += `${event.clientX},${event.clientY}\r\n`;
+       myMouse = getMousePos(e) 
+       myMouseOutput += `${myMouse.x},${myMouse.y}\r\n`;
        if (++myMouseCount > myNumberOfSamples) {
           clearInterval(myInterval);
           document.getElementById('myArea01').value = myMouseOutput
