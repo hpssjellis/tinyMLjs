@@ -171,13 +171,13 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
 }"> 
 
  <input type="button" value="Mouse Motion" onClick="{
-       const myNumSamples = parseInt(document.getElementById('myNumSamples').value);
+       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
        let myMouseCount = 0;
        let myMouseOutput = '';
        document.getElementById('myArea01').value = 'Move the Mouse!';
 
        const mousemoveListener = function (event) {
-           if (myMouseCount < myNumSamples) {
+           if (myMouseCount < myNumberOfSamples - 1) {
                myMouseOutput += `${event.x},${event.y}\r\n`;
                myMouseCount++;
            } else {
