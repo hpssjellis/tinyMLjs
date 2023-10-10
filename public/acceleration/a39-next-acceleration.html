@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.38.4-159 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.38.4-160 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -170,33 +170,25 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
    
 }"> 
 
-<input type="button" value="Mouse Motion" onClick="{
-   function getMousePos(e) {
-      return {x:e.clientX,y:e.clientY};
-   }
-   
-   document.getElementById('myNumSenses').value = 2  // x and y from the mouse
-   //  startMouseTracking();
-   let myMouseCount = 0;
-   let myMouseOutput = ''
-   let myMouse;
-   let myNumberOfSamples  = parseInt(document.getElementById('myNumSamples').value)
-   document.getElementById('myArea01').value = 'Move the Mouse!'
+ <input type="button" value="Mouse Motion" onClick="{
+       const myNumSamples = parseInt(document.getElementById('myNumSamples').value);
+       let myMouseCount = 0;
+       let myMouseOutput = '';
+       document.getElementById('myArea01').value = 'Move the Mouse!';
 
-  const myInterval = setInterval(function () {
-       myMouse = getMousePos(event) 
-       myMouseOutput += `${myMouse.x},${myMouse.y}\r\n`;
-       if (++myMouseCount > myNumberOfSamples) {
-          clearInterval(myInterval);
-          document.getElementById('myArea01').value = myMouseOutput
-          myShowGraph()
-      }
-   }, 300);
+       const mousemoveListener = function (event) {
+           if (myMouseCount < myNumSamples) {
+               myMouseOutput += `${event.x},${event.y}\r\n`;
+               myMouseCount++;
+           } else {
+               document.removeEventListener('mousemove', mousemoveListener);
+               document.getElementById('myArea01').value = myMouseOutput;
+               myShowGraph();
+           }
+       };
 
-
-
-   
-}"><br>   
+       document.addEventListener('mousemove', mousemoveListener);
+    }"><br> 
 
    
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
