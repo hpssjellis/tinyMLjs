@@ -350,8 +350,11 @@ for (let i = 1; i <= myDataMcu; i++) {
          myDoing += 'deleted,'
       }  
    }
-   if (myDifference < 0) {     
-     
+
+
+/*
+   
+   if (myDifference < 0) {          
       myDifference = myDifference * -1
       for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
          let myTempSenses = []                                             
@@ -361,8 +364,20 @@ for (let i = 1; i <= myDataMcu; i++) {
          myTempArray.push(myTempSenses.join(',')) 
          myDoing += 'added,' 
       }  
+   }   
+
+*/
+
+   if (myDifference < 0) {          
+      myDifference = myDifference * -1
+      const lastValue = myCountArray[myCountArray.length - 1]; // Get the last value
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
+         myCountArray.push(lastValue);   // Duplicate the last value                               
+         myDoing += 'added,' 
+      }  
+   }   
    
-   }       
+   
    //  console.log(myCountArray)
    document.getElementById('myData2Mcu' + i).textContent = myTempArray.join('\n') 
 //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
@@ -406,7 +421,18 @@ function cleanFillTrim(){
          myCountArray.pop()   // delete this data                                
       }  
     }
-           
+
+
+if (myDifference < 0) {       // add to the data 
+   myDifference *= -1;  // make it positive                                                 
+   const lastValue = myCountArray[myCountArray.length - 1]; // Get the last value
+   for (myI = 0; myI < myDifference; myI++) {  
+      myCountArray.push(lastValue);   // Duplicate the last value                               
+   }  
+}
+
+
+   /*
     if (myDifference < 0) {       // add to the data 
        myDifference *= -1  // make it positive                                                 
       for (myI=0; myI < myDifference; myI++){  
@@ -417,7 +443,9 @@ function cleanFillTrim(){
          myCountArray.push(myTempSenses.join(','))   // put them together add the extra '0,0,0' for xyz                               
       }  
     }                                               
-                                                 
+
+*/
+   
                                                                                                                       
                                                  
   // console.log(myCountArray)
