@@ -173,17 +173,23 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    document.getElementById('myNumSenses').value = 2  // x and y from the mouse
    //  startMouseTracking();
    let myMouseCount = 0;
+   let myMouseOutput = ''
    let myMouseX; // Mouse X coordinate
    let myMouseY; // Mouse Y coordinate
    document.getElementById('myArea01').value = ''
-   myMouseX = event.clientX; // Mouse X coordinate
-   myMouseY = event.clientY; // Mouse Y coordinate
-   document.getElementById('myArea01').value += `${myMouseX},${myMouseY}\r\n`;
-   if (++myMouseCount >= 25) {
-     // data collection done, so lets clean up a bit.
-     document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+$/, '') // remove blank lines 
-     myShowGraph()
-  }
+
+   setInterval(function () {
+       myMouseCount +=1; 
+       myMouseOutput += `${event.clientX},${event.clientY}\r\n`;
+       if (++myMouseCount >= 25) {
+          clearInterval();
+          document.getElementById('myArea01').value = myMouseOutput
+          myShowGraph()
+      }
+   }, 30);
+
+
+
    
 }"><br>   
 
