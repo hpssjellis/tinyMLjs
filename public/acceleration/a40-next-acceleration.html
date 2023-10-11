@@ -62,7 +62,7 @@ Hide: <input type=radio name="myPre" onclick="{
    document.getElementById('myDataPreviewSensor').style.display = 'none'
 }"> ----------- 
    
-<input type="file" id="myDataFile" accept=".csv" multiple onChange="{
+<input type="file" id="myDataFile" accept=".csv" value="Choose .csv Files" multiple onChange="{
     if (!myDataFiles) {
        myDataFiles = event.target.files;
     } else {
