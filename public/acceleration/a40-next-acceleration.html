@@ -1193,7 +1193,10 @@ The "fancy" Arduino sketch for the Nano33BleSense is on the github here
 #include <Arduino.h> // Only needed for https://platformio.org/
 //#include <Arduino_LSM9DS1.h> 
 #include <Arduino_LSM6DSOX.h>
+#include "VL53L1X.h"
 
+// GLOBAL VAERIABLES
+VL53L1X proximity;
 
 #define FREQUENCY_HZ        25     // how many samples per second 
 #define COLLECTION_SECONDS  1     // how many seconds to collect samples
@@ -1207,6 +1210,8 @@ unsigned long myStart;
 
 String readString;
 bool mySendData = true;
+bool mySendProximity = false;
+int myProximityReading = 0;
 
 
 void setup() {
@@ -1223,10 +1228,29 @@ void setup() {
      Serial.println("Failed to initialize IMU!");
      while (1);
   }
+
+
+  // Initilize the Proximity sensor and com using wire1
+  Wire1.begin();
+  Wire1.setClock(400000); // use 400 kHz I2C
+  proximity.setBus(&Wire1);
+
+
+
+  if (!proximity.init()) {
+    Serial.println("Failed to detect and initialize sensor!");
+    while (1);
+  }
+
+  proximity.setDistanceMode(VL53L1X::Long);
+  proximity.setMeasurementTimingBudget(10000);
+  proximity.startContinuous(10);
+
 }
 
 void loop() {
   float x, y, z;
+  myProximityReading = proximity.read();
   if ( (millis() - myStart ) >= myDelay) {       
      myStart = millis();      //  reset the delay time
      myCount += 1;
@@ -1241,8 +1265,14 @@ void loop() {
      if (myCount >= myMaxData){
         mySendData = false;   // stop sending data when amount reached
      }
+
+     // This should be written better perhaps a case statement etc
      if (mySendData){
-        Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+        if (mySendProximity){
+          Serial.println(String(myProximityReading));  
+        } else {
+          Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+        }
      } 
    }
 
@@ -1261,6 +1291,7 @@ void loop() {
       digitalWrite(LED_BUILTIN, HIGH);
     }
     if (readString == "start"){
+      mySendProximity = false;
       mySendData = true;
       myStart = millis();      //  reset the delay time
       myCount = 0;
@@ -1270,12 +1301,27 @@ void loop() {
       Serial.println("Stopping at count: "+ String(myCount));  // CSV file heading titles
     }
     if (readString == "firstline"){
-      Serial.println("accX,accY,accZ");  // CSV file heading titles
+      if (mySendProximity){
+         Serial.println("proximity"); 
+      } else {
+        Serial.println("accX,accY,accZ");  // CSV file heading titles
+      }
+    }
+
+    if (readString == "proximity"){
+      mySendProximity = true;
+      mySendData = true;
+      myStart = millis();      //  reset the delay time
+      myCount = 0;
+
     }
     readString="";
   } 
   
 }
+
+    
+
 
     
 </textarea> <br><br>
