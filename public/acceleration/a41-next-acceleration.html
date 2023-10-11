@@ -660,12 +660,22 @@ console.log('myModelSamples')
 console.log(myModelSamples)   
 console.log('myModelSenses')   
 console.log(myModelSenses)   
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));  // probably not supported in tflite micro
  
-//model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
+model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+document.getElementById('mySpanUpload').innerHTML =  `
+  <br> The current model design:
+  <br> model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
+  <br> model.add(tf.layers.dense({ units: 30 }) );     
+  <br> model.add(tf.layers.dense({ units: 30 }) );     
+  <br> model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+`
+
+   
 
 // Compile the model
 const myRate = parseFloat(document.getElementById('myLearningRate').value)
