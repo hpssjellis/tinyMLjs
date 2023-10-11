@@ -141,9 +141,15 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
    <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
 }">
-<input type=button value="send 'firstline' " Title="Only for proper CSV files not for here" onclick="{
-   mySendFirstLine = true
-   mySendIt('firstline')
+<input type=button value="send firstline" Title="Only for proper CSV files not for here" onclick="{
+   if (this.value =='send firstline' ){
+     mySendFirstLine = true
+     mySendIt('firstline')
+     this.value = 'stop sending firstline'
+   } else {
+     this.value ='send firstline'  
+      mySendFirstLine = false
+   }
 }">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
 <input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
