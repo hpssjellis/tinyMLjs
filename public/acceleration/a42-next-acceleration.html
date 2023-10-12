@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.42.1-163 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.42.2-164 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -654,6 +654,7 @@ async function trainModel() {
 // Define the model architecture
 myModelSamples = parseInt(document.getElementById('myNumSamples').value)
 myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
+myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
 model = tf.sequential();
    
 console.log('myModelSamples')   
@@ -662,7 +663,7 @@ console.log('myModelSenses')
 console.log(myModelSenses)   
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
  
-model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples * myModelSenses] }) );  
+model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples,  myModelSenses, myModelTotalCount] }) );  
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
