@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.42.2-164 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.42.2-165 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -601,7 +601,7 @@ async function loadDataToTensor() {
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
          dataArrays.push(dataArray);   
-         document.getElementById("mySpanClassify").innerHTML = 'DataSenses:' + i      
+         document.getElementById("mySpanClassify").innerHTML = 'DataSenses: ' + i      
       }
    }
    
@@ -610,7 +610,7 @@ async function loadDataToTensor() {
    const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
    myTensor = tf.stack(tensors);
    console.log('Data converted to tensor:', myTensor);
-   document.getElementById("mySpanClassify").innerHTML += `myTensor.shape: ${ myTensor.shape}<br>`
+   document.getElementById("mySpanClassify").innerHTML += `, myTensor.shape: ${ myTensor.shape}<br>`
 
     let labelsArray1 = []
     let labelsArray2 = []
@@ -665,7 +665,8 @@ console.log('myModelTotalCount')
 console.log(myModelTotalCount)   
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
  
-model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples,  myModelSenses, myModelTotalCount] }) );  
+//model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples,  myModelSenses, myModelTotalCount] }) );//  myTensor.shape
+model.add(tf.layers.dense({ units: 30,  inputShape: [myTensor.shape] }) );//  
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
