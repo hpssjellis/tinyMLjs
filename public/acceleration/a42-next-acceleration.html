@@ -661,6 +661,8 @@ console.log('myModelSamples')
 console.log(myModelSamples)   
 console.log('myModelSenses')   
 console.log(myModelSenses)   
+console.log('myModelTotalCount')   
+console.log(myModelTotalCount)   
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
  
 model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples,  myModelSenses, myModelTotalCount] }) );  
