@@ -745,7 +745,7 @@ console.log(model)
 async function justFit() {
 // Train the model
 //await model.fit(xs, ys, {
-await model.fit(myTensor.flatten(), labelsTensor, {
+await model.fit(myTensor, labelsTensor, {
    epochs:  parseInt(document.getElementById('myEpochs').value),
    batchSize: 32,
    callbacks: {
