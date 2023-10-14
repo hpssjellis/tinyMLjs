@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.44.1-180 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.44.1-181 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -120,9 +120,9 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
 <br>
 <input type="button" value="Upload Model" onclick="uploadModel()"><br>
 Enter Labels (comma seperated): <input type=text id="myNewLabels"  value=''  placeholder="0unknown,1facingup,2onSide,3vertical">
-<input type=button value="new labels" onclick="{
+<input type=button value="Set labels" onclick="{
    const labelsInput3 = document.getElementById('myNewLabels').value;   
-   const labelsArray3 = labelsInput3.split(",").map((label) => label.trim());
+   const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
    uniqueLabels = [...new Set(labelsArray3)];
    console.log('uniqueLabels')
    console.log(uniqueLabels)
