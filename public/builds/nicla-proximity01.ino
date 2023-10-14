@@ -26,7 +26,7 @@ int myCurrentIndex = 0;
 
 void setup() {
   Serial.begin(115200);
-  ml.begin(sine_model);
+  ml.begin(proximityModel);
   pinMode(LED_BUILTIN, OUTPUT);   // try on Portenta LEDB = blue, LEDG or LED_BUILTIN = green, LEDR = red 
 
   // Initilize the Proximity sensor and com using wire1
@@ -55,6 +55,8 @@ void loop() {
   float myPredict = ml.predict(myInput); // make the proximity prediction on the last 25 samples
 
   Serial.println(String(myPredict)  );  // output with minimal formating
+  //Serial.println(String(myPredict) + ",0," + String(myY) );  // output for plotter minimal formating
+  
   if (myPredict < 0.50) {  
     digitalWrite(LED_BUILTIN, LOW);    // on for portenta, off for Nano33BleSense
   } else {
