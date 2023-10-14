@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.42.6-173 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.42.7-174 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -678,8 +678,8 @@ model = tf.sequential();
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
 
 
-model.add(Dense(20, activation='relu', activity_regularizer=tf.keras.regularizers.l1(0.00001)))
-model.add(Dense(10, activation='relu', activity_regularizer=tf.keras.regularizers.l1(0.00001)))
+model.add(tf.layers.dense(20, activation='relu', activity_regularizer=tf.keras.regularizers.l1(0.00001)))
+model.add(tf.layers.dense(10, activation='relu', activity_regularizer=tf.keras.regularizers.l1(0.00001)))
    
    
 //model.add(tf.layers.dense({ units: 10, inputShape: [myModelTotalCount] }));   
