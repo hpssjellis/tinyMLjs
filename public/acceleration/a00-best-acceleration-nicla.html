@@ -34,7 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script> 
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
    -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.js"></script>
   <script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
     
 <script src="https://cdn.jsdelivr.net/npm/web-serial-polyfill@1.0.13/dist/serial.js"> </script> 
@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.38.5-161 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.43.1-177 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -60,9 +60,9 @@ Show: <input type=radio name="myPre" onclick="{
 Hide: <input type=radio name="myPre" onclick="{
    document.getElementById('myDataPreviewCSV').style.display = 'none'
    document.getElementById('myDataPreviewSensor').style.display = 'none'
-}"> ----------- 
+}"> ----------- Load .csv files: 
    
-<input type="file" id="myDataFile" accept=".csv" multiple onChange="{
+<input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
     if (!myDataFiles) {
        myDataFiles = event.target.files;
     } else {
@@ -107,15 +107,15 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <span id="mySpanClassify">...</span><br>
 
-<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="my-model">
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model">
 Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Github</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
 <span id="mySpanExport">...</span>
 <hr>
 
-<label for="modelFile">Select model file:</label>
+<label for="modelFile">Select model file (.json):</label>
 <input type="file" id="modelFile" accept=".json">
 <br>
-<label for="weightsFile">Select weights file:</label>
+<label for="weightsFile">Select weights file (.bin):</label>
 <input type="file" id="weightsFile" accept=".bin">
 <br>
 <input type="button" value="Upload Model" onclick="uploadModel()"><br>
@@ -141,23 +141,36 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
    <input type=button value="Clear" onclick="{
     document.getElementById('myArea01').value = ''                                                                                            
 }">
-<input type=button value="send 'firstline' " Title="Only for proper CSV files not for here" onclick="{
-   mySendFirstLine = true
-   mySendIt('firstline')
+<input type=button value="send firstline" Title="Only for proper CSV files not for here" onclick="{
+   if (this.value =='send firstline' ){
+     mySendFirstLine = true
+     mySendIt('firstline')
+     this.value = 'stop sending firstline'
+   } else {
+     this.value ='send firstline'  
+      mySendFirstLine = false
+   }
 }">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
-<input type=button value="fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
+<input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
     setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }"> 
-<input type=button value="fancy2" title="18 sensor fusion example" onclick="{ 
+<input type=button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
     setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }">   
+   
+<input type=button value="Nicla-Proximity" title="18 sensor fusion example" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('proximity'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}">  <br> 
     
 <input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
    myCellPhoneOnce = true  // so it will show the data
@@ -171,6 +184,7 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
 }"> 
 
  <input type="button" value="Mouse Motion" onClick="{
+ setTimeout(function() {
        const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
        let myMouseCount = 0;
        let myMouseOutput = '';
@@ -188,6 +202,7 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
        };
 
        document.addEventListener('mousemove', mousemoveListener);
+   }, 1000); // wait x ms to start mouse movement
     }"><br> 
 
    
@@ -588,7 +603,7 @@ async function loadDataToTensor() {
       if (dataElement) {  // put all one bit of data into a group of arrays
          const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
          dataArrays.push(dataArray);   
-         document.getElementById("mySpanClassify").innerHTML = 'DataSenses:' + i      
+         document.getElementById("mySpanClassify").innerHTML = 'DataSenses: ' + i      
       }
    }
    
@@ -597,7 +612,7 @@ async function loadDataToTensor() {
    const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
    myTensor = tf.stack(tensors);
    console.log('Data converted to tensor:', myTensor);
-   document.getElementById("mySpanClassify").innerHTML += `myTensor.shape: ${ myTensor.shape}<br>`
+   document.getElementById("mySpanClassify").innerHTML += `, myTensor.shape: ${ myTensor.shape}<br>`
 
     let labelsArray1 = []
     let labelsArray2 = []
@@ -641,19 +656,94 @@ async function trainModel() {
 // Define the model architecture
 myModelSamples = parseInt(document.getElementById('myNumSamples').value)
 myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
-model = tf.sequential();
+myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
+
    
 console.log('myModelSamples')   
 console.log(myModelSamples)   
 console.log('myModelSenses')   
 console.log(myModelSenses)   
+console.log('myModelTotalCount')   
+console.log(myModelTotalCount)   
+
+
+/*
+model = tf.sequential();
+   
 model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
  
 //model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+*/
 
+/*
+
+
+
+
+
+   
+//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+ 
+ 
+//model.add(tf.layers.dense({ units: 30,  inputShape: [ myModelTotalCount, myModelSamples] }) );
+//model.add(tf.layers.dense({ units: 30,  inputShape: [ myModelTotalCount, myModelSamples,  myModelSenses] }) );
+//model.add(tf.layers.dense({ units: 30,  inputShape: [myTensor.shape] }) );//  
+//model.add(tf.layers.dense({ units: 10, inputShape: [myModelSamples, myModelSenses] }));   
+
+
+
+//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
+//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
+
+//model.add(tf.layers.dense({ units: 64, activation: 'relu', inputShape: [75] }));     the tensor should be flat.
+
+//model.add(tf.layers.dense({ units: 10, inputShape: [parseInt(myModelSamples * myModelSenses)] }));   
+
+*/
+
+  /* 
+// this works but can't be converted
+model = tf.sequential();   
+model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
+model.add(tf.layers.dense({ units: 20 }) );     
+model.add(tf.layers.dense({ units: 30 }) );     
+model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));  
+//model.summary();
+*/
+
+
+
+model = tf.sequential();   
+// Add Flatten layer before Dense layer
+model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
+model.add(tf.layers.dense({units: 8}));
+model.add(tf.layers.dense({ units: 20 }) );     
+model.add(tf.layers.dense({ units: 30 }) );     
+model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+
+
+
+
+
+   
+/*
+   
+
+//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
+const model = tf.sequential();
+//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses]}));
+model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+model.add(tf.layers.dense({units: 20}));
+model.add(tf.layers.dense({units: 30}));
+model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+   */
+   
 // Compile the model
 const myRate = parseFloat(document.getElementById('myLearningRate').value)
 model.compile({
@@ -661,7 +751,8 @@ model.compile({
       loss: 'categoricalCrossentropy',
       metrics: ['accuracy']
 });
-
+model.summary();
+   
 // Prepare the data for training
 //const xs = myTensor;
 //const ys = labelsTensor;
@@ -1186,7 +1277,10 @@ The "fancy" Arduino sketch for the Nano33BleSense is on the github here
 #include <Arduino.h> // Only needed for https://platformio.org/
 //#include <Arduino_LSM9DS1.h> 
 #include <Arduino_LSM6DSOX.h>
+#include "VL53L1X.h"
 
+// GLOBAL VAERIABLES
+VL53L1X proximity;
 
 #define FREQUENCY_HZ        25     // how many samples per second 
 #define COLLECTION_SECONDS  1     // how many seconds to collect samples
@@ -1200,6 +1294,8 @@ unsigned long myStart;
 
 String readString;
 bool mySendData = true;
+bool mySendProximity = false;
+int myProximityReading = 0;
 
 
 void setup() {
@@ -1216,10 +1312,29 @@ void setup() {
      Serial.println("Failed to initialize IMU!");
      while (1);
   }
+
+
+  // Initilize the Proximity sensor and com using wire1
+  Wire1.begin();
+  Wire1.setClock(400000); // use 400 kHz I2C
+  proximity.setBus(&Wire1);
+
+
+
+  if (!proximity.init()) {
+    Serial.println("Failed to detect and initialize sensor!");
+    while (1);
+  }
+
+  proximity.setDistanceMode(VL53L1X::Long);
+  proximity.setMeasurementTimingBudget(10000);
+  proximity.startContinuous(10);
+
 }
 
 void loop() {
   float x, y, z;
+  myProximityReading = proximity.read();
   if ( (millis() - myStart ) >= myDelay) {       
      myStart = millis();      //  reset the delay time
      myCount += 1;
@@ -1234,8 +1349,14 @@ void loop() {
      if (myCount >= myMaxData){
         mySendData = false;   // stop sending data when amount reached
      }
+
+     // This should be written better perhaps a case statement etc
      if (mySendData){
-        Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+        if (mySendProximity){
+          Serial.println(String(myProximityReading));  
+        } else {
+          Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+        }
      } 
    }
 
@@ -1254,6 +1375,7 @@ void loop() {
       digitalWrite(LED_BUILTIN, HIGH);
     }
     if (readString == "start"){
+      mySendProximity = false;
       mySendData = true;
       myStart = millis();      //  reset the delay time
       myCount = 0;
@@ -1263,12 +1385,27 @@ void loop() {
       Serial.println("Stopping at count: "+ String(myCount));  // CSV file heading titles
     }
     if (readString == "firstline"){
-      Serial.println("accX,accY,accZ");  // CSV file heading titles
+      if (mySendProximity){
+         Serial.println("proximity"); 
+      } else {
+        Serial.println("accX,accY,accZ");  // CSV file heading titles
+      }
+    }
+
+    if (readString == "proximity"){
+      mySendProximity = true;
+      mySendData = true;
+      myStart = millis();      //  reset the delay time
+      myCount = 0;
+
     }
     readString="";
   } 
   
 }
+
+    
+
 
     
 </textarea> <br><br>
