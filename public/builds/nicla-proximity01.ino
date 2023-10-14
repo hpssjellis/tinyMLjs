@@ -26,7 +26,7 @@ int myCurrentIndex = 0;
 
 void setup() {
   Serial.begin(115200);
-  ml.begin(proximityModel);
+  ml.begin(model_tflite);   // standard name inside proximityModel.h
   pinMode(LED_BUILTIN, OUTPUT);   // try on Portenta LEDB = blue, LEDG or LED_BUILTIN = green, LEDR = red 
 
   // Initilize the Proximity sensor and com using wire1
