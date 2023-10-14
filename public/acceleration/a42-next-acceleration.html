@@ -696,7 +696,8 @@ model.summary();
    */
 
 const model = tf.sequential();
-model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses]}));
+//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses]}));
+model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
 model.add(tf.layers.dense({units: 20}));
 model.add(tf.layers.dense({units: 30}));
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
