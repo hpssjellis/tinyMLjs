@@ -676,14 +676,14 @@ console.log(myModelTotalCount)
 
 model = tf.sequential();
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
-model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
-model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
+//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
+//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
 
-   
-   
-//model.add(tf.layers.dense({ units: 10, inputShape: [myModelTotalCount] }));   
-//model.add(tf.layers.dense({ units: 20 }) );     
-//model.add(tf.layers.dense({ units: 30 }) );     
+//model.add(tf.layers.dense({ units: 64, activation: 'relu', inputShape: [75] }));     the tensor should be flat.
+
+model.add(tf.layers.dense({ units: 10, inputShape: [parseInt(myModelSamples * myModelSenses)] }));   
+model.add(tf.layers.dense({ units: 20 }) );     
+model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));  
 model.summary();
 
@@ -708,7 +708,7 @@ console.log(model)
 async function justFit() {
 // Train the model
 //await model.fit(xs, ys, {
-await model.fit(myTensor, labelsTensor, {
+await model.fit(myTensor.flatten(), labelsTensor, {
    epochs:  parseInt(document.getElementById('myEpochs').value),
    batchSize: 32,
    callbacks: {
