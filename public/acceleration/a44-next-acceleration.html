@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.44.0-178 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.44.1-179 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -118,7 +118,12 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
 <label for="weightsFile">Select weights file (.bin):</label>
 <input type="file" id="weightsFile" accept=".bin">
 <br>
-<input type="button" value="Upload Model" onclick="uploadModel()"><br>
+<input type="button" value="Upload Model" onclick="uploadModel()">
+, Labels comma seperated: <input type=text value=''  placeholder="0unknown,1facingup,2onSide,3vertical">
+<input type=button value="new labels" onclick="{
+   alert()
+}">   
+<br>
 <span id="mySpanUpload">...</span>
 
 <hr>
