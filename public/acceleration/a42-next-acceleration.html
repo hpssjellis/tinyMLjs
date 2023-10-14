@@ -676,10 +676,9 @@ console.log(myModelTotalCount)
 
 model = tf.sequential();
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
+model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
 
-
-model.add(tf.layers.dense(20, activation='relu', activity_regularizer=tf.keras.regularizers.l1(0.00001)))
-model.add(tf.layers.dense(10, activation='relu', activity_regularizer=tf.keras.regularizers.l1(0.00001)))
    
    
 //model.add(tf.layers.dense({ units: 10, inputShape: [myModelTotalCount] }));   
