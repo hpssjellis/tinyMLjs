@@ -708,7 +708,7 @@ model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
    
 // this works but can't be converted
 model = tf.sequential();   
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
+model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
 model.add(tf.layers.dense({ units: 20 }) );     
 model.add(tf.layers.dense({ units: 30 }) );     
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));  
