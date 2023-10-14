@@ -119,7 +119,7 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
 <input type="file" id="weightsFile" accept=".bin">
 <br>
 <input type="button" value="Upload Model" onclick="uploadModel()"><br>
-Enter Labels (comma seperated): <input type=text id="myNewLabels"  value=''  placeholder="0unknown,1facingup,2onSide,3vertical">
+Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
 <input type=button value="Set labels" onclick="{
    const labelsInput3 = document.getElementById('myNewLabels').value;   
    const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
