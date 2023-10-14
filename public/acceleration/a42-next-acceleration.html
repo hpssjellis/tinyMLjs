@@ -700,7 +700,7 @@ model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelS
 model.add(tf.layers.dense({units: 20}));
 model.add(tf.layers.dense({units: 30}));
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-model.summary();
+
    
    
 // Compile the model
@@ -710,7 +710,8 @@ model.compile({
       loss: 'categoricalCrossentropy',
       metrics: ['accuracy']
 });
-
+model.summary();
+   
 // Prepare the data for training
 //const xs = myTensor;
 //const ys = labelsTensor;
