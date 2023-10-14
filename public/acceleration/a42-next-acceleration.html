@@ -665,6 +665,26 @@ console.log('myModelSenses')
 console.log(myModelSenses)   
 console.log('myModelTotalCount')   
 console.log(myModelTotalCount)   
+
+
+
+model = tf.sequential();
+   
+model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
+ 
+//model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
+model.add(tf.layers.dense({ units: 30 }) );     
+model.add(tf.layers.dense({ units: 30 }) );     
+model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+
+
+
+
+
+
+
+   
 //model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
  
  
@@ -693,7 +713,7 @@ model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
 model.summary();
 
 
-   */
+   
 
 const model = tf.sequential();
 //model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses]}));
@@ -702,7 +722,7 @@ model.add(tf.layers.dense({units: 20}));
 model.add(tf.layers.dense({units: 30}));
 model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
 
-   
+   */
    
 // Compile the model
 const myRate = parseFloat(document.getElementById('myLearningRate').value)
@@ -711,7 +731,7 @@ model.compile({
       loss: 'categoricalCrossentropy',
       metrics: ['accuracy']
 });
-model.summary();
+//model.summary();
    
 // Prepare the data for training
 //const xs = myTensor;
