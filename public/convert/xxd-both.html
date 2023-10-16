@@ -4,90 +4,68 @@
     <title>xxd -i</title>
 </head>
 <body>
-    <h1>xxd -i version 0.0.2</h1>
+    <h1>xxd -i</h1>
     <input type="file" id="fileInput">
-    <button id="convertToCButton">Convert to C</button>
-    <button id="convertToTFLiteButton">Convert to TFLite</button>
+    <input type="button" onclick="convertFile()" value="Convert to C Header">
+    <input type="button" onclick="convertToTFLite()" value="Convert to TFLite">
     <script>
-        // Function to convert C-header data to Uint8Array
-     // Function to convert C-header data to Uint8Array
-function convertToUint8Array(data) {
-  const array = [];
-  data.split(',').forEach((hex) => {
-    array.push(parseInt(hex.trim(), 16));
-  });
-  return new Uint8Array(array);
-}
+        function myXxd(filename, data) {
+            let output = `unsigned char ${filename}[] = {\n`;
+            for (let i = 0; i < data.length; i++) {
+                output += `  0x${data[i].toString(16).padStart(2, '0')}`;
+                if (i !== data.length - 1) {
+                    output += ',';
+                }
+                if ((i + 1) % 12 === 0) {
+                    output += '\n';
+                }
+            }
+            output += `\n};\nunsigned int ${filename}_len = ${data.length};\n`;
+            return output;
+        }
 
-// Function to convert C-header to a TFLite file
-async function convertToTFLite(data, filename) {
-  const uint8Array = convertToUint8Array(data);
+        function myConvertToTFLite(filename) {
+            // Replace this with your TFLite conversion logic
+            // Example: You can provide code to convert the C header to TFLite format.
+            alert(`Converting ${filename} to TFLite format.`);
+        }
 
-  // Create a binary buffer from the Uint8Array
-  const buffer = new Uint8Array(uint8Array.length);
-  for (let i = 0; i < uint8Array.length; i++) {
-    buffer[i] = uint8Array[i];
-  }
+        async function convertFile() {
+            // Read the binary data from the file
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to convert");
+                return;
+            }
 
-  // Load the TensorFlow model from the buffer
-  const model = await tf.loadGraphModel(tf.io.fromMemory(buffer));
+            const data = new Uint8Array(await file.arrayBuffer());
 
-  // Get the input tensor from the model
-  const inputTensor = model.inputs[0];
+            // Convert the binary data to a C header file
+            const header = myXxd(file.name.replace(/\W/g, '_'), data);
 
-  // Check the data type and shape of the input tensor
-  console.log("Input tensor data type:", inputTensor.dtype);
-  console.log("Input tensor shape:", inputTensor.shape);
+            // Download the C header file
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(new Blob([header], {type: 'text/plain'}));
+            downloadLink.download = `${file.name}.h`;
+            downloadLink.click();
+        }
 
-  // If the input tensor is not of type float32, cast it to float32
-  if (inputTensor.dtype !== "float32") {
-    inputTensor = tf.cast(inputTensor, "float32");
-    console.log("Casted input tensor to float32");
-  }
+        async function convertToTFLite() {
+            // Read the C header file
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a C header file to convert to TFLite");
+                return;
+            }
 
-  // If the input tensor is not of shape [1, ?, ?, 3], reshape it to [1, ?, ?, 3]
-  if (inputTensor.shape[0] !== 1 || inputTensor.shape[3] !== 3) {
-    inputTensor = tf.reshape(inputTensor, [1, -1, -1, 3]);
-    console.log("Reshaped input tensor to [1, ?, ?, 3]");
-  }
+            // Get the file name without extension
+            const filename = file.name.replace(/\W/g, '_');
 
-  // Convert the TensorFlow model to a TFLite model
-  const converter = new tf.lite.TFLiteConverter(model);
-  const tfliteModel = await converter.convert();
-
-  // Create a URL for the TFLite file
-  const url = URL.createObjectURL(new Blob([tfliteModel], {type: "application/octet-stream"}));
-
-  // Download the TFLite file
-  const downloadLink = document.createElement("a");
-  downloadLink.href = url;
-  downloadLink.download = `${filename}.tflite`;
-  downloadLink.click();
-}
-
-const fileInput = document.getElementById("fileInput");
-const convertToCButton = document.getElementById("convertToCButton");
-const convertToTFLiteButton = document.getElementById("convertToTFLiteButton");
-
-convertToCButton.addEventListener("click", () => {
-    // Your existing code to convert to C-header here
-    // Make sure to store the C-header content in a variable called "header"
-});
-
-convertToTFLiteButton.addEventListener("click", () => {
-    const file = fileInput.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            // Convert the C-header data to a TFLite file
-            convertToTFLite(event.target.result, file.name.replace(/\W/g, '_'));
-        };
-        reader.readAsText(file);
-    } else {
-        alert("Please select a file to convert");
-    }
-});
-
+            // Replace this with your TFLite conversion logic
+            myConvertToTFLite(filename);
+        }
     </script>
 </body>
 </html>
