@@ -127,7 +127,6 @@ void loop() {
     if (myPredictProximity) {
       myCurrentIndex = (myCurrentIndex + 1) % NUMBER_OF_INPUTS; // Wrap around to the beginning when the end is reached.
       input[myCurrentIndex] = myProximityReading;
-      float myPredicted = ml.predict(input, myOutput); 
 
       //  First print all the inputs to the model
       //  for (int myLoop2 = 0; myLoop2 < NUMBER_OF_INPUTS; myLoop2++){
@@ -135,16 +134,21 @@ void loop() {
       //  }
       //  Serial.println();
       //  Serial.print("Predicted:  " + String(myPredicted,3)  );  // not needed since same as myOutput[0]
-      Serial.println("Far label[0]: "+String(myOutput[0]) + ", Near label[1]:" + String(myOutput[1]) );  // output for plotter minimal formating
 
-      if (myPredicted >= 0.5){
-        digitalWrite(LED_BUILTIN, LOW); // grounds the LED turns it on only on portenta, off for the nano 33 BLE
-      } else {  
-        digitalWrite(LED_BUILTIN, HIGH); //  turns it off only on portenta and on for the nano 33 BLE
+
+      if (myCurrentIndex == 0) {  // only send data to the model every 25 readings
+        
+        float myPredicted = ml.predict(input, myOutput); 
+        Serial.println("Proximity: " + String(myProximityReading) +", Far label[0]: "+String(myOutput[0]) + ", Near label[1]:" + String(myOutput[1]) );  // output for plotter minimal formating
+      
+        if (myPredicted >= 0.5){   // same as the first myOutput[0]
+          digitalWrite(LED_BUILTIN, LOW); // grounds the LED turns it on only on portenta, off for the nano 33 BLE
+        } else {  
+          digitalWrite(LED_BUILTIN, HIGH); //  turns it off only on portenta and on for the nano 33 BLE
+        }
       }
 
-
-      delay(100);
+      delay(10);
     }
 
 
