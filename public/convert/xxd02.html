@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>xxd -i</title>
+</head>
+<body>
+    <h1>xxd -i</h1>
+    <input type="file" id="fileInput">
+    <input type="button" onclick="convertFile()" value="Convert">
+    <script>
+        function myXxd(filename, data) {
+            let output = `unsigned char ${filename}[] = {\n`;
+            for (let i = 0; i < data.length; i++) {
+                output += `  0x${data[i].toString(16).padStart(2, '0')}`;
+                if (i !== data.length - 1) {
+                    output += ',';
+                }
+                if ((i + 1) % 12 === 0) {
+                    output += '\n';
+                }
+            }
+            output += `\n};\nunsigned int ${filename}_len = ${data.length};\n`;
+            return output;
+        }
+
+        async function convertFile() {
+            // Read the binary data from the file
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file to convert");
+                return;
+            }
+
+            const data = new Uint8Array(await file.arrayBuffer());
+
+            // Convert the binary data to a C header file
+            const header = myXxd(file.name.replace(/\W/g, '_'), data);
+
+            // Download the C header file
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(new Blob([header], {type: 'text/plain'}));
+            downloadLink.download = `${file.name}.h`;
+            downloadLink.click();
+        }
+    </script>
+</body>
+</html>
