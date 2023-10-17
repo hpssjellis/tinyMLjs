@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+.<!DOCTYPE html>
 <html lang="en">
 <head>
 <script>  
@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h6> Version 0.43.1-177 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.44.1-181 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -109,6 +109,8 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model">
 Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Github</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
+Once you have made a mode.h file. then install this deprecated but I am working on getting a replacement Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">https://github.com/hpssjellis/RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino   
+
 <span id="mySpanExport">...</span>
 <hr>
 
@@ -118,6 +120,18 @@ Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to
 <label for="weightsFile">Select weights file (.bin):</label>
 <input type="file" id="weightsFile" accept=".bin">
 <br>
+   
+Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
+<input type=button value="Re-set labels" onclick="{
+   const labelsInput3 = document.getElementById('myNewLabels').value;   
+   const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+   uniqueLabels = [...new Set(labelsArray3)];
+   console.log('uniqueLabels')
+   console.log(uniqueLabels)
+  // const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+}">   
+<br>
+   
 <input type="button" value="Upload Model" onclick="uploadModel()"><br>
 <span id="mySpanUpload">...</span>
 
@@ -788,6 +802,14 @@ await model.save(myModelFileName);
    
    
 async function uploadModel() {
+  // set labels first  this is a repeat of the re-set labels button ~line 120
+   const labelsInput3 = document.getElementById('myNewLabels').value;   
+   const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+   uniqueLabels = [...new Set(labelsArray3)];
+   console.log('uniqueLabels')
+   console.log(uniqueLabels)
+   
+   // get the model
    const modelFile = document.getElementById("modelFile").files[0];
    const weightsFile = document.getElementById("weightsFile").files[0];
    if (!modelFile || !weightsFile) {
@@ -796,6 +818,7 @@ async function uploadModel() {
    }
    // careful here somehow need labels loaded!
    model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+   model.summary()
 }
 
 async function classifyData() {
