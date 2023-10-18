@@ -816,13 +816,13 @@ mySaveTxt(myModelFileName)   // save the unique Label names
    
 async function uploadModel() {
    myModelWasUploaded = true
-
+  let labelsInput3;
 
   const reader = new FileReader();
 
   reader.onload = function (e) {
     const fileContent = e.target.result;
-    const labelsInput3 = fileContent;
+    labelsInput3 = fileContent;
   };
 
   reader.readAsText(document.getElementById("modelFile").files[0]);  // grab the .txt file
@@ -830,9 +830,9 @@ async function uploadModel() {
 
    
   // set labels first  this is a repeat of the re-set labels button ~line 120
-   document.getElementById('myNewLabels').value = labelsInput3
-   const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
-   uniqueLabels = [...new Set(labelsArray3)];
+   document.getElementById('myNewLabels').value = await labelsInput3
+   const labelsArray3 = await labelsInput3.split(',').map((label) => label.trim());
+   uniqueLabels =  await [...new Set(labelsArray3)];
    console.log('uniqueLabels')
    console.log(uniqueLabels)
    
