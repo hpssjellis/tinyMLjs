@@ -229,15 +229,15 @@ Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size
   cleanFillTrim()
 }">
       
-<input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
+Label: <input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
   document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value 
    
 }">  
 <input type=button value="Keep" onclick="{previewSensorData()}">   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
-<input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
-    myBaseCsvFileName = this.value.split('-')[0]     // just grab the part before the 'dash'
+CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
+    myBaseCsvFileName = this.value.split('-')[0] + '-'    // just grab the part before the 'dash' and then add the dash back
    alert(myBaseCsvFileName)
 }"><br>
 
@@ -1015,7 +1015,20 @@ function mySaveCSV(myInFileName) {
   document.body.removeChild(link);
 }
 
-    
+function mySaveTxt(myInFileName) {
+  var text = document.getElementById("myArea01").value;
+
+  // Create a data URI for the text content
+  var encodedUri = "data:text/plain;charset=utf-8," + encodeURI(text);
+
+  // Create an anchor element to trigger the download
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", myInFileName);
+
+  // Simulate a click event to download the file
+  link.click();
+}
     
    /////////////////////////////////////// End of user code ///////////////////////////////////////////   
 
