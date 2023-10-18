@@ -22,6 +22,7 @@
    let accelerometerData = [];
    let startTime = null;
    let myModelWasUploaded = false
+   let myBaseCsvFileName = 'myCSV-'
    
     // let myRaw = false
    //  let myRawInterval
@@ -45,7 +46,7 @@
 </head>
 <body>
 
-<h6> Version 0.45.1-183 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.45.2-184 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -228,11 +229,17 @@ Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size
   cleanFillTrim()
 }">
       
-<input type=text id="mySingleLabel" placeholder="1lable" value="1label">  
+<input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
+  document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value 
+   
+}">  
 <input type=button value="Keep" onclick="{previewSensorData()}">   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
-<input id="myOutFilename" type=text value="myCSV-myLabel.csv"><br>
+<input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
+    myBaseCsvFileName = this.value.split('-')[0]     // just grab the part before the 'dash'
+   alert(myBaseCsvFileName)
+}"><br>
 
 <textarea id="myArea01" rows=6 cols=120></textarea>
 <br>
