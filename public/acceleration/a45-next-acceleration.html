@@ -46,7 +46,7 @@
 </head>
 <body>
 
-<h6> Version 0.45.2-184 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.45.2-185 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -121,6 +121,9 @@ Once you have made a mode.h file. then install this deprecated but I am working 
 <br>
 <label for="weightsFile">Select weights file (.bin):</label>
 <input type="file" id="weightsFile" accept=".bin">
+<br>
+<label for="labelFile">Select labels file (.txt):</label>
+<input type="file" id="labelsFile" accept=".txt">
 <br>
    
 Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
@@ -230,7 +233,7 @@ Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size
 }">
       
 Label: <input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
-  document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value 
+  document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
    
 }">  
 <input type=button value="Keep" onclick="{previewSensorData()}">   <br>
@@ -805,14 +808,29 @@ await model.fit(myTensor, labelsTensor, {
 async function exportModel() {
 let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value
 await model.save(myModelFileName);
+mySaveTxt(myModelFileName)   // save the unique Label names
+   
 }
 
    
    
 async function uploadModel() {
    myModelWasUploaded = true
+
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const fileContent = e.target.result;
+    const labelsInput3 = fileContent;
+  };
+
+  reader.readAsText(document.getElementById("modelFile").files[0]);  // grab the .txt file
+
+
+   
   // set labels first  this is a repeat of the re-set labels button ~line 120
-   const labelsInput3 = document.getElementById('myNewLabels').value;   
+   document.getElementById('myNewLabels').value;   = labelsInput3
    const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
    uniqueLabels = [...new Set(labelsArray3)];
    console.log('uniqueLabels')
@@ -1016,7 +1034,7 @@ function mySaveCSV(myInFileName) {
 }
 
 function mySaveTxt(myInFileName) {
-  var text = document.getElementById("myArea01").value;
+  var text = uniqueLabels
 
   // Create a data URI for the text content
   var encodedUri = "data:text/plain;charset=utf-8," + encodeURI(text);
