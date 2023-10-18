@@ -46,7 +46,7 @@
 </head>
 <body>
 
-<h6> Version 0.45.3-188 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.46.0-189 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1>tinyMLjs </h1>
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -816,7 +816,33 @@ mySaveTxt(document.getElementById('myExportFileName').value+'Labels')   // save 
    
 async function uploadModel() {
    myModelWasUploaded = true
+   let labelsInput3
 
+   
+  async function loadLabelsFile() {
+   try {
+       const response = await fetch('document.getElementById("labelsFile").files[0];');
+       if (response.ok) {
+           labelsInput3 = await response.text();
+        
+           // set labels first  this is a repeat of the re-set labels button ~line 120
+            document.getElementById('myNewLabels').value = labelsInput3
+            const labelsArray3 =  labelsInput3.split(',').map((label) => label.trim());
+            uniqueLabels =   [...new Set(labelsArray3)];
+            console.log('uniqueLabels')
+            console.log(uniqueLabels)
+          
+       } else {
+           console.error('Failed to load the text file.');
+       }
+   } catch (error) {
+       console.error('An error occurred:', error);
+   }
+}
+
+loadLabelsFile()
+
+   
 // presently txt file reader is not working. perhaps should be a csv file reader anyway
    // the issue is the code is not waiting for the labelsInput3
    /*
@@ -832,13 +858,7 @@ async function uploadModel() {
   reader.readAsText(document.getElementById("modelFile").files[0]);  // grab the .txt file
 
 */
-   
-  // set labels first  this is a repeat of the re-set labels button ~line 120
-   const labelsInput3 = document.getElementById('myNewLabels').value  
-   const labelsArray3 =  labelsInput3.split(',').map((label) => label.trim());
-   uniqueLabels =   [...new Set(labelsArray3)];
-   console.log('uniqueLabels')
-   console.log(uniqueLabels)
+
    
    // get the model
    const modelFile = document.getElementById("modelFile").files[0];
