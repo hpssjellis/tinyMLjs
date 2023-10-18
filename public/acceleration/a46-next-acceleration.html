@@ -46,7 +46,7 @@
 </head>
 <body>
 
-<h6> Version 0.46.0-189 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
+<h6> Version 0.46.1-190 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1 align=center>tinyMLjs </h1>
 
 This website makes Machine Learning models from microcontroller sensors using Javascript then uploaded to the microcontroller using Gitpod, RocksettaTinyML and The Arduino IDE.<br><br>
@@ -824,28 +824,32 @@ async function uploadModel() {
    let labelsInput3
 
    
-  async function loadLabelsFile() {
-   try {
-       const response = await fetch('document.getElementById("labelsFile").files[0];');
-       if (response.ok) {
-           labelsInput3 = await response.text();
-        
-           // set labels first  this is a repeat of the re-set labels button ~line 120
-            document.getElementById('myNewLabels').value = labelsInput3
-            const labelsArray3 =  labelsInput3.split(',').map((label) => label.trim());
-            uniqueLabels =   [...new Set(labelsArray3)];
-            console.log('uniqueLabels')
-            console.log(uniqueLabels)
-          
-       } else {
-           console.error('Failed to load the text file.');
-       }
-   } catch (error) {
-       console.error('An error occurred:', error);
-   }
-}
+        async function loadLabelsFile() {
+            const labelsFileInput = document.getElementById("labelsFile");
 
-loadLabelsFile()
+            if (labelsFileInput.files.length === 0) {
+                console.error('Please select a text file.');
+                return;
+            }
+
+            const file = labelsFileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function () {
+                try {
+                    const labelsInput3 = reader.result;
+                    document.getElementById('myNewLabels').value = labelsInput3;
+                    const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+                    uniqueLabels = [...new Set(labelsArray3)];
+                    console.log('uniqueLabels');
+                    console.log(uniqueLabels);
+                } catch (error) {
+                    console.error('An error occurred:', error);
+                }
+            };
+
+            reader.readAsText(file);
+        }
 
    
 // presently txt file reader is not working. perhaps should be a csv file reader anyway
