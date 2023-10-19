@@ -180,6 +180,104 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
 
 
 
+   
+Machine Learning models often need very specific data.<br>
+
+<input type=button value="Clean, Trim or Fill All" onclick="{  
+   document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
+   myDataCheckCSV()   /// ~line 264  Checks all the csv data for correct number of samples and senses  
+   myDataCheckSenses()   /// ~line 318  Checks all the csv data for correct number of samples and senses 
+}">
+
+Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
+Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
+Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
+   
+Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
+Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
+   
+<input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
+   
+Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
+<input type="button" value="Train Model"  style="color:green; width:200px;" onclick="trainModel()"> 
+<input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
+
+<span id="mySpanClassify">...</span><br>
+
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model">
+Convert the exported model to Arduino ready c-header model.h file using this  Github repository called: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
+Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  
+
+ 
+<span id="mySpanExport">...</span>
+<hr>
+
+
+
+
+
+
+
+
+
+
+   
+
+<textarea id="myArea01" rows=6 cols=120></textarea>
+<br>
+<input type=button value="Clear and send 'start' "  style="Background-color:green; width:200px;"  onclick="{
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
+}">   
+<input type="button" value="Show Graph" onclick="myShowGraph()">
+<input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
+<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
+<input type=button value="Show All Data" onclick="{
+   document.getElementById('myArea01').value =''                                        
+ 
+   let dataString = '';
+   let labelString = '';
+   // for (let i = 0; i < myDataFiles.length; i++) {
+   for (let i = 0; i <= myDataCSV; i++) {                                       
+      const dataElement = document.getElementById('myData' + i);
+      const labelElement = document.getElementById('myLabel' + i);
+      if (dataElement) {
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+      }
+      if (labelElement) {
+         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+      }
+   }
+   for (let i = 0; i <= myDataMcu; i++) {                                       
+      const dataElement = document.getElementById('myData2Mcu' + i);
+      const labelElement = document.getElementById('myLabel2Mcu' + i);
+      if (dataElement) {
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+      }
+      if (labelElement) {
+         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+      }
+   }
+
+  document.getElementById('myArea01').value = dataString + labelString;                                             
+                                             
+}"> <br>
+<span id="mySpanResults">...</span>
+    
+
+<!-- <canvas id="myChart" width="700" height="300"></canvas> -->
+<div id="myChart" style="width:1000px; height:300px"></div>
+
+
+
+
+
+
+
+
 
    
 <input  type=button value="Show File Uploading" style="background-color:red;" onclick="{
@@ -239,39 +337,17 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
 Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
 
 <div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+
+
+
+
+
+
+
+
+
+
    
-Machine Learning models often need very specific data.<br>
-
-<input type=button value="Clean, Trim or Fill All" onclick="{  
-   document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
-   myDataCheckCSV()   /// ~line 264  Checks all the csv data for correct number of samples and senses  
-   myDataCheckSenses()   /// ~line 318  Checks all the csv data for correct number of samples and senses 
-}">
-
-Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
-Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
-Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
-   
-Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
-Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
-   
-<input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
-   
-Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
-Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
-<input type="button" value="Train Model"  style="color:green; width:200px;" onclick="trainModel()"> 
-<input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
-
-<span id="mySpanClassify">...</span><br>
-
-<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model">
-Convert the exported model to Arduino ready c-header model.h file using this  Github repository called: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
-Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  
-
- 
-<span id="mySpanExport">...</span>
-<hr>
-
 <span id="mySpanModelUpload" style="display : none; ">   
 
    <label for="modelFile">Select model file (.json):</label>
@@ -306,56 +382,6 @@ Once you have made a model.h file then install this Arduino Library <a href="htt
 
 
 
-
-
-   
-
-<textarea id="myArea01" rows=6 cols=120></textarea>
-<br>
-<input type=button value="Clear and send 'start' "  style="Background-color:green; width:200px;"  onclick="{
-    document.getElementById('myArea01').value = '' 
-    if (mySendFirstLine) { mySendIt('firstline'); }
-    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
-}">   
-<input type="button" value="Show Graph" onclick="myShowGraph()">
-<input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
-<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
-<input type=button value="Show All Data" onclick="{
-   document.getElementById('myArea01').value =''                                        
- 
-   let dataString = '';
-   let labelString = '';
-   // for (let i = 0; i < myDataFiles.length; i++) {
-   for (let i = 0; i <= myDataCSV; i++) {                                       
-      const dataElement = document.getElementById('myData' + i);
-      const labelElement = document.getElementById('myLabel' + i);
-      if (dataElement) {
-         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
-      }
-      if (labelElement) {
-         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
-      }
-   }
-   for (let i = 0; i <= myDataMcu; i++) {                                       
-      const dataElement = document.getElementById('myData2Mcu' + i);
-      const labelElement = document.getElementById('myLabel2Mcu' + i);
-      if (dataElement) {
-         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
-      }
-      if (labelElement) {
-         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
-      }
-   }
-
-  document.getElementById('myArea01').value = dataString + labelString;                                             
-                                             
-}"> <br>
-<span id="mySpanResults">...</span>
-    
-
-<!-- <canvas id="myChart" width="700" height="300"></canvas> -->
-<div id="myChart" style="width:1000px; height:300px"></div>
    
    
  <!-- --------------------------------- End of regular webpage tags with Javascript as events -------------------------------------------------------  -->       
