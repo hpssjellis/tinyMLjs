@@ -57,15 +57,15 @@ Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/
 
    if (this.value != 'Show File uploading') {
        this.value = 'Show File uploading'   
-       document.getElementById('myUploadCsvSpan').style.visibility = 'hidden' 
-       document.getElementById('mySpanModelUploa').style.visibility = 'hidden'  
+       document.getElementById('myUploadCsvSpan').style.display = 'none' 
+       document.getElementById('mySpanModelUploa').style.display = 'none' 
    }  else {
-      document.getElementById('myUploadCsvSpan').style.visibility = 'visible' 
-      document.getElementById('mySpanModelUploa').style.visibility = 'visible'     d
+      document.getElementById('myUploadCsvSpan').style.display = 'block' 
+      document.getElementById('mySpanModelUploa').style.display = 'block' 
       this.value = 'Hide CSV uploading'
    }
 }"><br>
-<span id="myUploadCsvSpan" style="visibility : hidden; ">
+<span id="myUploadCsvSpan" style="display : none; ">
    
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -139,7 +139,7 @@ Once you have made a model.h file. then install this deprecated but I am working
 <span id="mySpanExport">...</span>
 <hr>
 
-<span id="mySpanModelUpload" style="visibility:hidden;">   
+<span id="mySpanModelUpload" style="display : none; ">   
 
    <label for="modelFile">Select model file (.json):</label>
    <input type="file" id="modelFile" accept=".json">
