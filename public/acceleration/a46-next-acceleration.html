@@ -141,30 +141,30 @@ Once you have made a model.h file. then install this deprecated but I am working
 
 <span id="mySpanModelUpload" style="visibility:hidden;">   
 
-<label for="modelFile">Select model file (.json):</label>
-<input type="file" id="modelFile" accept=".json">
-<br>
-<label for="weightsFile">Select weights file (.bin):</label>
-<input type="file" id="weightsFile" accept=".bin">
-<br>
-<label for="labelFile">Select labels file (.txt):</label>
-<input type="file" id="labelsFile" accept=".txt">
-<br>
-   
-Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
-<input type=button value="Re-set labels" onclick="{
-   const labelsInput3 = document.getElementById('myNewLabels').value;   
-   const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
-   uniqueLabels = [...new Set(labelsArray3)];
-   console.log('uniqueLabels')
-   console.log(uniqueLabels)
-  // const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
-}">   
-<br>
-   
-<input type="button" value="Upload Model" onclick="uploadModel()"><br>
-<span id="mySpanUpload">...</span>
-
+   <label for="modelFile">Select model file (.json):</label>
+   <input type="file" id="modelFile" accept=".json">
+   <br>
+   <label for="weightsFile">Select weights file (.bin):</label>
+   <input type="file" id="weightsFile" accept=".bin">
+   <br>
+   <label for="labelFile">Select labels file (.txt):</label>
+   <input type="file" id="labelsFile" accept=".txt">
+   <br>
+      
+   Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
+   <input type=button value="Re-set labels" onclick="{
+      const labelsInput3 = document.getElementById('myNewLabels').value;   
+      const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+      uniqueLabels = [...new Set(labelsArray3)];
+      console.log('uniqueLabels')
+      console.log(uniqueLabels)
+     // const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+   }">   
+   <br>
+      
+   <input type="button" value="Upload Model" onclick="uploadModel()"><br>
+   <span id="mySpanUpload">...</span>
+</span>   
    
 
 <hr>
