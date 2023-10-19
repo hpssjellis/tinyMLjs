@@ -45,13 +45,18 @@
 
 </head>
 <body>
-
-<h6> Version 0.46.1-191 Note: works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only on Edge for Linux</h6>
 <h1 align=center>tinyMLjs </h1>
+<h6> Version 0.46.1-192 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
-This website makes Machine Learning models from microcontroller sensors using Javascript then uploaded to the microcontroller using Gitpod, RocksettaTinyML and The Arduino IDE.<br><br>
 
-Presently for complex Camera or Sound data use EdgeImpulse.com as the needed compression is at a much better level. <br><br>
+This website makes Machine Learning models from WebSerial connected microcontroller sensors using TensorflowJS the saved model can then be converted to c-header file using Gitpod, and finally prepared for a microcontroller using RocksettaTinyML and The Arduino IDE.<br><br>
+
+Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the need model compression that we have not yet activated here. <br><br>
+
+<input  type=button value="Advanced CSV uploading" onclick="{
+   document.getElementById('myUploadCsvSpan').style = 'visible'
+}">
+<span id="myUploadCsvSpan" style="visibility : hidden; ">
    
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -84,8 +89,11 @@ Hide: <input type=radio name="myPre" onclick="{
 Following is the list of actual labels used in the same order as uploaded (comma-separated)
 Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
    
-CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> <br>
-Senses Labels (careful): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
+CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> <hr>
+   
+</span>
+   
+Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
 
 <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
