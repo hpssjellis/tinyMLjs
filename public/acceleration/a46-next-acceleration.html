@@ -53,17 +53,19 @@ This website makes Machine Learning models from WebSerial connected microcontrol
 
 Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the need model compression that we have not yet activated here. <br><br>
 
-<input  type=button value="Show CSV uploading" onclick="{
+<input  type=button value="Show File uploading" onclick="{
 
-   if (this.value != 'Show CSV uploading') {
-       this.value = 'Show CSV uploading'   
-      document.getElementById('myUploadCsvSpan').style.visibility = 'none'  
+   if (this.value != 'Show File uploading') {
+       this.value = 'Show File uploading'   
+       document.getElementById('myUploadCsvSpan').style.visibility = 'hidden' 
+       document.getElementById('mySpanModelUploa').style.visibility = 'hidden'  
    }  else {
-      document.getElementById('myUploadCsvSpan').style.visibility = 'visible'   
+      document.getElementById('myUploadCsvSpan').style.visibility = 'visible' 
+      document.getElementById('mySpanModelUploa').style.visibility = 'visible'     d
       this.value = 'Hide CSV uploading'
    }
 }"><br>
-<span id="myUploadCsvSpan" style="visibility : none; ">
+<span id="myUploadCsvSpan" style="visibility : hidden; ">
    
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
@@ -133,8 +135,11 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 Convert Model to Arduino: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Github called tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
 Once you have made a model.h file. then install this deprecated but I am working on getting a replacement Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE  
 
+ 
 <span id="mySpanExport">...</span>
 <hr>
+
+<span id="mySpanModelUpload" style="visibility:hidden;">   
 
 <label for="modelFile">Select model file (.json):</label>
 <input type="file" id="modelFile" accept=".json">
@@ -159,6 +164,8 @@ Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size
    
 <input type="button" value="Upload Model" onclick="uploadModel()"><br>
 <span id="mySpanUpload">...</span>
+
+   
 
 <hr>
 
