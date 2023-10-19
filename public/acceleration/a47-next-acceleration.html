@@ -162,9 +162,10 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
 
 <input type=button   value="Auto" onclick="{
    // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
-   previewSensorData()  
+    previewSensorData()  
    
-    setTimeout(function() { document.getElementById('myArea01').value = ''; if (mySendFirstLine) { mySendIt('firstline');}, 300);  // short delay to send the first line
+    setTimeout(function() { document.getElementById('myArea01').value = '';   }, 300);  // short delay to send the first line
+    setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline');  }, 400);  // short delay to send the first line
     setTimeout(function() { mySendIt('start'); }, 600);  // short delay to send the data
     setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart  
     setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2500);      // give the data a few seconds to load before drawing chart  
