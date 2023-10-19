@@ -53,16 +53,18 @@ This website makes Machine Learning models from WebSerial connected microcontrol
 
 Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the need model compression that we have not yet activated here. <br><br>
 
-<input  type=button value="Show File uploading" style="background-color:red;" onclick="{
+<input  type=button value="Show File uploading" style="background-color:lime;" onclick="{
 
    if (this.value != 'Show File uploading') {
        this.value = 'Show File uploading'   
-       document.getElementById('myUploadCsvSpan').style.display = 'none' 
-       document.getElementById('mySpanModelUploa').style.display = 'none' 
+      this.style.backgroundColor = 'lime'
+       document.getElementById('myUploadCsvSpan').style.display = 'block' 
+       document.getElementById('mySpanModelUploa').style.display = 'block' 
    }  else {
-      document.getElementById('myUploadCsvSpan').style.display = 'block' 
-      document.getElementById('mySpanModelUploa').style.display = 'block' 
+      document.getElementById('myUploadCsvSpan').style.display = 'none' 
+      document.getElementById('mySpanModelUploa').style.display = 'none' 
       this.value = 'Hide CSV uploading'
+      this.style.backgroundColor = 'red'
    }
 }"><br>
 <span id="myUploadCsvSpan" style="display : none; ">
@@ -164,11 +166,11 @@ Once you have made a model.h file. then install this deprecated but I am working
       
    <input type="button" value="Upload Model" onclick="uploadModel()"><br>
    <span id="mySpanUpload">...</span>
-</span>   
-   
-
+  
 <hr>
+</span> 
 
+   
 <button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
