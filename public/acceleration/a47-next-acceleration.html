@@ -169,17 +169,7 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
     setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart  
     setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2500);      // give the data a few seconds to load before drawing chart  
                                            
-}">     
-   
-   
-   /*
-    document.getElementById('myArea01').value = '' 
-    if (mySendFirstLine) { mySendIt('firstline'); }
-    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart      
-   */
-   
-   <br>
+}">     <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
