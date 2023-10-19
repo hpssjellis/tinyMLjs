@@ -46,7 +46,7 @@
 </head>
 <body>
 <h1 align=center>tinyMLjs </h1>
-<h6> Version 0.46.4-196 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.47.0-197 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -55,6 +55,133 @@ Finally the model.h file is combined with C/C++ code using an Arduino IDE ready 
 
 Presently for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
 
+
+
+
+
+
+   
+   
+<button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
+<input type=text id="mySendText" value="start">
+<input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
+
+<input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
+<input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
+
+<input type=button value="Clear and send 'start' "  style="Background-color:green; width:200px;"  onclick="{
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
+}">
+    
+<input type=button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendIt('stop')}">  
+   <input type=button value="Clear" onclick="{
+    document.getElementById('myArea01').value = ''                                                                                            
+}">
+<input type=button value="send firstline" Title="Only for proper CSV files not for here" onclick="{
+   if (this.value =='send firstline' ){
+     mySendFirstLine = true
+     mySendIt('firstline')
+     this.value = 'stop sending firstline'
+   } else {
+     this.value ='send firstline'  
+      mySendFirstLine = false
+   }
+}">   
+<input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
+<input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}"> 
+<input type=button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}">   
+   
+<input type=button value="Nicla-Proximity" title="18 sensor fusion example" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('proximity'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}">  <br> 
+    
+<input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
+   myCellPhoneOnce = true  // so it will show the data
+   accelerometerData = [];
+   startTime = null;
+   document.getElementById('myArea01').value = '' 
+   if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }  // actually this is deleted, also done in the next function
+   setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
+   setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
+   
+}"> 
+
+ <input type="button" value="Mouse Motion" onClick="{
+ setTimeout(function() {
+       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
+       let myMouseCount = 0;
+       let myMouseOutput = '';
+       document.getElementById('myArea01').value = 'Move the Mouse!';
+
+       const mousemoveListener = function (event) {
+           if (myMouseCount < myNumberOfSamples - 1) {
+               myMouseOutput += `${event.x},${event.y}\r\n`;
+               myMouseCount++;
+           } else {
+               document.removeEventListener('mousemove', mousemoveListener);
+               document.getElementById('myArea01').value = myMouseOutput;
+               myShowGraph();
+           }
+       };
+
+       document.addEventListener('mousemove', mousemoveListener);
+   }, 1000); // wait x ms to start mouse movement
+    }"><br> 
+
+   
+<!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
+<br>    
+
+<input type=button value="Clean, Trim or Fill" onclick="{
+  cleanFillTrim()
+}">
+      
+Label: <input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
+  document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
+   
+}">  
+<input type=button value="Keep" onclick="{previewSensorData()}">   <br>
+    
+<input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
+CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
+    myBaseCsvFileName = this.value.split('-')[0] + '-'    // just grab the part before the 'dash' and then add the dash back
+   alert(myBaseCsvFileName)
+}"><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
 <input  type=button value="Show File Uploading" style="background-color:red;" onclick="{
 
    if (this.value != 'Show File Uploading') {
@@ -174,112 +301,23 @@ Once you have made a model.h file then install this Arduino Library <a href="htt
    <hr>
 </span> 
 
+
+
+
+
+
+
+
    
-<button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
-<input type=text id="mySendText" value="start">
-<input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
 
-<input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
-<input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
-
-<input type=button value="Clear and send 'start' "  style="color:green; width:200px;"  onclick="{
+<textarea id="myArea01" rows=6 cols=120></textarea>
+<br>
+<input type=button value="Clear and send 'start' "  style="Background-color:green; width:200px;"  onclick="{
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
     setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
-}">
-    
-<input type=button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendIt('stop')}">  
-   <input type=button value="Clear" onclick="{
-    document.getElementById('myArea01').value = ''                                                                                            
-}">
-<input type=button value="send firstline" Title="Only for proper CSV files not for here" onclick="{
-   if (this.value =='send firstline' ){
-     mySendFirstLine = true
-     mySendIt('firstline')
-     this.value = 'stop sending firstline'
-   } else {
-     this.value ='send firstline'  
-      mySendFirstLine = false
-   }
 }">   
-<input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
-<input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
-    document.getElementById('myArea01').value = '' 
-    if (mySendFirstLine) { mySendIt('firstline'); }
-    setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
-}"> 
-<input type=button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
-    document.getElementById('myArea01').value = '' 
-    if (mySendFirstLine) { mySendIt('firstline'); }
-    setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
-}">   
-   
-<input type=button value="Nicla-Proximity" title="18 sensor fusion example" onclick="{ 
-    document.getElementById('myArea01').value = '' 
-    if (mySendFirstLine) { mySendIt('firstline'); }
-    setTimeout(function() { mySendIt('proximity'); }, 300);  // short delay to send the first line before activating the sensor
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
-}">  <br> 
-    
-<input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
-   myCellPhoneOnce = true  // so it will show the data
-   accelerometerData = [];
-   startTime = null;
-   document.getElementById('myArea01').value = '' 
-   if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }  // actually this is deleted, also done in the next function
-   setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
-   setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
-   
-}"> 
-
- <input type="button" value="Mouse Motion" onClick="{
- setTimeout(function() {
-       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
-       let myMouseCount = 0;
-       let myMouseOutput = '';
-       document.getElementById('myArea01').value = 'Move the Mouse!';
-
-       const mousemoveListener = function (event) {
-           if (myMouseCount < myNumberOfSamples - 1) {
-               myMouseOutput += `${event.x},${event.y}\r\n`;
-               myMouseCount++;
-           } else {
-               document.removeEventListener('mousemove', mousemoveListener);
-               document.getElementById('myArea01').value = myMouseOutput;
-               myShowGraph();
-           }
-       };
-
-       document.addEventListener('mousemove', mousemoveListener);
-   }, 1000); // wait x ms to start mouse movement
-    }"><br> 
-
-   
-<!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
-<br>    
-
-<input type=button value="Clean, Trim or Fill" onclick="{
-  cleanFillTrim()
-}">
-      
-Label: <input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
-  document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
-   
-}">  
-<input type=button value="Keep" onclick="{previewSensorData()}">   <br>
-    
-<input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
-CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
-    myBaseCsvFileName = this.value.split('-')[0] + '-'    // just grab the part before the 'dash' and then add the dash back
-   alert(myBaseCsvFileName)
-}"><br>
-
-<textarea id="myArea01" rows=6 cols=120></textarea>
-<br>
-   
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
 <input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
