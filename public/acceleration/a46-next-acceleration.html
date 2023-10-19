@@ -46,12 +46,14 @@
 </head>
 <body>
 <h1 align=center>tinyMLjs </h1>
-<h6> Version 0.46.3-195 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.46.4-196 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
-This website makes Machine Learning models from WebSerial connected microcontroller sensors using TensorflowJS the saved model can then be converted to c-header file using Gitpod, and finally prepared for a microcontroller using RocksettaTinyML and The Arduino IDE.<br><br>
+This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
+That model can be saved and converted to a tFlite model then to a C-header model.h file using Tensorflow command line or Python converters. I simplify the conversion using a Gitpod.
+Finally the model.h file is combined with C/C++ code using an Arduino IDE ready library called RocksettaTinyML and compiled to the device for testing. <br><br>
 
-Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the need model compression that we have not yet activated here. <br><br>
+Presently for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
 
 <input  type=button value="Show File Uploading" style="background-color:lime;" onclick="{
 
