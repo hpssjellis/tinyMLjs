@@ -46,67 +46,69 @@
 </head>
 <body>
 <h1 align=center>tinyMLjs </h1>
-<h6> Version 0.46.2-194 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.46.3-195 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes Machine Learning models from WebSerial connected microcontroller sensors using TensorflowJS the saved model can then be converted to c-header file using Gitpod, and finally prepared for a microcontroller using RocksettaTinyML and The Arduino IDE.<br><br>
 
 Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the need model compression that we have not yet activated here. <br><br>
 
-<input  type=button value="Show File uploading" style="background-color:lime;" onclick="{
+<input  type=button value="Show File Uploading" style="background-color:lime;" onclick="{
 
-   if (this.value != 'Show File uploading') {
-       this.value = 'Show File uploading'   
-      this.style.backgroundColor = 'lime'
+   if (this.value != 'Show File Uploading') {
+       this.value = 'Show File Uploading'   
+       this.style.backgroundColor = 'lime'
        document.getElementById('myUploadCsvSpan').style.display = 'block' 
        document.getElementById('mySpanModelUploa').style.display = 'block' 
    }  else {
       document.getElementById('myUploadCsvSpan').style.display = 'none' 
       document.getElementById('mySpanModelUploa').style.display = 'none' 
-      this.value = 'Hide CSV uploading'
+      this.value = 'Hide File Uploading'
       this.style.backgroundColor = 'red'
    }
 }"><br>
-<span id="myUploadCsvSpan" style="display : none; ">
+<span id="myUploadCsvSpan" style="display:none; ">
    
-Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
-Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
-vanilla Javascript webpage! <br><br>
-
-    
-    
-
-Show: <input type=radio name="myPre" onclick="{
-   document.getElementById('myDataPreviewCSV').style.display = 'block'
-   document.getElementById('myDataPreviewSensor').style.display = 'block'
-}" CHECKED> ------------ 
-Hide: <input type=radio name="myPre" onclick="{
-   document.getElementById('myDataPreviewCSV').style.display = 'none'
-   document.getElementById('myDataPreviewSensor').style.display = 'none'
-}"> ----------- Load .csv files: 
+   Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
+   Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
+   vanilla Javascript webpage! <br><br>
    
-<input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
-    if (!myDataFiles) {
-       myDataFiles = event.target.files;
-    } else {
-       myDataFiles = [...myDataFiles, ...event.target.files];
-    }
-    if (myDataFiles.length > 0) {
-      previewData();
-    }                                                      
-}"> 
-<br>
-
-Following is the list of actual labels used in the same order as uploaded (comma-separated)
-Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
+       
+       
    
-CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> <hr>
+   Show: <input type=radio name="myPre" onclick="{
+      document.getElementById('myDataPreviewCSV').style.display = 'block'
+      document.getElementById('myDataPreviewSensor').style.display = 'block'
+   }" CHECKED> ------------ 
+   Hide: <input type=radio name="myPre" onclick="{
+      document.getElementById('myDataPreviewCSV').style.display = 'none'
+      document.getElementById('myDataPreviewSensor').style.display = 'none'
+   }"> ----------- Load .csv files: 
+      
+   <input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
+       if (!myDataFiles) {
+          myDataFiles = event.target.files;
+       } else {
+          myDataFiles = [...myDataFiles, ...event.target.files];
+       }
+       if (myDataFiles.length > 0) {
+         previewData();
+       }                                                      
+   }"> 
+   <br>
    
-</span>
+   Following is the list of actual labels used in the same order as uploaded (comma-separated)
+   Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
+      
+   CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> 
+   
+   <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+   <hr>
+   
+</span><br>
    
 Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
 
-<div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
 <div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
    
 Machine Learning models often need very specific data.<br>
@@ -167,7 +169,7 @@ Once you have made a model.h file. then install this deprecated but I am working
    <input type="button" value="Upload Model" onclick="uploadModel()"><br>
    <span id="mySpanUpload">...</span>
   
-<hr>
+   <hr>
 </span> 
 
    
