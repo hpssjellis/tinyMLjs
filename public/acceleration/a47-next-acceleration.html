@@ -47,7 +47,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.47.0-198 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.47.1-199 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -157,7 +157,28 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
   document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
    
 }">  
-<input type=button style="Background-color:lime;"  value="Keep" onclick="{previewSensorData()}">   <br>
+<input type=button style="Background-color:lime;"  value="Keep" onclick="{previewSensorData()}">  
+   
+
+<input type=button   value="Auto" onclick="{
+                                           
+   previewSensorData()  
+   
+    setTimeout(function() { document.getElementById('myArea01').value = ''; if (mySendFirstLine) { mySendIt('firstline');}, 300);  // short delay to send the first line
+    setTimeout(function() { mySendIt('start'); }, 600);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart  
+                                           
+}">     
+   
+   
+   /*
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart      
+   */
+   
+   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
