@@ -59,14 +59,14 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 
    if (this.value != 'Show File Uploading') {
        this.value = 'Show File Uploading'   
-       this.style.backgroundColor = 'lime'
-       document.getElementById('myUploadCsvSpan').style.display = 'block' 
-       document.getElementById('mySpanModelUpload').style.display = 'block' 
+       this.style.backgroundColor = 'red'
+       document.getElementById('myUploadCsvSpan').style.display = 'none' 
+       document.getElementById('mySpanModelUpload').style.display = 'none' 
    }  else {
-      document.getElementById('myUploadCsvSpan').style.display = 'none' 
-      document.getElementById('mySpanModelUpload').style.display = 'none' 
+      document.getElementById('myUploadCsvSpan').style.display = 'block' 
+      document.getElementById('mySpanModelUpload').style.display = 'block' 
       this.value = 'Hide File Uploading'
-      this.style.backgroundColor = 'red'
+      this.style.backgroundColor = 'lime'
    }
 }"><br>
 <span id="myUploadCsvSpan" style="display:none; ">
