@@ -63,14 +63,14 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 
    
    
-<button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
+<button id="connectButton"  style="background-color:lime; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
 
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="Clear and send 'start' "  style="Background-color:green; width:200px;"  onclick="{
+<input type=button value="Clear and send 'start' "  style="Background-color:lime; width:200px;"  onclick="{
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
@@ -149,15 +149,15 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
 <br>    
 
-<input type=button value="Clean, Trim or Fill" onclick="{
+<input type=button   style="Background-color:lime;"  value="Clean, Trim or Fill" onclick="{
   cleanFillTrim()
 }">
       
-Label: <input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
+Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Background-color:lime;"  value="1label" onChange="{
   document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
    
 }">  
-<input type=button value="Keep" onclick="{previewSensorData()}">   <br>
+<input type=button style="Background-color:lime;"  value="Keep" onclick="{previewSensorData()}">   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
@@ -191,7 +191,7 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
 
 <textarea id="myArea01" rows=6 cols=120></textarea>
 <br>
-<input type=button value="Clear and send 'start' "  style="Background-color:green; width:200px;"  onclick="{
+<input type=button value="Clear and send 'start' "  style="Background-color:lime; width:200px;"  onclick="{
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
@@ -199,7 +199,7 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
 }">   
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
-<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
+<input type="button" value="Classify Data"  style="background-color:lime; width:200px;"  onclick="{classifyData();}">
 <input type=button value="Show All Data" onclick="{
    document.getElementById('myArea01').value =''                                        
  
@@ -259,11 +259,11 @@ Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5>
 Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
-<input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
+<input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
    
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
 Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
-<input type="button" value="Train Model"  style="color:green; width:200px;" onclick="trainModel()"> 
+<input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
 <input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
 
 <span id="mySpanClassify">...</span><br>
