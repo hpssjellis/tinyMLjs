@@ -164,13 +164,25 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
    // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
     previewSensorData()  // Keep the entered data
    
-    setTimeout(function() { document.getElementById('myArea01').value = '';   }, 300);  // short delay to send the first line
-    setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 400);  // short delay to send the first line
-    setTimeout(function() { mySendIt('start'); }, 600);  // short delay to send the data
-    setTimeout(function() { myShowGraph() }, 2000);      // give the data a few seconds to load before drawing chart  
-    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2500);      // give the data a few seconds to load before drawing chart  
+    setTimeout(function() { document.getElementById('myArea01').value = '';   }, 500);  // short delay to send the first line
+    setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 1000);  // short delay to send the first line
+    setTimeout(function() { mySendIt('start'); }, 2000);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 4000);      // give the data a few seconds to load before drawing chart  
+                                            
+}">    
+   
+<input type=button   value="Auto Next and save" title="Does it all. After the first entry is made." onclick="{
+   // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
+    previewSensorData()  // Keep the entered data
+   
+    setTimeout(function() { document.getElementById('myArea01').value = '';   }, 500);  // short delay to send the first line
+    setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 1000);  // short delay to send the first line
+    setTimeout(function() { mySendIt('start'); }, 2000);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 4000);      // give the data a few seconds to load before drawing chart  
+    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 5000);      // give the data a few seconds to load before drawing chart  
                                            
-}">     <br>
+}">     
+   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
