@@ -46,17 +46,24 @@
 </head>
 <body>
 <h1 align=center>tinyMLjs </h1>
-<h6> Version 0.46.1-192 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.46.1-193 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes Machine Learning models from WebSerial connected microcontroller sensors using TensorflowJS the saved model can then be converted to c-header file using Gitpod, and finally prepared for a microcontroller using RocksettaTinyML and The Arduino IDE.<br><br>
 
 Presently for complex Camera or Sound data use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the need model compression that we have not yet activated here. <br><br>
 
-<input  type=button value="Advanced CSV uploading" onclick="{
-   document.getElementById('myUploadCsvSpan').style = 'visible'
-}">
-<span id="myUploadCsvSpan" style="visibility : hidden; ">
+<input  type=button value="Show CSV uploading" onclick="{
+
+   if (this.value != 'Show CSV uploading') {
+       this.value = 'Show CSV uploading'   
+      document.getElementById('myUploadCsvSpan').style.visibility = 'none'  
+   }  else {
+      document.getElementById('myUploadCsvSpan').style.visibility = 'visible'   
+      this.value = 'Hide CSV uploading'
+   }
+}"><br>
+<span id="myUploadCsvSpan" style="visibility : none; ">
    
 Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
 Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
