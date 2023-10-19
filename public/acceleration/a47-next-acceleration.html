@@ -160,9 +160,9 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
 <input type=button style="Background-color:lime;"  value="Keep" onclick="{previewSensorData()}">  
    
 
-<input type=button   value="Auto" title="Does it all" onclick="{
+<input type=button   value="Auto Next" title="Does it all. After the first entry is made." onclick="{
    // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
-    previewSensorData()  
+    previewSensorData()  // Keep the entered data
    
     setTimeout(function() { document.getElementById('myArea01').value = '';   }, 300);  // short delay to send the first line
     setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 400);  // short delay to send the first line
