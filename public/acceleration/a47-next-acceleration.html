@@ -257,10 +257,10 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
       const dataElement = document.getElementById('myData2Mcu' + i);
       const labelElement = document.getElementById('myLabel2Mcu' + i);
       if (dataElement) {
-         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + ', length: ' + dataElement.textContent.length + '\n\n';
       }
       if (labelElement) {
-         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+         labelString += 'Label #' + i + ':' + labelElement.textContent + ', length: ' + labelElement.textContent.length +  '\n';
       }
    }
 
