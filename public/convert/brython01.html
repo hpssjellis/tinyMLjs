@@ -1,22 +1,7 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Brython">
-<meta name="keywords" content="Python,Brython">
-<meta name="author" content="Pierre Quentel">
-<title>Brython</title>
+
 
 <link rel="icon" type="image/png" href="favicon.png" />
-<!--
-<script type="text/javascript" src="/src/brython.js"></script>
-<script type="text/javascript" src="/src/brython_stdlib.js"></script>
 
-<link rel="stylesheet" href="/brython.css">
-
-<script src="/assets/header.brython.js"></script>
--->
 
 <script type="text/javascript"
     src="https://cdn.jsdelivr.net/npm/brython@3.12/brython.min.js">
@@ -27,25 +12,7 @@
 
 
 
-    
 
-<script type="text/python">
-"""Load header and text according to the language."""
-
-from browser import document, html
-import header
-
-# Get the language specified in the query string (lang=...) and in the browser
-# settings.
-qs_lang, language = header.show()
-
-# Adapt content to selected language
-document["content"].html = document[f"content_{language}"].html
-
-if qs_lang:
-    document[f"c_{qs_lang}"].href += f"?lang={qs_lang}"
-
-</script>
 
 <script type="text/python">
 """Code for the clock"""
@@ -150,123 +117,18 @@ else:
 </script>
 
 
-</head>
 
 <body onload="brython(1)">
 
-<noscript>Please enable Javascript to view this page correctly.</noscript>
-
-<div id="banner_row">
-<span class="logo"><a href="/index.html">brython</a></span>
-</div>
 
 <div id="content"></div>
 
-<div id="content_en" style="height:1px;visibility:hidden">
+<div id="content_en" style="height:1px;visibility:hidden"> </div>
 
-<table style="width:85%;margin-left:10%">
-  <tr>
-    <td>
-      <H2>A Python 3 implementation for client-side web programming</H2>
-    </td>
 
-  </tr>
-</table>
 
-<table style="width:85%;margin-left:10%">
-<tr>
-<td style="width:65%;font-size:16px;">
-Without a doubt, you've seen a clock like this in demos of HTML5
-<p>
-However, right click and view the source of this page...
-<p>It is not Javascript code! Instead, you will find Python code in a script of type "text/python".
-<p>Brython is designed to replace Javascript as the scripting language for the Web. As such, it is a Python 3 implementation (you can take it for a test drive through a web <a href="console.html" id="c_en">console</a>), adapted to the HTML5 environment, that is to say with an interface to the DOM objects and events.
-<p><a href="speed_results.html">Speed of execution</a> is similar to CPython for most operations.
-<p>The <a href="gallery/gallery_en.html">gallery</a> highlights a few of the possibilities, from creating simple document elements to drag and drop and 3D navigation. A <a href="https://github.com/brython-dev/brython/wiki/Brython%20in%20the%20wild">wiki</a> lists some applications using Brython.
-<!-- <p><a href="http://pyschool.net">pyschool.net</a> provides a web-based environment for teachers in Python classes. -->
-<p>You can also take a look at <a href="https://github.com/brython-dev/brython/wiki/Brython-videos-and-talks">presentations</a> made in various conferences.</td>
 
-<td style="padding-left:5%;">
 <canvas width="250" height="250" class="clock">
 <i>sorry, Brython can't make the demo work on your browser ; <br>check if Javascript is turned on</i>
 <br><div class="navig_zone"></div>
 </canvas>
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-<div id="content_fr" style="height:1px;visibility:hidden">
-<table style="width:80%;margin-left:10%">
-<tr>
-<td>
-
-<H2>Une implémentation de Python 3 pour la programmation web côté client</H2>
-</td>
-
-</tr>
-</table>
-
-<table style="width:80%;margin-left:10%">
-<tr>
-<td style="width:60%;font-size:16px;">
-Des horloges comme celle-ci, vous en avez sans doute déjà vu dans des démos d'HTML5
-<p>
-Maintenant, regardez le code source de cette page...
-<p>Vous ne verrez pas une ligne de Javascript, mais à la place, du code Python dans un script de type "text/python".
-<p>Brython a pour objectif de remplacer Javascript comme langage de script des pages Web. Il s'agit donc d'une implémentation de Python 3 (que vous pouvez tester sur la <a href="console.html" id="c_fr">console</a>), adaptée à l'environnement HTML5, c'est-à-dire dotée d'une interface avec les objets et les événements DOM.
-<p>La <a href="speed_results.html">vitesse d'exécution</a> est comparable à celle de CPython pour la plupart des opérations.
-<p>Une <a href="gallery/gallery_fr.html">galerie</a> présente quelques démos de ce qu'il est possible de faire, depuis la création d'éléments simples jusqu'au glisser-déposer ou la navigation 3D. Un <a href="https://github.com/brython-dev/brython/wiki/Brython%20in%20the%20wild">wiki</a> répertorie quelques applications utilisant Brython.
-<!-- <p><a href="http://pyschool.net">pyschool.net</a> fournit un environnement web pour l'enseignement de Python. -->
-<p>Vous pouvez également consulter <a href="https://github.com/brython-dev/brython/wiki/Brython-videos-and-talks">plusieurs présentations de Brython</a> dans diverses conférences.
-</td>
-
-<td style="padding-left:5%;">
-<canvas width="250" height="250" class="clock">
-<i>désolé, Brython n'arrive pas à faire fonctionner la démo sur votre navigateur ;<br>vérifiez que Javascript est activé</i>
-<br><div class="navig_zone"></div>
-</canvas>
-</td>
-</tr>
-</table>
-
-</div>
-
-<div id="content_es" style="height:1px;visibility:hidden">
-<table style="width:80%;margin-left:10%;">
-<tr>
-<td>
-
-<H2>Una implementación de Python para la programación web del lado del cliente</H2>
-</td>
-
-</tr>
-</table>
-
-<table style="width:80%;margin-left:10%">
-<tr>
-<td style="width:60%;font-size:16px;">
-Muy cierto que has visto relojes de este tipo en demos de HTML5.
-<p>
-Pero, mira el código fuente de esta página...
-<p>No hay lineas de Javascript, es puro código Python dentro de un script de tipo "text/python".
-<p>Brython es diseñado para remplazar a JavaScript como lenguaje de scripting para páginas web. Por lo tanto, es una implementación de Python 3 (que se puede probar en la <a href="console.html" id="c_es">consola</a>), adaptada a un entorno HTML5, es decir, con una interfaz con los objetos y eventos DOM.
-<p>Una <a href="gallery/gallery_es.html">galería</a> presenta algunas maquetas de lo que se puede hacer, de la creación de elementos, a ejemplos de arrastrar y soltar a navegación 3D.
-<p>Una <a href="https://github.com/brython-dev/brython/wiki/Brython%20in%20the%20wild">wiki</a> que muestra un listado de algunas aplicaciones que funcionan usando Brython.
-<p>Además, le puedes echar un vistazo a<a href="https://github.com/brython-dev/brython/wiki/Brython-videos-and-talks"> estas presentaciones</a> mostradas en varias conferencias.
-</td>
-<td style="padding-left:5%;">
-<canvas width="250" height="250" class="clock">
-<i>El navegador no soporta HTML5 canvas<br>o el Javascript es apagado</i>
-<br><div class="navig_zone"></div>
-</canvas>
-</td>
-</table>
-
-</div>
-
-</body>
-</html>
