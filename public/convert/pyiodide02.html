@@ -10,11 +10,11 @@
     <script type="text/javascript">
       async function main(){
         let pyodide = await loadPyodide();
-       document.getElementById('myDiv01').innerHTML =  pyodide.runPython(`
+        console.log(pyodide.runPython(`
             import sys
             sys.version
-        `)
-        pyodide.runPython("print(1 + 2)");
+        `));
+       document.getElementById('myDiv01').innerHTML =   pyodide.runPython("print(1 + 2)");
       }
       main();
     </script>
