@@ -8,6 +8,7 @@ My first tests using piodide were not very good.
 #  brython
 
 1.   https://hpssjellis.github.io/tinyMLjs/public/convert/brython01.html
+2.   2. https://brython.info/demo.html?lang=en#
 
 
 
