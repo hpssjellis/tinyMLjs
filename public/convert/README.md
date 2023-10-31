@@ -5,6 +5,13 @@ Testing an online method to convert tensorflowJS files to microcontrollers
 My first tests using piodide were not very good.
 
 
+#  brython
+
+1.   https://hpssjellis.github.io/tinyMLjs/public/convert/brython01.html
+
+
+
+
 ## emsrcipten  
 
 
