@@ -51,10 +51,10 @@ async function evaluatePython() {
 
         // Run the Python code
         let myReturn = pyodide.runPython(myPython);
-        myOutput.innerHTML += "<br><br>Your answer is: " + myReturn + "<br>";
+        myOutput.innerHTML += "<br>Your answer is: " + myReturn + "<br>";
         // Get the captured output
         const myA = pyodide.globals.get("a");  
-        myOutput.innerHTML += "<br>The variable a is : " + myA + "<br>";
+        myOutput.innerHTML += "<br>The javascript variable pyodide.globals.get(a) is : " + myA + "<br>";
     } catch (err) {
         addToOutput(err);
     }
