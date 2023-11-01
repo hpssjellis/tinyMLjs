@@ -1,0 +1,64 @@
+
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+<h1 align=center>t1a12-year2-pyodide-fred.html</h1>
+ <h3align=center> <a href="https://github.com/pyodide/pyodide">Pyodide</a>: Python with Javascript in the browser</h3>
+
+You can edit and change this code but when it works save it to the <i> myPython</i> variable in the code<br>
+
+<textarea id="myArea01" rows=10 cols=70 NOWRAP onChange="{
+myPython = this.value
+}"></textarea><br>
+<input type=button value="Run" onclick = "evaluatePython()"> 
+<input type=button value="Clear" onclick = "document.getElementById("myDiv01").innerHTML = ''> <br>
+
+<div  id="myDiv01" >...</div>
+
+
+
+
+<script>
+let myPython = `
+a = sum([1, 2, 3, 4, 5])
+print(a)
+b = 5
+c = a + b
+c
+
+`    // End of Python code
+  
+let pyodide
+document.getElementById("myArea01").value  = myPython
+const myOutput = document.getElementById("myDiv01");
+myOutput.innerHTML = "Initializing...<br>";
+  
+// init Pyodide
+async function main() {
+  let pyodide = await loadPyodide();
+  myOutput.innerHTML += "Ready!<br>"
+  return pyodide;
+}
+let pyodideReadyPromise = main();
+
+async function evaluatePython() {
+    pyodide = await pyodideReadyPromise;
+  
+    myOutput.innerHTML += "Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
+    try {
+        // Clear the captured output before running the code
+        captured_output = "";
+
+        // Run the Python code
+        let myReturn = pyodide.runPython(myPython);
+        myOutput.innerHTML += "<br>Your answer is: " + myReturn + "<br>";
+        // Get the captured output
+        const myA = pyodide.globals.get("a");  
+        myOutput.innerHTML += "<br>The javascript variable pyodide.globals.get(a) is : " + myA + "<br>";
+    } catch (err) {
+        addToOutput(err);
+    }
+}
+
+
+</script>
