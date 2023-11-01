@@ -12,16 +12,15 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 
 
 <input type=button value=check onclick="{
-let myMap = pyodide.globals.toJs
-myOutput.innerHTML += JSON.stringify(myMap, null, '<br>')
+  let myMap = pyodide.globals.toJs
+  myOutput.innerHTML += JSON.stringify(myMap, null, '<br>')
 
- 
 }">
 
 
 
 <script>
-let pyodide
+//let pyodide
 const myOutput = document.getElementById("outputDiv");
 const myPython = `
 a = sum([1, 2, 3, 4, 5])
@@ -31,15 +30,15 @@ print(a)
 `   // end all python code
 
 function addToOutput(myResult) {
-myOutput.innerHTML += "<br><br>Your answer is: " + myResult + "<br>";
+  myOutput.innerHTML += "<br><br>Your answer is: " + myResult + "<br>";
 }
 
 myOutput.innerHTML = "Initializing...<br>";
 // init Pyodide
 async function main() {
-let pyodide = await loadPyodide();
-myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
-return pyodide;
+  let pyodide = await loadPyodide();
+  myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
+  return pyodide;
 }
 let pyodideReadyPromise = main();
 
