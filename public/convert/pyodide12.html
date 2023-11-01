@@ -7,6 +7,11 @@
 
 Just enter some python code in the variable <b><i>myPython</i></b>, and resave this file to your own Github. Print() goes to the console.<br>
 
+
+<textarea id="myArea01" rows=10 cols=70 NOWRAP onChange="{
+
+  alert()
+}"></textarea><br>
 <input type=button value = run onclick = "evaluatePython()"> <br>
 
 <div  id="outputDiv" >...</div>
@@ -16,7 +21,7 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 
 <script>
 let pyodide
-const myOutput = document.getElementById("outputDiv");
+const myOutput = document.getElementById("myArea01");
 const myPython = `
 a = sum([1, 2, 3, 4, 5])
 print(a)
@@ -24,7 +29,9 @@ b = 5
 c = a + b
 c
 
-`
+`    // End of Python code
+
+document.getElementById("myArea01").value  = myPython
 
 function addToOutput(myResult) {
   myOutput.innerHTML += "<br><br>Your answer is: " + myResult + "<br>";
