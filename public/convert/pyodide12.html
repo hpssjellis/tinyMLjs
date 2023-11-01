@@ -1,0 +1,60 @@
+
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+<h1 align=center>t1a14-year2-pyodide-fred.html</h1>
+<!-- <h1 align=center> <a href="https://github.com/pyodide/pyodide">Pyodide</a>: Python with Javascript in the browser</h1> -->
+
+Just enter some python code in the variable <b><i>myPython</i></b>, and resave this file to your own Github. Print() goes to the console.<br>
+
+<input type=button value = run onclick = "evaluatePython()"> <br>
+
+<div  id="outputDiv" >...</div>
+
+
+
+
+<script>
+let pyodide
+const myOutput = document.getElementById("outputDiv");
+const myPython = `
+a = sum([1, 2, 3, 4, 5])
+print(a)
+b = 5
+c = a + b
+c
+
+`
+
+function addToOutput(myResult) {
+  myOutput.innerHTML += "<br><br>Your answer is: " + myResult + "<br>";
+}
+
+myOutput.innerHTML = "Initializing...<br>";
+// init Pyodide
+async function main() {
+  let pyodide = await loadPyodide();
+  myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
+  return pyodide;
+}
+let pyodideReadyPromise = main();
+
+async function evaluatePython() {
+    pyodide = await pyodideReadyPromise;
+    try {
+        // Clear the captured output before running the code
+        captured_output = "";
+
+        // Run the Python code
+        let myReturn = pyodide.runPython(myPython);
+        myOutput.innerHTML += "<br><br>Your answer is: " + myReturn + "<br>";
+        // Get the captured output
+        const myA = pyodide.globals.get("a");  
+        myOutput.innerHTML += "<br>The variable a is : " + myA + "<br>";
+    } catch (err) {
+        addToOutput(err);
+    }
+}
+
+
+</script>
