@@ -41,13 +41,15 @@ myOutput.innerHTML = "Initializing...<br>";
 // init Pyodide
 async function main() {
   let pyodide = await loadPyodide();
-  myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
+  myOutput.innerHTML += "Ready!
   return pyodide;
 }
 let pyodideReadyPromise = main();
 
 async function evaluatePython() {
     pyodide = await pyodideReadyPromise;
+  
+    myOutput.innerHTML = "Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
     try {
         // Clear the captured output before running the code
         captured_output = "";
