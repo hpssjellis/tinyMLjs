@@ -1,5 +1,6 @@
 
 
+
 <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
 <h1 align=center>t1a12-year2-pyodide-fred.html</h1>
@@ -11,7 +12,7 @@ You can edit and change this code but when it works save it to the <i> myPython<
 myPython = this.value
 }"></textarea><br>
 <input type=button value="Run" onclick = "{evaluatePython()}"> 
-<input type=button value="Clear" onclick = "{document.getElementById("myDiv01").innerHTML = ''}"> <br>
+<input type=button value="Clear" onclick = "{document.getElementById('myDiv01').innerHTML = ''}"> <br>
 
 <div  id="myDiv01" >...</div>
 
@@ -28,7 +29,7 @@ c
 
 `    // End of Python code
   
-//let pyodide
+let pyodide
 document.getElementById("myArea01").value  = myPython
 const myOutput = document.getElementById("myDiv01");
 myOutput.innerHTML = "Initializing...<br>";
