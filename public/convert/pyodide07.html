@@ -16,14 +16,14 @@ sum([1, 2, 3, 4, 5])
 `   // end all python code
 
 function addToOutput(myResult) {
-myOutput.innerHTML += "<br> Your code is:<br> >>>" + myPython + "<br><br>Your answer is: " + myResult + "<br>";
+myOutput.innerHTML += "<br><br>Your answer is: " + myResult + "<br>";
 }
 
 myOutput.innerHTML = "Initializing...<br>";
 // init Pyodide
 async function main() {
 let pyodide = await loadPyodide();
-myOutput.innerHTML += "Ready!<br>";
+myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython + "<br>";
 return pyodide;
 }
 let pyodideReadyPromise = main();
