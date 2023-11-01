@@ -3,24 +3,27 @@
 
 <h1 align=center> <a href="https://github.com/pyodide/pyodide">Pyodide</a>: Python with Javascript in the browser</h1>
 
-Just enter some python code in the variable <b><i>myPython</i></b>, and resave this file to your own Github. <br>
+Just enter some python code in the variable <b><i>myPython</i></b>, and resave this file to your own Github. Print() goes to the console.<br>
 
 <input type=button value = run onclick = "evaluatePython()"> <br>
 
 <div  id="outputDiv" >...</div>
 
+
+<!--
 <input type=button value=check onclick="{
 
   myOutput.innerHTML += myPython.replace(/\n/g, '<br>');
  // alert(myPython.split('/n'))
 }">
 
+-->
+
 <script>
 const myOutput = document.getElementById("outputDiv");
 const myPython = `
-a = sum([1, 2, 3, 4, 5])
-b = a**2
-c = a + b
+sum([1, 2, 3, 4, 5])
+print(a)
 
 
 `   // end all python code
@@ -33,7 +36,7 @@ myOutput.innerHTML = "Initializing...<br>";
 // init Pyodide
 async function main() {
 let pyodide = await loadPyodide();
-myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython + "<br>";
+myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
 return pyodide;
 }
 let pyodideReadyPromise = main();
