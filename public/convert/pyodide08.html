@@ -20,6 +20,7 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 
 
 <script>
+let pyodide
 const myOutput = document.getElementById("outputDiv");
 const myPython = `
 a = sum([1, 2, 3, 4, 5])
@@ -42,7 +43,7 @@ return pyodide;
 let pyodideReadyPromise = main();
 
 async function evaluatePython() {
-let pyodide = await pyodideReadyPromise;
+pyodide = await pyodideReadyPromise;
 try {
   let myReturn = pyodide.runPython(myPython);
   addToOutput(myReturn);
