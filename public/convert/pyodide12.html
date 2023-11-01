@@ -2,7 +2,7 @@
 
 <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
-<h1 align=center>t1a14-year2-pyodide-fred.html</h1>
+<h1 align=center>t1a12-year2-pyodide-fred.html</h1>
 <!-- <h1 align=center> <a href="https://github.com/pyodide/pyodide">Pyodide</a>: Python with Javascript in the browser</h1> -->
 
 Just enter some python code in the variable <b><i>myPython</i></b>, and resave this file to your own Github. Print() goes to the console.<br>
@@ -41,7 +41,7 @@ myOutput.innerHTML = "Initializing...<br>";
 // init Pyodide
 async function main() {
   let pyodide = await loadPyodide();
-  myOutput.innerHTML += "Ready!
+  myOutput.innerHTML += "Ready!<br>"
   return pyodide;
 }
 let pyodideReadyPromise = main();
@@ -49,7 +49,7 @@ let pyodideReadyPromise = main();
 async function evaluatePython() {
     pyodide = await pyodideReadyPromise;
   
-    myOutput.innerHTML = "Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
+    myOutput.innerHTML += "Your code to run is:<br> >>>" + myPython.replace(/\n/g, '<br>') + "<br>";
     try {
         // Clear the captured output before running the code
         captured_output = "";
