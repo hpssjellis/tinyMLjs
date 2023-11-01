@@ -1,0 +1,42 @@
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+<h1 align=center> <a href="https://github.com/pyodide/pyodide">Pyodide</a>: Python with Javascript in the browser</h1>
+
+Just enter some python code in the variable <b><i>myPython</i></b>, and resave this file to your own Github. <br>
+
+<input type=button value = run onclick = "evaluatePython()"> <br>
+
+<div  id="output" >...</div>
+
+<script>
+const myOutput = document.getElementById("output");
+const myPython = `
+sum([1, 2, 3, 4, 5])
+
+
+`   // end all python code
+
+function addToOutput(myResult) {
+myOutput.innerHTML += "<br><br>Your answer is: " + myResult + "<br>";
+}
+
+myOutput.innerHTML = "Initializing...<br>";
+// init Pyodide
+async function main() {
+let pyodide = await loadPyodide();
+myOutput.innerHTML += "Ready!<br> <br> Your code to run is:<br> >>>" + myPython + "<br>";
+return pyodide;
+}
+let pyodideReadyPromise = main();
+
+async function evaluatePython() {
+let pyodide = await pyodideReadyPromise;
+try {
+  let myReturn = pyodide.runPython(myPython);
+  addToOutput(myReturn);
+} catch (err) {
+  addToOutput(err);
+}
+}
+</script>
