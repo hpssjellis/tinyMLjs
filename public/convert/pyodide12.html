@@ -13,14 +13,12 @@ You can edit and change this code but when it works save it to the <i> myPython<
 }"></textarea><br>
 <input type=button value = run onclick = "evaluatePython()"> <br>
 
-<div  id="outputDiv" >...</div>
+<div  id="myDiv01" >...</div>
 
 
 
 
 <script>
-let pyodide
-const myOutput = document.getElementById("myArea01");
 const myPython = `
 a = sum([1, 2, 3, 4, 5])
 print(a)
@@ -29,10 +27,12 @@ c = a + b
 c
 
 `    // End of Python code
-
+  
+let pyodide
 document.getElementById("myArea01").value  = myPython
-
+const myOutput = document.getElementById("myDiv01");
 myOutput.innerHTML = "Initializing...<br>";
+  
 // init Pyodide
 async function main() {
   let pyodide = await loadPyodide();
