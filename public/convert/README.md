@@ -21,6 +21,11 @@ https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide05.html
 https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide06.html    
 https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide07.html   
 https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide08.html   
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide09.html   
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide11.html   
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide12.html   
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide13.html   
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide14.html   
 
 
 #  brython
