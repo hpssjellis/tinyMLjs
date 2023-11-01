@@ -13,8 +13,8 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 
 <input type=button value=check onclick="{
 
-let myMap = pyodide.globals.toJs
-console.log(myMap)
+myOutput.innerHTML += JSON.stringfy(pyodide.globals.toJs, null, '<br>')
+
  
 }">
 
