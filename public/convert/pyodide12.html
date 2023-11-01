@@ -8,8 +8,7 @@
 You can edit and change this code but when it works save it to the <i> myPython</i> variable in the code<br>
 
 <textarea id="myArea01" rows=10 cols=70 NOWRAP onChange="{
-
-  alert()
+myPython = this.value
 }"></textarea><br>
 <input type=button value = run onclick = "evaluatePython()"> <br>
 
@@ -19,7 +18,7 @@ You can edit and change this code but when it works save it to the <i> myPython<
 
 
 <script>
-const myPython = `
+let myPython = `
 a = sum([1, 2, 3, 4, 5])
 print(a)
 b = 5
