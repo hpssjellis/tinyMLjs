@@ -10,13 +10,8 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 <div  id="outputDiv" >...</div>
 
 <input type=button value=check onclick="{
-  transformItems(items) {
-      return items.map((item) => ({
-        ...item,
-        description: item.description.replace(/(?:\r\n|\r|\n)/g, '<br>'),
-      }));
-}
-  myOutput.innerHTML += transformItems(myPython)
+
+  myOutput.innerHTML += myPython.replace(/\n/g, '<br>');
  // alert(myPython.split('/n'))
 }">
 
