@@ -13,7 +13,8 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 
 <input type=button value=check onclick="{
 
- alert(pyodide.globals.toJs())
+let myMap = pyodide.globals.toJs
+console.log(myMap)
  
 }">
 
