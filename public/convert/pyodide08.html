@@ -46,7 +46,7 @@ try {
   let myReturn = pyodide.runPython(myPython);
   addToOutput(myReturn);
 } catch (err) {
-  addToOutput(err);
+  addToOutput(err.replace(/\n/g, '<br>'));
 }
 }
 </script>
