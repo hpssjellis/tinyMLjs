@@ -12,8 +12,8 @@ Just enter some python code in the variable <b><i>myPython</i></b>, and resave t
 
 
 <input type=button value=check onclick="{
-
-myOutput.innerHTML += JSON.stringfy(pyodide.globals.toJs, null, '<br>')
+let myMap = pyodide.globals.toJs
+myOutput.innerHTML += JSON.stringify(myMap, null, '<br>')
 
  
 }">
