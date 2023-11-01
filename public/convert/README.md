@@ -5,11 +5,20 @@ Testing an online method to convert tensorflowJS files to microcontrollers
 My first tests using piodide were not very good.
 
 
-# Pyiodide
+# Pyodide
 
 https://pyodide.org/en/stable/usage/quickstart.html
 
 https://github.com/pyodide/pyodide
+
+pyodide demos
+
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide01.html    
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide02.html    
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide03.html    
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide04.html    
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide05.html    
+https://hpssjellis.github.io/tinyMLjs/public/convert/pyodide06.html    
 
 
 #  brython
