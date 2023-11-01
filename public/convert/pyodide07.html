@@ -1,43 +1,41 @@
 
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
-    You can execute any Python code. Just enter some python code in the variable myPython  resave this file to your own Github. <br>
+You can execute any Python code. Just enter some python code in the variable myPython  resave this file to your own Github. <br>
+
+<input type=button value = run onclick = "evaluatePython()"> <br>
+
+<div  id="output" >...</div>
+
+<script>
+const myOutput = document.getElementById("output");
+const myPython = `
+sum([1, 2, 3, 4, 5])
 
 
-    <input type=button value = run onclick = "evaluatePython()"> <br>
+`   // end all python code
 
-    <div  id="output" >...</div>
+function addToOutput(myResult) {
+myOutput.innerHTML += "<br> >>>" + myPython + "<br>" + myResult + "<br>";
+}
 
-    <script>
-      const myOutput = document.getElementById("output");
-      const myPython = `
-      sum([1, 2, 3, 4, 5])
-      
-      
-      `   // end all python code
+myOutput.innerHTML = "Initializing...<br>";
+// init Pyodide
+async function main() {
+let pyodide = await loadPyodide();
+myOutput.innerHTML += "Ready!<br>";
+return pyodide;
+}
+let pyodideReadyPromise = main();
 
-      function addToOutput(myResult) {
-        myOutput.innerHTML += "<br> >>>" + myPython + "<br>" + myResult + "<br>";
-      }
+async function evaluatePython() {
+let pyodide = await pyodideReadyPromise;
+try {
+  let myReturn = pyodide.runPython(myPython);
+  addToOutput(myReturn);
+} catch (err) {
+  addToOutput(err);
+}
+}
+</script>
 
-      myOutput.innerHTML = "Initializing...<br>";
-      // init Pyodide
-      async function main() {
-        let pyodide = await loadPyodide();
-        output.value += "Ready!\n";
-        return pyodide;
-      }
-      let pyodideReadyPromise = main();
-
-      async function evaluatePython() {
-        let pyodide = await pyodideReadyPromise;
-        try {
-          let myReturn = pyodide.runPython(myPython);
-          addToOutput(myReturn);
-        } catch (err) {
-          addToOutput(err);
-        }
-      }
-    </script>
-  </body>
-</html>
