@@ -8,8 +8,7 @@
 
 You can edit and change this code in the textarea but when it works, save it to the <i> myPython</i> variable in the code<br><br>
 Open Console Ctrl-Shift-i to see regular Print(a) statements.<br>
-Thanks: Mohid, Luke, Trey, Jonathon, Giogio and Leander for help with the code.<br>
-
+Thanks: Tommy, Mohid, Luke, Trey, Jonathon, Giogio and Leander for helping to convert Python to the web.<br><br>
 myB: <input id="myNum01" type=number value="5" onChange="{myB = parseInt(this.value)}"><br>
 <textarea id="myArea01" rows=10 cols=70 NOWRAP onChange="{myPython = this.value}"></textarea><br>
 
@@ -58,7 +57,7 @@ async function evaluatePython() {
         myOutput.innerHTML += "Your answer is: " + myReturn + "<br>";
         // Get the captured output
         const myA = pyodide.globals.get("a");  
-        myOutput.innerHTML += "The Python variable a available to Javascript using: pyodide.globals.get(a) is : " + myA + "<br>";       
+        myOutput.innerHTML += "The Python variable 'a' available to Javascript by using: pyodide.globals.get(a) is : " + myA + "<br>";       
         myOutput.innerHTML += "The javascript variable used in Python as myB is : " + myB + "<br>";
     } catch (err) {
         myOutput.innerHTML += err;
