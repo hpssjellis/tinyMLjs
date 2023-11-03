@@ -5,6 +5,21 @@ Testing an online method to convert tensorflowJS files to microcontrollers
 My first tests using piodide were not very good.
 
 
+Nov 2023 Best approach is to either use iPython notebooks, which would do the trick or to get tensorflow and tfjs converters converted to WASM.
+
+Presently the best options seem to convert the poython into C/C== code and use emascripten to convert it to  wesassembly code.
+
+reference python t C   https://wiki.python.org/moin/PythonImplementations#Compilers
+
+
+
+
+
+
+
+
+Below is things that I have tried.
+
 # Pyodide
 
 https://pyodide.org/en/stable/usage/quickstart.html
