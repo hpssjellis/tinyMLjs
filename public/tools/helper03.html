@@ -1,0 +1,98 @@
+
+
+<script>
+    
+ // mySpecialVar = '\x3Cscript src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.3"> \x3C/script>\n\n' 
+
+ mySpecialVar = '' 
+    
+</script>    
+
+
+
+    
+    
+<h2 align=center>Title:</h2>
+
+
+
+
+
+
+
+
+<div id="myDiv123Code"> 
+
+<input type=text id="myTextIn01" value="Stuff written here" size=30>  
+    
+<input id="myButton123" type=button value="Input / Output"  onclick="{
+      document.getElementById('myDiv123').innerHTML = document.getElementById('myTextIn01').value // note: use value not innerHTML                                                    
+}"><br><br>
+
+</div>
+<div id='myDiv123'>...</div><br>
+
+<input id="myUpdate123" type=button value="Update and Run" style="visibility:hidden;" onclick="{
+
+   // first remove first and last line since they are injected
+  myFred = document.getElementById('myTextarea123').value.split('\n')
+  myFred.pop()
+  myFred.push('')
+  myFred.shift()
+  myFred.shift()
+  myJoe = myFred.join('\n')
+
+  document.getElementById('myDiv123Code').innerHTML =    myJoe 
+  document.getElementById('myButton123').click()
+                                             
+}"><br>
+
+<textarea id="myTextarea123"  wrap="off"  style= "font-size:15px; color:white; background-color:black; width:90%;"   rows=2 onclick="{
+  if (myOnce123){
+     myTextGrow('myTextarea123', 'myDiv123Code')
+     document.getElementById('myUpdate123').style.visibility = 'visible'
+     myOnce123 = false
+  }
+}">
+Click here to see the working HTML code.
+</textarea><br>
+
+
+
+
+
+
+
+
+<!--  Following is a helper functions  to grow the textareas  -->
+
+<script>
+
+myOnce123 = true    // so textareas are only clicked once
+
+  
+ 
+function myTextGrow(myT, myB){
+   var myCursorStart = document.getElementById(myT).selectionStart
+   var myCursorEnd = document.getElementById(myT).selectionEnd
+
+   myDivName = myB.replace('Code','')
+   document.getElementById(myT).value = mySpecialVar  + document.getElementById(myB).innerHTML 
+   document.getElementById(myT).value += '<div id=\''+myDivName+'\'>...</div><br>'     
+   setTimeout(function() {
+      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
+          document.getElementById(myT).rows += 3; 
+      } 
+   }, 100)
+
+  document.getElementById(myT).selectionStart = myCursorStart
+  document.getElementById(myT).selectionEnd = myCursorEnd
+
+}  
+
+
+</script>  
+ 
+
+
+
