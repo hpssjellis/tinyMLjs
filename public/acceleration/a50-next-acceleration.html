@@ -411,7 +411,42 @@ console.log(model)
 </div>   <!-- End fancy div that allows instant updates  -->
 
 
+<script>   // This is the funciton needed for the fancy stuff above
 
+myOnce123 = true    // so textareas are only clicked once
+
+  
+ 
+function myTextGrow(myT, myB){
+   var myCursorStart = document.getElementById(myT).selectionStart
+   var myCursorEnd = document.getElementById(myT).selectionEnd
+
+  // myDivName = myB.replace('Code','')
+   //document.getElementById(myT).value = mySpecialVar  + document.getElementById(myB).innerHTML 
+  // document.getElementById(myT).value += '<div id=\''+myDivName+'\'>...</div><br>'     
+
+   
+
+
+   document.getElementById(myT).value = document.getElementById(myB).innerHTML 
+
+   
+   setTimeout(function() {
+      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
+          document.getElementById(myT).rows += 3; 
+      } 
+   }, 100)
+
+  document.getElementById(myT).selectionStart = myCursorStart
+  document.getElementById(myT).selectionEnd = myCursorEnd
+
+}  
+
+
+</script>  
+
+
+   
 
 
    
@@ -1492,32 +1527,7 @@ if (myCellPhoneOnce){
 
 
 
-<script>
 
-myOnce123 = true    // so textareas are only clicked once
-
-  
- 
-function myTextGrow(myT, myB){
-   var myCursorStart = document.getElementById(myT).selectionStart
-   var myCursorEnd = document.getElementById(myT).selectionEnd
-
-   myDivName = myB.replace('Code','')
-   document.getElementById(myT).value = mySpecialVar  + document.getElementById(myB).innerHTML 
-   document.getElementById(myT).value += '<div id=\''+myDivName+'\'>...</div><br>'     
-   setTimeout(function() {
-      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
-          document.getElementById(myT).rows += 3; 
-      } 
-   }, 100)
-
-  document.getElementById(myT).selectionStart = myCursorStart
-  document.getElementById(myT).selectionEnd = myCursorEnd
-
-}  
-
-
-</script>  
  
 
 
