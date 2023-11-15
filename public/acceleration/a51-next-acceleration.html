@@ -56,7 +56,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.50.0-206 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.51.0-207 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -458,9 +458,9 @@ function myTextGrow(myT, myB){
    console.log(model.summary())
 
 
-   document.getElementById('mySpanClassify').innerHTML += '<br>'
+   document.getElementById('myShowModelDiv').innerHTML += '<br>'
    model.layers.forEach((layer, index) => {
-     document.getElementById('mySpanClassify').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`
+     document.getElementById('myShowModelDiv').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`
      console.log(`Layer ${index + 1}:`);
      console.log(`- Name: ${layer.name}`);
      console.log(`- Type: ${layer.getClassName()}`);
@@ -476,6 +476,8 @@ function myTextGrow(myT, myB){
     });
 }"> <br> 
 
+
+<div id="myShowModelDiv" >...</div>  <br>
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
 Convert the exported model to Arduino ready c-header model.h file as well as a model.tFlite file using 1 of the following methods:<br>
