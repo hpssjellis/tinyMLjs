@@ -897,7 +897,10 @@ console.log(myModelTotalCount)
 
 
 if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
-   model.dispose();  // get rid of the old model
+   if (model){   
+      model.dispose();  // get rid of the old model
+   }
+
    model = tf.sequential();   
    // Add Flatten layer before Dense layer
    model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
