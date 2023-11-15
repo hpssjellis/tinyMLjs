@@ -321,15 +321,19 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 
    // first remove first and last line since they are injected
   myFred = document.getElementById('myTextarea123').value.split('\n')
+  console.log(myFred)
   myFred.pop()
   myFred.push('')
   myFred.shift()
   myFred.shift()
   myJoe = myFred.join('\n')
-
+  console.log(myJoe)
   document.getElementById('myDiv123Code').innerHTML =    myJoe 
 //  document.getElementById('myButton123').click()
-  trainModel()
+ // trainModel()
+
+ document.getElementById('myTrainButton').click()
+   
                                              
 }"><br>
 
@@ -350,11 +354,67 @@ Click here to see the working HTML code.
 
 
 
+<div id="myDiv123Code">    <!-- Start fancy div that allows instant updates  -->
+
+
+   
+<input type="button" id="myTrainButton" value="Train Model"  style="background-color:lime; width:200px;" onclick="{
+
+async function trainModel() {
+// Define the model architecture
+myModelSamples = parseInt(document.getElementById('myNumSamples').value)
+myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
+myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
+ 
+console.log('myModelSamples')   
+console.log(myModelSamples)   
+console.log('myModelSenses')   
+console.log(myModelSenses)   
+console.log('myModelTotalCount')   
+console.log(myModelTotalCount)   
+
+
+if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
+   if (model){   
+      model.dispose();  // get rid of the old model
+      console.log('Model deleted')
+   }
+
+   model = tf.sequential();   
+   // Add Flatten layer before Dense layer
+   model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
+   model.add(tf.layers.dense({units: 8}));
+   model.add(tf.layers.dense({ units: 20 }) );     
+   model.add(tf.layers.dense({ units: 30 }) );     
+   model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+}
+
+   
+// Compile the model
+const myRate = parseFloat(document.getElementById('myLearningRate').value)
+model.compile({
+      optimizer: tf.train.adam(myRate),
+      loss: 'categoricalCrossentropy',
+      metrics: ['accuracy']
+});
+model.summary();
+   
+// Train the model
+justFit()
+console.log(model)
+}
+
+   
+}"> 
+
+</div>   <!-- End fancy div that allows instant updates  -->
+
+
 
 
 
    
-<input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
 <input type="button" value="Just Fit - retrain"   onclick="{justFit(); console.log(model.summary());}"> 
 <input type="button" value="View Model"   onclick="{
  //  let myMod = model.replace('}', '}<br>')
@@ -892,67 +952,6 @@ async function loadDataToTensor() {
     
  
 
-</script>
-
-
-<div id="myDiv123Code"> 
-   
-<script>  
-  
-
-async function trainModel() {
-// Define the model architecture
-myModelSamples = parseInt(document.getElementById('myNumSamples').value)
-myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
-myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
- 
-console.log('myModelSamples')   
-console.log(myModelSamples)   
-console.log('myModelSenses')   
-console.log(myModelSenses)   
-console.log('myModelTotalCount')   
-console.log(myModelTotalCount)   
-
-
-if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
-   if (model){   
-      model.dispose();  // get rid of the old model
-      console.log('Model deleted')
-   }
-
-   model = tf.sequential();   
-   // Add Flatten layer before Dense layer
-   model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
-   model.add(tf.layers.dense({units: 8}));
-   model.add(tf.layers.dense({ units: 20 }) );     
-   model.add(tf.layers.dense({ units: 30 }) );     
-   model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-
-}
-
-   
-// Compile the model
-const myRate = parseFloat(document.getElementById('myLearningRate').value)
-model.compile({
-      optimizer: tf.train.adam(myRate),
-      loss: 'categoricalCrossentropy',
-      metrics: ['accuracy']
-});
-model.summary();
-   
-// Train the model
-justFit()
-console.log(model)
-}
-
-
-
-</script>
-
-</div>
-
-   
-<script>
    
 
 async function justFit() {
