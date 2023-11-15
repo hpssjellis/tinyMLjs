@@ -899,6 +899,7 @@ console.log(myModelTotalCount)
 if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
    if (model){   
       model.dispose();  // get rid of the old model
+      console.log('Model deleted')
    }
 
    model = tf.sequential();   
