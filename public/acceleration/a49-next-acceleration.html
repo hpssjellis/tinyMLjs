@@ -364,7 +364,8 @@ Click here to see the working HTML code.
 
 
    model.layers.forEach((layer, index) => {
-     document.getElementById('mySpanClassify').innerHTML +=`Layer ${index + 1}:${layer.name}, ${layer.getClassName()}, out:${layer.outputShape}, params:${layer.countParams()}, train:${layer.trainable} <br>`
+     document.getElementById('mySpanClassify').innerHTML += '<br>'
+     document.getElementById('mySpanClassify').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`
      console.log(`Layer ${index + 1}:`);
      console.log(`- Name: ${layer.name}`);
      console.log(`- Type: ${layer.getClassName()}`);
