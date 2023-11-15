@@ -56,7 +56,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.49.3-204 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.49.4-205 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -361,6 +361,22 @@ Click here to see the working HTML code.
 //   let myMod = model.replace('}', '}<br>')
   // document.getElementById('mySpanClassify').innerHTML = JSON.stringify(myMod);
    console.log(model.summary())
+
+
+       model.layers.forEach((layer, index) => {
+        console.log(`Layer ${index + 1}:`);
+        console.log(`- Name: ${layer.name}`);
+        console.log(`- Type: ${layer.getClassName()}`);
+        console.log(`- Output Shape: ${layer.outputShape}`);
+        console.log(`- Number of Parameters: ${layer.countParams()}`);
+        console.log(`- Trainable: ${layer.trainable}`);
+        if (layer.getWeights().length > 0) {
+            console.log(`- Weights: ${layer.getWeights().map(w => w.shape).join(', ')}`);
+        } else {
+            console.log('- No Weights');
+        }
+        console.log('-----------------------');
+    });
 }"> <br> 
 
 
