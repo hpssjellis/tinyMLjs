@@ -56,7 +56,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.49.2-203 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.49.3-204 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -897,7 +897,7 @@ console.log(myModelTotalCount)
 
 
 if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
-
+   model.dispose();  // get rid of the old model
    model = tf.sequential();   
    // Add Flatten layer before Dense layer
    model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
