@@ -306,13 +306,12 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
 <span id="mySpanClassify">...</span><br>
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
-Convert the exported model to Arduino ready c-header model.h file as well as a tFlite file using:
+Convert the exported model to Arduino ready c-header model.h file as well as a model.tFlite file using 1 of the following methods:<br>
 <table border=1>
-<tr><td>Best to install the modules needed to client side do the conversions youruself. This github shows what you need to do. The installation might be different on your computer.<a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>2</td></tr>
-<tr><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook loads the necessary code then you click on an upload button to load your tensorfljs exported model.json and model.weights.bin files and it zips and downloads the tflit and c-header file.</td></tr>
-<tr><td>Use a Gitpod: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a></td><td>A gitpod browser docker program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view</td></tr>
-</table>
- this  Github repository called: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
+<tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client side do the conversions youruself. This github shows what you need to do. The installation might be different on your computer.</td></tr>
+<tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook loads the necessary code then you click on an upload button to load your tensorfljs exported model.json and model.weights.bin files and it zips and downloads the tflit and c-header file.</td></tr>
+<tr><td>3:</td><td>Use a Gitpod: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a></td><td>A gitpod browser docker program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view</td></tr>
+</table> <br><br>
 Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  <br>
 
  
