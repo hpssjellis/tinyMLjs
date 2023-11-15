@@ -308,7 +308,7 @@ Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 on
 <input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
    
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
-Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> 
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> <br>
 
 
    
@@ -357,7 +357,7 @@ Click here to see the working HTML code.
 <input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
 <input type="button" value="Just Fit - retrain"   onclick="{justFit(); console.log(model.summary());}"> 
 <input type="button" value="View Model"   onclick="{
-   document.getElementById('mySpanClassify').innerHTML = JSON.stringify(model.summary(), null, '<br>');
+   document.getElementById('mySpanClassify').innerHTML = JSON.stringify(model, null, '<br>');
    console.log(model.summary())
 }"> <br> 
 
