@@ -363,19 +363,20 @@ Click here to see the working HTML code.
    console.log(model.summary())
 
 
-       model.layers.forEach((layer, index) => {
-        console.log(`Layer ${index + 1}:`);
-        console.log(`- Name: ${layer.name}`);
-        console.log(`- Type: ${layer.getClassName()}`);
-        console.log(`- Output Shape: ${layer.outputShape}`);
-        console.log(`- Number of Parameters: ${layer.countParams()}`);
-        console.log(`- Trainable: ${layer.trainable}`);
-        if (layer.getWeights().length > 0) {
-            console.log(`- Weights: ${layer.getWeights().map(w => w.shape).join(', ')}`);
-        } else {
-            console.log('- No Weights');
-        }
-        console.log('-----------------------');
+   model.layers.forEach((layer, index) => {
+     document.getElementById('mySpanClassify').innerHTML +=`Layer ${index + 1}:${layer.name}, ${layer.getClassName()}, out:${layer.outputShape}, params:${layer.countParams()}, train:${layer.trainable} <br>`
+     console.log(`Layer ${index + 1}:`);
+     console.log(`- Name: ${layer.name}`);
+     console.log(`- Type: ${layer.getClassName()}`);
+     console.log(`- Output Shape: ${layer.outputShape}`);
+     console.log(`- Number of Parameters: ${layer.countParams()}`);
+     console.log(`- Trainable: ${layer.trainable}`);
+     if (layer.getWeights().length > 0) {
+         console.log(`- Weights: ${layer.getWeights().map(w => w.shape).join(', ')}`);
+     } else {
+         console.log('- No Weights');
+     }
+     console.log('-----------------------');
     });
 }"> <br> 
 
