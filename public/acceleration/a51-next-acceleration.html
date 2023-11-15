@@ -314,28 +314,10 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
    
 
 
-<span id="mySpanClassify">...</span><br>  
+<br>  
 
 
-<input id="myUpdate123" type=button value="Update Model" style="visibility:hidden;" onclick="{
 
-   // first remove first and last line since they are injected
-  myFred = document.getElementById('myTextarea123').value.split('\n')
-  console.log(myFred)
-  myFred.pop()
-  myFred.push('')
-  myFred.shift()
-  myFred.shift()
-  myJoe = myFred.join('\n')
-  console.log(myJoe)
-  document.getElementById('myDiv123Code').innerHTML =    myJoe 
-//  document.getElementById('myButton123').click()
- // trainModel()
-
- document.getElementById('myTrainButton').click()
-   
-                                             
-}"><br>
 
 <textarea id="myTextarea123"  wrap="off"  style= "font-size:15px; color:white; background-color:black; width:90%;"   rows=2 onclick="{
   if (myOnce123){
@@ -448,7 +430,25 @@ function myTextGrow(myT, myB){
 
    
 
+<input id="myUpdate123" type=button value="Update Model" style="visibility:hidden;" onclick="{
 
+   // first remove first and last line since they are injected
+  myFred = document.getElementById('myTextarea123').value.split('\n')
+  console.log(myFred)
+  myFred.pop()
+  myFred.push('')
+  myFred.shift()
+  myFred.shift()
+  myJoe = myFred.join('\n')
+  console.log(myJoe)
+  document.getElementById('myDiv123Code').innerHTML =    myJoe 
+//  document.getElementById('myButton123').click()
+ // trainModel()
+
+ document.getElementById('myTrainButton').click()
+   
+                                             
+}">
    
 <input type="button" value="Just Fit - retrain"   onclick="{justFit(); console.log(model.summary());}"> 
 <input type="button" value="View Model"   onclick="{
@@ -458,7 +458,7 @@ function myTextGrow(myT, myB){
    console.log(model.summary())
 
 
-   document.getElementById('myShowModelDiv').innerHTML += '<br>'
+   document.getElementById('myShowModelDiv').innerHTML = '<br>'
    model.layers.forEach((layer, index) => {
      document.getElementById('myShowModelDiv').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`
      console.log(`Layer ${index + 1}:`);
@@ -476,7 +476,8 @@ function myTextGrow(myT, myB){
     });
 }"> <br> 
 
-
+<div id="mySpanClassify">...</div>
+   
 <div id="myShowModelDiv" >...</div>  <br>
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
