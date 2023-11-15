@@ -305,16 +305,7 @@ Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5>
 Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
-<input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
-   
-Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
-Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> <br>
 
-
-   
-
-
-<br>  
 
 
 
@@ -331,7 +322,15 @@ Click here to see the working HTML code.
 
 
 
+<input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
+   
+Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> <br>
 
+
+   
+ 
+<div id="mySpanClassify">...</div>
 
 
 
@@ -476,7 +475,6 @@ function myTextGrow(myT, myB){
     });
 }"> <br> 
 
-<div id="mySpanClassify">...</div>
    
 <div id="myShowModelDiv" >...</div>  <br>
 
