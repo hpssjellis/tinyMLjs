@@ -45,8 +45,9 @@
 
 </head>
 <body>
-<h1 align=center>tinyMLjs </h1>
-<h6> Version 0.46.4-196 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h1 align=center>TinyMLjs </h1>
+<h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
+<h6> Version 0.48.0-200 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -55,134 +56,21 @@ Finally the model.h file is combined with C/C++ code using an Arduino IDE ready 
 
 Presently for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
 
-<input  type=button value="Show File Uploading" style="background-color:red;" onclick="{
 
-   if (this.value != 'Show File Uploading') {
-       this.value = 'Show File Uploading'   
-       this.style.backgroundColor = 'red'
-       document.getElementById('myUploadCsvSpan').style.display = 'none' 
-       document.getElementById('mySpanModelUpload').style.display = 'none' 
-   }  else {
-      document.getElementById('myUploadCsvSpan').style.display = 'block' 
-      document.getElementById('mySpanModelUpload').style.display = 'block' 
-      this.value = 'Hide File Uploading'
-      this.style.backgroundColor = 'lime'
-   }
-}"><br>
-<span id="myUploadCsvSpan" style="display:none; ">
-   
-   Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
-   Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
-   vanilla Javascript webpage! <br><br>
-   
-       
-       
-   
-   Show: <input type=radio name="myPre" onclick="{
-      document.getElementById('myDataPreviewCSV').style.display = 'block'
-      document.getElementById('myDataPreviewSensor').style.display = 'block'
-   }" CHECKED> ------------ 
-   Hide: <input type=radio name="myPre" onclick="{
-      document.getElementById('myDataPreviewCSV').style.display = 'none'
-      document.getElementById('myDataPreviewSensor').style.display = 'none'
-   }"> ----------- Load .csv files: 
-      
-   <input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
-       if (!myDataFiles) {
-          myDataFiles = event.target.files;
-       } else {
-          myDataFiles = [...myDataFiles, ...event.target.files];
-       }
-       if (myDataFiles.length > 0) {
-         previewData();
-       }                                                      
-   }"> 
-   <br>
-   
-   Following is the list of actual labels used in the same order as uploaded (comma-separated)
-   Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
-      
-   CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> 
-   
-   <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
-   <hr>
-   
-</span><br>
-   
-Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
 
-<div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
-   
-Machine Learning models often need very specific data.<br>
 
-<input type=button value="Clean, Trim or Fill All" onclick="{  
-   document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
-   myDataCheckCSV()   /// ~line 264  Checks all the csv data for correct number of samples and senses  
-   myDataCheckSenses()   /// ~line 318  Checks all the csv data for correct number of samples and senses 
-}">
 
-Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
-Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
-Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
-   
-Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
-Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
-   
-<input type="button" value="Convert Data to Tensor"  style="color:green; width:200px;" onclick="loadDataToTensor()"><br>
-   
-Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
-Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
-<input type="button" value="Train Model"  style="color:green; width:200px;" onclick="trainModel()"> 
-<input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
-
-<span id="mySpanClassify">...</span><br>
-
-<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model">
-Convert the exported model to Arduino ready c-header model.h file using this  Github repository called: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a> <br> 
-Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  
-
- 
-<span id="mySpanExport">...</span>
-<hr>
-
-<span id="mySpanModelUpload" style="display : none; ">   
-
-   <label for="modelFile">Select model file (.json):</label>
-   <input type="file" id="modelFile" accept=".json">
-   <br>
-   <label for="weightsFile">Select weights file (.bin):</label>
-   <input type="file" id="weightsFile" accept=".bin">
-   <br>
-   <label for="labelFile">Select labels file (.txt):</label>
-   <input type="file" id="labelsFile" accept=".txt">
-   <br>
-      
-   Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
-   <input type=button value="Re-set labels" onclick="{
-      const labelsInput3 = document.getElementById('myNewLabels').value;   
-      const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
-      uniqueLabels = [...new Set(labelsArray3)];
-      console.log('uniqueLabels')
-      console.log(uniqueLabels)
-     // const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
-   }">   
-   <br>
-      
-   <input type="button" value="Upload Model" onclick="uploadModel()"><br>
-   <span id="mySpanUpload">...</span>
-  
-   <hr>
-</span> 
 
    
-<button id="connectButton"  style="color:green; width:200px; ">Connect via Serial Port</button><br>
+   
+<button id="connectButton"  style="background-color:lime; width:200px; ">Connect via Serial Port</button><br>
 <input type=text id="mySendText" value="start">
 <input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
 
 <input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
 <input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
 
-<input type=button value="Clear and send 'start' "  style="color:green; width:200px;"  onclick="{
+<input type=button value="Clear and send 'start' "  style="Background-color:lime; width:200px;"  onclick="{
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
@@ -261,15 +149,52 @@ Once you have made a model.h file then install this Arduino Library <a href="htt
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
 <br>    
 
-<input type=button value="Clean, Trim or Fill" onclick="{
+<input type=button   style="Background-color:lime;"  value="Clean, Trim or Fill" onclick="{
   cleanFillTrim()
 }">
       
-Label: <input type=text id="mySingleLabel" placeholder="1lable" value="1label" onChange="{
+Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Background-color:lime;"  value="1label" onChange="{
   document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
    
 }">  
-<input type=button value="Keep" onclick="{previewSensorData()}">   <br>
+<input type=button style="Background-color:lime;"  value="Keep" onclick="{previewSensorData()}">  
+   
+
+<input type=button   value="Auto Next" title="Does it all. After the first entry is made." onclick="{
+   // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
+    previewSensorData()  // Keep the entered data
+   
+    //setTimeout(function() { document.getElementById('myArea01').value = '';   }, 500);  // short delay to send the first line
+    //setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 1000);  // short delay to send the first line
+  
+    document.getElementById('myArea01').value = '';
+    if (mySendFirstLine) { mySendIt('firstline'); } 
+    setTimeout(function() { mySendIt('start'); }, 200);  // short delay to send the data
+    setTimeout(function() { cleanFillTrim(); }, 2000);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart  
+                                            
+}">    
+   
+<input type=button   value="Auto Next and save" title="Does it all. After the first entry is made and saved the CSV files" onclick="{
+   // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
+    previewSensorData()  // Keep the entered data
+    document.getElementById('myArea01').value = '';
+    if (mySendFirstLine) { mySendIt('firstline'); } 
+    setTimeout(function() { mySendIt('start'); }, 200);  // short delay to send the data
+    setTimeout(function() { cleanFillTrim(); }, 2000);  // short delay to send the data
+    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2400);     
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart  
+
+
+   /*
+    setTimeout(function() { document.getElementById('myArea01').value = '';   }, 500);  // short delay to send the first line
+    setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 1000);  // short delay to send the first line
+    setTimeout(function() { mySendIt('start'); }, 2000);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 4000);      // give the data a few seconds to load before drawing chart  
+    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 5000);      // give the data a few seconds to load before saving as a csv
+       */                                    
+}">     
+   <br>
     
 <input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
 CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
@@ -277,12 +202,41 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
    alert(myBaseCsvFileName)
 }"><br>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
 <textarea id="myArea01" rows=6 cols=120></textarea>
 <br>
-   
+<input type=button value="Clear and send 'start' "    onclick="{
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
+}">   
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
-<input type="button" value="Classify Data"  style="color:green; width:200px;"  onclick="{classifyData();}">
+<input type="button" value="Classify Data"  style="background-color:lime; width:200px;"  onclick="{classifyData();}">
 <input type=button value="Show All Data" onclick="{
    document.getElementById('myArea01').value =''                                        
  
@@ -303,10 +257,10 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
       const dataElement = document.getElementById('myData2Mcu' + i);
       const labelElement = document.getElementById('myLabel2Mcu' + i);
       if (dataElement) {
-         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + ', length: ' + dataElement.textContent.length + '\n\n';
       }
       if (labelElement) {
-         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+         labelString += 'Label #' + i + ':' + labelElement.textContent + ', length: ' + labelElement.textContent.length +  '\n';
       }
    }
 
@@ -318,6 +272,159 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
 
 <!-- <canvas id="myChart" width="700" height="300"></canvas> -->
 <div id="myChart" style="width:1000px; height:300px"></div>
+
+
+
+
+
+
+
+
+   
+Machine Learning models often need very specific data.<br>
+
+<input type=button value="Clean, Trim or Fill All" onclick="{  
+   document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
+   myDataCheckCSV()   /// ~line 264  Checks all the csv data for correct number of samples and senses  
+   myDataCheckSenses()   /// ~line 318  Checks all the csv data for correct number of samples and senses 
+}">
+
+Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
+Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
+Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
+   
+Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
+Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
+   
+<input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
+   
+Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
+<input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
+<input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
+
+<span id="mySpanClassify">...</span><br>
+
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
+Convert the exported model to Arduino ready c-header model.h file as well as a model.tFlite file using 1 of the following methods:<br>
+<table border=1>
+<tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client side do the conversions youruself. This github shows what you need to do. The installation might be different on your computer.</td></tr>
+<tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td></tr>
+<tr><td>3:</td><td>Use a Gitpod: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a></td><td>A gitpod browser docker like program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view</td></tr>
+</table> <br><br>
+Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  <br>
+
+ 
+<span id="mySpanExport">...</span>
+<hr>
+
+
+
+
+
+   
+<input  type=button value="Show File Uploading" style="background-color:red;" onclick="{
+
+   if (this.value != 'Show File Uploading') {
+       this.value = 'Show File Uploading'   
+       this.style.backgroundColor = 'red'
+       document.getElementById('myUploadCsvSpan').style.display = 'none' 
+       document.getElementById('mySpanModelUpload').style.display = 'none' 
+   }  else {
+      document.getElementById('myUploadCsvSpan').style.display = 'block' 
+      document.getElementById('mySpanModelUpload').style.display = 'block' 
+      this.value = 'Hide File Uploading'
+      this.style.backgroundColor = 'lime'
+   }
+}"><br>
+<span id="myUploadCsvSpan" style="display:none; ">
+   
+   Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
+   Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
+   vanilla Javascript webpage! <br><br>
+   
+       
+       
+   
+   Show: <input type=radio name="myPre" onclick="{
+      document.getElementById('myDataPreviewCSV').style.display = 'block'
+      document.getElementById('myDataPreviewSensor').style.display = 'block'
+   }" CHECKED> ------------ 
+   Hide: <input type=radio name="myPre" onclick="{
+      document.getElementById('myDataPreviewCSV').style.display = 'none'
+      document.getElementById('myDataPreviewSensor').style.display = 'none'
+   }"> ----------- Load .csv files: 
+      
+   <input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
+       if (!myDataFiles) {
+          myDataFiles = event.target.files;
+       } else {
+          myDataFiles = [...myDataFiles, ...event.target.files];
+       }
+       if (myDataFiles.length > 0) {
+         previewData();
+       }                                                      
+   }"> 
+   <br>
+   
+   Following is the list of actual labels used in the same order as uploaded (comma-separated)
+   Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
+      
+   CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> 
+   
+   <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+   <hr>
+   
+</span><br>
+   
+Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
+
+<div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+
+
+
+
+
+
+
+
+
+
+   
+<span id="mySpanModelUpload" style="display : none; ">   
+
+   <label for="modelFile">Select model file (.json):</label>
+   <input type="file" id="modelFile" accept=".json">
+   <br>
+   <label for="weightsFile">Select weights file (.bin):</label>
+   <input type="file" id="weightsFile" accept=".bin">
+   <br>
+   <label for="labelFile">Select labels file (.txt):</label>
+   <input type="file" id="labelsFile" accept=".txt">
+   <br>
+      
+   Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
+   <input type=button value="Re-set labels" onclick="{
+      const labelsInput3 = document.getElementById('myNewLabels').value;   
+      const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+      uniqueLabels = [...new Set(labelsArray3)];
+      console.log('uniqueLabels')
+      console.log(uniqueLabels)
+     // const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+   }">   
+   <br>
+      
+   <input type="button" value="Upload Model" onclick="uploadModel()"><br>
+   <span id="mySpanUpload">...</span>
+  
+   <hr>
+</span> 
+
+
+
+
+
+
    
    
  <!-- --------------------------------- End of regular webpage tags with Javascript as events -------------------------------------------------------  -->       
