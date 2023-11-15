@@ -429,8 +429,8 @@ function myTextGrow(myT, myB){
 
    
 
-<input id="myUpdate123" type=button value="Update Model" style="visibility:hidden;" onclick="{
-
+<input id="myUpdate123" type=button value="Update Model"  style="background-color:pink; width:200px; visibility:hidden;" onclick="{
+  document.getElementById('myUpdate123').style.backgroundColor = 'gray'
    // first remove first and last line since they are injected
   myFred = document.getElementById('myTextarea123').value.split('\n')
   console.log(myFred)
