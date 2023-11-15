@@ -310,10 +310,10 @@ Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 on
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
 Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
 
+<span id="mySpanClassify">...</span><br>  
 
 
-
-<input id="myUpdate123" type=button value="Update and Run" style="visibility:hidden;" onclick="{
+<input id="myUpdate123" type=button value="Update Model" style="visibility:hidden;" onclick="{
 
    // first remove first and last line since they are injected
   myFred = document.getElementById('myTextarea123').value.split('\n')
@@ -324,7 +324,8 @@ Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="wi
   myJoe = myFred.join('\n')
 
   document.getElementById('myDiv123Code').innerHTML =    myJoe 
-  document.getElementById('myButton123').click()
+//  document.getElementById('myButton123').click()
+  trainModel()
                                              
 }"><br>
 
@@ -352,7 +353,7 @@ Click here to see the working HTML code.
 <input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
 <input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
 
-<span id="mySpanClassify">...</span><br>
+
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
 Convert the exported model to Arduino ready c-header model.h file as well as a model.tFlite file using 1 of the following methods:<br>
