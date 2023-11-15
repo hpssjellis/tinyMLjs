@@ -27,6 +27,15 @@
     // let myRaw = false
    //  let myRawInterval
 
+   
+
+ // for the textarea grow functions    
+ // mySpecialVar = '\x3Cscript src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.3"> \x3C/script>\n\n' 
+
+ mySpecialVar = '' 
+    
+
+
 </script>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -300,6 +309,46 @@ Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 on
    
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
 Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
+
+
+
+
+<input id="myUpdate123" type=button value="Update and Run" style="visibility:hidden;" onclick="{
+
+   // first remove first and last line since they are injected
+  myFred = document.getElementById('myTextarea123').value.split('\n')
+  myFred.pop()
+  myFred.push('')
+  myFred.shift()
+  myFred.shift()
+  myJoe = myFred.join('\n')
+
+  document.getElementById('myDiv123Code').innerHTML =    myJoe 
+  document.getElementById('myButton123').click()
+                                             
+}"><br>
+
+<textarea id="myTextarea123"  wrap="off"  style= "font-size:15px; color:white; background-color:black; width:90%;"   rows=2 onclick="{
+  if (myOnce123){
+     myTextGrow('myTextarea123', 'myDiv123Code')
+     document.getElementById('myUpdate123').style.visibility = 'visible'
+     myOnce123 = false
+  }
+}">
+Click here to see the working HTML code.
+</textarea><br>
+
+
+
+
+
+
+
+
+
+
+
+   
 <input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
 <input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
 
@@ -814,7 +863,13 @@ async function loadDataToTensor() {
 }
     
  
-  
+
+</script>
+
+
+<div id="myDiv123Code"> 
+   
+<script>  
   
 
 async function trainModel() {
@@ -822,8 +877,7 @@ async function trainModel() {
 myModelSamples = parseInt(document.getElementById('myNumSamples').value)
 myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
 myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
-
-  
+ 
 console.log('myModelSamples')   
 console.log(myModelSamples)   
 console.log('myModelSenses')   
@@ -832,56 +886,8 @@ console.log('myModelTotalCount')
 console.log(myModelTotalCount)   
 
 
-/*
-model = tf.sequential();
-   
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
- 
-//model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
-model.add(tf.layers.dense({ units: 30 }) );     
-model.add(tf.layers.dense({ units: 30 }) );     
-model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-*/
-
-/*
-
-
-
-
-
-   
-//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
- 
- 
-//model.add(tf.layers.dense({ units: 30,  inputShape: [ myModelTotalCount, myModelSamples] }) );
-//model.add(tf.layers.dense({ units: 30,  inputShape: [ myModelTotalCount, myModelSamples,  myModelSenses] }) );
-//model.add(tf.layers.dense({ units: 30,  inputShape: [myTensor.shape] }) );//  
-//model.add(tf.layers.dense({ units: 10, inputShape: [myModelSamples, myModelSenses] }));   
-
-
-
-//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
-//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
-//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
-
-//model.add(tf.layers.dense({ units: 64, activation: 'relu', inputShape: [75] }));     the tensor should be flat.
-
-//model.add(tf.layers.dense({ units: 10, inputShape: [parseInt(myModelSamples * myModelSenses)] }));   
-
-*/
-
-  /* 
-// this works but can't be converted
-model = tf.sequential();   
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
-model.add(tf.layers.dense({ units: 20 }) );     
-model.add(tf.layers.dense({ units: 30 }) );     
-model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));  
-//model.summary();
-*/
-
-
 if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
+
    model = tf.sequential();   
    // Add Flatten layer before Dense layer
    model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
@@ -892,22 +898,6 @@ if (!myModelWasUploaded) {    // only declare the model if it has not yet been l
 
 }
 
-
-
-
-   
-/*
-   
-
-//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
-const model = tf.sequential();
-//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses]}));
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
-model.add(tf.layers.dense({units: 20}));
-model.add(tf.layers.dense({units: 30}));
-model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-
-   */
    
 // Compile the model
 const myRate = parseFloat(document.getElementById('myLearningRate').value)
@@ -918,14 +908,20 @@ model.compile({
 });
 model.summary();
    
-// Prepare the data for training
-//const xs = myTensor;
-//const ys = labelsTensor;
-
 // Train the model
 justFit()
 console.log(model)
 }
+
+
+
+</script>
+
+</div>
+
+   
+<script>
+   
 
 async function justFit() {
 // Train the model
@@ -1462,6 +1458,43 @@ if (myCellPhoneOnce){
 
 ////////////////////////////////////////////////////////  END OF SCRIPT TAG //////////////////////////////////////////////////////////////  
 </script>
+
+
+
+<script>
+
+myOnce123 = true    // so textareas are only clicked once
+
+  
+ 
+function myTextGrow(myT, myB){
+   var myCursorStart = document.getElementById(myT).selectionStart
+   var myCursorEnd = document.getElementById(myT).selectionEnd
+
+   myDivName = myB.replace('Code','')
+   document.getElementById(myT).value = mySpecialVar  + document.getElementById(myB).innerHTML 
+   document.getElementById(myT).value += '<div id=\''+myDivName+'\'>...</div><br>'     
+   setTimeout(function() {
+      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
+          document.getElementById(myT).rows += 3; 
+      } 
+   }, 100)
+
+  document.getElementById(myT).selectionStart = myCursorStart
+  document.getElementById(myT).selectionEnd = myCursorEnd
+
+}  
+
+
+</script>  
+ 
+
+
+
+
+
+
+   
 
 <br><br>
 Aruino NiclaVision webSerial code that can be adapted for other microcontrollers<br> 
