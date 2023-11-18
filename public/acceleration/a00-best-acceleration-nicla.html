@@ -27,6 +27,15 @@
     // let myRaw = false
    //  let myRawInterval
 
+   
+
+ // for the textarea grow functions    
+ // mySpecialVar = '\x3Cscript src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.3"> \x3C/script>\n\n' 
+
+ mySpecialVar = '' 
+    
+
+
 </script>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,7 +56,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.48.0-200 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.51.0-207 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -296,20 +305,184 @@ Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5>
 Number of Samples/count: <input type=text id="myNumSamples" value="25"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
 Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
    
+
+
+
+
+
+<textarea id="myTextarea123"  wrap="off"  style= "font-size:15px; color:white; background-color:black; width:90%;"   rows=2 onclick="{
+  if (myOnce123){
+     myTextGrow('myTextarea123', 'myDiv123Code')
+     document.getElementById('myUpdate123').style.visibility = 'visible'
+     myOnce123 = false
+  }
+}">
+Click here to see the working HTML code.
+</textarea><br>
+
+
+
 <input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
    
 Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
-Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"><br>  
-<input type="button" value="Train Model"  style="background-color:lime; width:200px;" onclick="trainModel()"> 
-<input type="button" value="Just Fit - retrain"   onclick="justFit(); console.log(model);"> <br>
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> <br>
 
-<span id="mySpanClassify">...</span><br>
+
+   
+ 
+<div id="mySpanClassify">...</div>
+
+
+
+
+<span id="myDiv123Code">    <!-- Start fancy span that allows instant updates  -->
+
+
+   
+<input type="button" id="myTrainButton" value="Train Model"  style="background-color:lime; width:200px;" onclick="{
+
+async function trainModel() {
+// Define the model architecture
+myModelSamples = parseInt(document.getElementById('myNumSamples').value)
+myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
+myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
+ 
+console.log('myModelSamples')   
+console.log(myModelSamples)   
+console.log('myModelSenses')   
+console.log(myModelSenses)   
+console.log('myModelTotalCount')   
+console.log(myModelTotalCount)   
+
+
+if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
+   if (model){   
+      model.dispose();  // get rid of the old model
+      console.log('Model deleted')
+   }
+
+   model = tf.sequential();   
+   // Add Flatten layer before Dense layer
+   model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
+   model.add(tf.layers.dense({units: 8}));
+   model.add(tf.layers.dense({ units: 20 }) );     
+   model.add(tf.layers.dense({ units: 30 }) );     
+   model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+}
+
+   
+// Compile the model
+const myRate = parseFloat(document.getElementById('myLearningRate').value)
+model.compile({
+      optimizer: tf.train.adam(myRate),
+      loss: 'categoricalCrossentropy',
+      metrics: ['accuracy']
+});
+model.summary();
+   
+// Train the model
+justFit()
+console.log(model)
+}
+
+trainModel() // run the above async code
+}"> 
+
+</span>   <!-- End fancy span that allows instant updates  -->
+
+
+<script>   // This is the funciton needed for the fancy stuff above
+
+myOnce123 = true    // so textareas are only clicked once
+
+  
+ 
+function myTextGrow(myT, myB){
+   var myCursorStart = document.getElementById(myT).selectionStart
+   var myCursorEnd = document.getElementById(myT).selectionEnd
+
+  // myDivName = myB.replace('Code','')
+   //document.getElementById(myT).value = mySpecialVar  + document.getElementById(myB).innerHTML 
+  // document.getElementById(myT).value += '<div id=\''+myDivName+'\'>...</div><br>'     
+
+   
+
+
+   document.getElementById(myT).value = document.getElementById(myB).innerHTML 
+
+   
+   setTimeout(function() {
+      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
+          document.getElementById(myT).rows += 3; 
+      } 
+   }, 100)
+
+  document.getElementById(myT).selectionStart = myCursorStart
+  document.getElementById(myT).selectionEnd = myCursorEnd
+
+}  
+
+
+</script>  
+
+
+   
+
+<input id="myUpdate123" type=button value="Update Model"  style="background-color:pink; width:200px; visibility:hidden;" onclick="{
+  document.getElementById('myUpdate123').style.backgroundColor = 'gray'
+   // first remove first and last line since they are injected
+  myFred = document.getElementById('myTextarea123').value.split('\n')
+  console.log(myFred)
+  myFred.pop()
+  myFred.push('')
+  myFred.shift()
+  myFred.shift()
+  myJoe = myFred.join('\n')
+  console.log(myJoe)
+  document.getElementById('myDiv123Code').innerHTML =    myJoe 
+//  document.getElementById('myButton123').click()
+ // trainModel()
+
+ document.getElementById('myTrainButton').click()
+   
+                                             
+}">
+   
+<input type="button" value="Just Fit - retrain"   onclick="{justFit(); console.log(model.summary());}"> 
+<input type="button" value="View Model"   onclick="{
+ //  let myMod = model.replace('}', '}<br>')
+//   let myMod = model.replace('}', '}<br>')
+  // document.getElementById('mySpanClassify').innerHTML = JSON.stringify(myMod);
+   console.log(model.summary())
+
+
+   document.getElementById('myShowModelDiv').innerHTML = '<br>'
+   model.layers.forEach((layer, index) => {
+     document.getElementById('myShowModelDiv').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`
+     console.log(`Layer ${index + 1}:`);
+     console.log(`- Name: ${layer.name}`);
+     console.log(`- Type: ${layer.getClassName()}`);
+     console.log(`- Output Shape: ${layer.outputShape}`);
+     console.log(`- Number of Parameters: ${layer.countParams()}`);
+     console.log(`- Trainable: ${layer.trainable}`);
+     if (layer.getWeights().length > 0) {
+         console.log(`- Weights: ${layer.getWeights().map(w => w.shape).join(', ')}`);
+     } else {
+         console.log('- No Weights');
+     }
+     console.log('-----------------------');
+    });
+}"> <br> 
+
+   
+<div id="myShowModelDiv" >...</div>  <br>
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
 Convert the exported model to Arduino ready c-header model.h file as well as a model.tFlite file using 1 of the following methods:<br>
 <table border=1>
 <tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client side do the conversions youruself. This github shows what you need to do. The installation might be different on your computer.</td></tr>
-<tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td></tr>
+<tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook (Needs a google login) loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td></tr>
 <tr><td>3:</td><td>Use a Gitpod: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a></td><td>A gitpod browser docker like program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view</td></tr>
 </table> <br><br>
 Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  <br>
@@ -814,118 +987,8 @@ async function loadDataToTensor() {
 }
     
  
-  
-  
-
-async function trainModel() {
-// Define the model architecture
-myModelSamples = parseInt(document.getElementById('myNumSamples').value)
-myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
-myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
-
-  
-console.log('myModelSamples')   
-console.log(myModelSamples)   
-console.log('myModelSenses')   
-console.log(myModelSenses)   
-console.log('myModelTotalCount')   
-console.log(myModelTotalCount)   
-
-
-/*
-model = tf.sequential();
-   
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
- 
-//model.add(tf.layers.dense({ units: 30,  inputShape: [myModelSamples, myModelSenses] }) );  
-model.add(tf.layers.dense({ units: 30 }) );     
-model.add(tf.layers.dense({ units: 30 }) );     
-model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-*/
-
-/*
-
-
-
-
 
    
-//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
- 
- 
-//model.add(tf.layers.dense({ units: 30,  inputShape: [ myModelTotalCount, myModelSamples] }) );
-//model.add(tf.layers.dense({ units: 30,  inputShape: [ myModelTotalCount, myModelSamples,  myModelSenses] }) );
-//model.add(tf.layers.dense({ units: 30,  inputShape: [myTensor.shape] }) );//  
-//model.add(tf.layers.dense({ units: 10, inputShape: [myModelSamples, myModelSenses] }));   
-
-
-
-//model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
-//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
-//model.add(tf.layers.dense({units: 20, activation: 'relu', activityRegularizer: tf.regularizers.l1({ l1: 0.00001 })}));
-
-//model.add(tf.layers.dense({ units: 64, activation: 'relu', inputShape: [75] }));     the tensor should be flat.
-
-//model.add(tf.layers.dense({ units: 10, inputShape: [parseInt(myModelSamples * myModelSenses)] }));   
-
-*/
-
-  /* 
-// this works but can't be converted
-model = tf.sequential();   
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
-model.add(tf.layers.dense({ units: 20 }) );     
-model.add(tf.layers.dense({ units: 30 }) );     
-model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));  
-//model.summary();
-*/
-
-
-if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
-   model = tf.sequential();   
-   // Add Flatten layer before Dense layer
-   model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
-   model.add(tf.layers.dense({units: 8}));
-   model.add(tf.layers.dense({ units: 20 }) );     
-   model.add(tf.layers.dense({ units: 30 }) );     
-   model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-
-}
-
-
-
-
-   
-/*
-   
-
-//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses] }));  // I need to get rid of this layer
-const model = tf.sequential();
-//model.add(tf.layers.lstm({units: 8, returnSequences: true, inputShape: [myModelSamples, myModelSenses]}));
-model.add(tf.layers.lstm({units: 8, inputShape: [myModelSamples, myModelSenses] }));
-model.add(tf.layers.dense({units: 20}));
-model.add(tf.layers.dense({units: 30}));
-model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
-
-   */
-   
-// Compile the model
-const myRate = parseFloat(document.getElementById('myLearningRate').value)
-model.compile({
-      optimizer: tf.train.adam(myRate),
-      loss: 'categoricalCrossentropy',
-      metrics: ['accuracy']
-});
-model.summary();
-   
-// Prepare the data for training
-//const xs = myTensor;
-//const ys = labelsTensor;
-
-// Train the model
-justFit()
-console.log(model)
-}
 
 async function justFit() {
 // Train the model
@@ -1462,6 +1525,18 @@ if (myCellPhoneOnce){
 
 ////////////////////////////////////////////////////////  END OF SCRIPT TAG //////////////////////////////////////////////////////////////  
 </script>
+
+
+
+
+ 
+
+
+
+
+
+
+   
 
 <br><br>
 Aruino NiclaVision webSerial code that can be adapted for other microcontrollers<br> 
