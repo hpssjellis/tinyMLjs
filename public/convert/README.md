@@ -136,4 +136,9 @@ emcc hello.c -o hello.js
 Presently easiest to work in the main folder as I need to figure out how to sedt the path for it to work in other folders. Have a look at the ```emsdk_env.sh file```
 
 
+Found an ipython notebook kind of like mine
+
+https://colab.research.google.com/github/tensorflow/examples/blob/master/lite/examples/gesture_classification/ml/tensorflowjs_to_tflite_colab_notebook.ipynb#scrollTo=FbMsNJ4PAq2j
+
+
 
