@@ -480,7 +480,7 @@ function myTextGrow(myT, myB){
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
 <ol> Try the following steps:
-<li>Convert the exported model to Arduino ready c-header model.h file as well as a model.tflite file using 1 of the following methods:<br></li>li>
+<li>Convert the exported model to Arduino ready c-header model.h file as well as a model.tflite file using 1 of the following methods:<br></li>
 <li><table border=1>
 <tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client side do the conversions youruself. This github shows what you need to do. The installation might be different on your computer.</td></tr>
 <tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook (Needs a google login) loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td></tr>
