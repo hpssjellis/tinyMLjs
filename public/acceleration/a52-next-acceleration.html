@@ -1318,7 +1318,8 @@ async function connectSerial() {
       const { value, done } = await reader.read();
    //   if (value && !/^\s*$/g.test(value)) { // Check if value is not just whitespace or carriage return
                // Check if value is not just a line feed or carriage return
-      if (!/^[\r\n]*$/g.test(value)) { 
+    //  if (!/^[\r\n]*$/g.test(value)) { 
+      if (!/^[\r]*$/g.test(value)) { 
         if (myMultiCSV) {
             document.getElementById('myArea01').value += value;
         } else {
