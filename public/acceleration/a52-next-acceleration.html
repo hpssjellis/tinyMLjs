@@ -56,7 +56,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.52.2-210 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.52.3-211 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -1316,7 +1316,9 @@ async function connectSerial() {
     
     while (true) {
       const { value, done } = await reader.read();
-      if (value && !/^\s*$/g.test(value)) { // Check if value is not just whitespace or carriage return
+   //   if (value && !/^\s*$/g.test(value)) { // Check if value is not just whitespace or carriage return
+               // Check if value is not just a line feed or carriage return
+      if (!/^[\r\n]*$/g.test(value)) { 
         if (myMultiCSV) {
             document.getElementById('myArea01').value += value;
         } else {
