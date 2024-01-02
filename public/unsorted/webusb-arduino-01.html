@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebUSB Arduino Interface</title>
+    <style>
+        #connect { margin-bottom: 10px; }
+        #log { height: 200px; overflow: auto; background: #f0f0f0; padding: 5px; }
+    </style>
+</head>
+<body>
+    <input type="button" id="connect" value="Connect to WebUSB" onclick="connectToWebUSB()">
+    <div id="log"></div>
+    <input type="text" id="inputText">
+    <input type="button" value="Send" onclick="sendText()">
+    <script>
+        let device;
+
+        async function connectToWebUSB() {
+            try {
+                // Request any USB device
+                device = await navigator.usb.requestDevice({ filters: [{}] });
+
+                await device.open();
+                if (device.configuration === null) await device.selectConfiguration(1);
+                await device.claimInterface(0);
+                await device.controlTransferOut({
+                    requestType: 'class',
+                    recipient: 'interface',
+                    request: 0x22,
+                    value: 0x01,
+                    index: 0x02
+                });
+                log('Connected to ' + device.productName);
+                readLoop();
+            } catch (error) {
+                log('Error: ' + error);
+            }
+        }
+
+        async function readLoop() {
+            while (device.opened) {
+                const result = await device.transferIn(5, 64);
+                const decoder = new TextDecoder();
+                const text = decoder.decode(result.data);
+                log(text, true);
+            }
+        }
+
+        function sendText() {
+            const text = document.getElementById('inputText').value;
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            device.transferOut(4, data);
+        }
+
+        function log(text, incoming = false) {
+            const logElement = document.getElementById('log');
+            const message = document.createElement('div');
+            message.textContent = (incoming ? '< ' : '> ') + text;
+            logElement.appendChild(message);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+    </script>
+</body>
+</html>
