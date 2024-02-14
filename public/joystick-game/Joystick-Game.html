@@ -1,0 +1,115 @@
+<!DOCTYPE html> 
+
+<html lang="en"> 
+
+<head> 
+
+  <meta charset="UTF-8"> 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+  <title>Serial Monitor</title> 
+
+</head> 
+
+<body> 
+
+  <label for="myTextBox">Received Data:</label> 
+
+  <input type="text" id="myTextBox" readonly> 
+
+  <button id="connect">Connect to a device</button> 
+
+ 
+
+  <script> 
+
+    const connectButton = document.getElementById('connect'); 
+
+    const textBox = document.getElementById('myTextBox'); 
+
+ 
+
+    connectButton.addEventListener('click', async () => { 
+
+      try { 
+
+        const port = await navigator.serial.requestPort(); 
+
+        await port.open({ baudRate: 9600 }); 
+
+ 
+
+        while (port.readable) { 
+
+          const reader = port.readable.getReader(); 
+
+          try { 
+
+            while (true) { 
+
+              const { value, done } = await reader.read(); 
+
+              if (done) { 
+
+                // Allow the serial port to be closed later. 
+
+                reader.releaseLock(); 
+
+                break; 
+
+              } 
+
+              // value is a Uint8Array. 
+
+              const data = new TextDecoder().decode(value); 
+
+              console.log(data); 
+
+              // Update the text box one letter at a time, never more than 2 letters 
+
+              for (let i = 0; i < data.length; i++) { 
+
+                setTimeout(() => { 
+
+                  const currentText = textBox.value; 
+
+                  const newText = currentText.slice(-1) === ' ' ? data[i] : currentText.slice(-1) + data[i]; 
+
+                  textBox.value = newText; 
+
+                }, i * 100); // Adjust the delay as per your preference 
+
+              } 
+
+            } 
+
+          } catch (error) { 
+
+            // TODO: Handle non-fatal read error. 
+
+          } finally { 
+
+            // Allow the serial port to be closed later. 
+
+            reader.releaseLock(); 
+
+          } 
+
+        } 
+
+      } catch (error) { 
+
+        // TODO: Handle fatal read error. 
+
+      } 
+
+    }); 
+
+  </script> 
+
+</body> 
+
+</html> 
+
+ 
