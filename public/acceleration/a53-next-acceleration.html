@@ -132,6 +132,8 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    
 }"> 
 
+<!--
+
  <input type="button" value="Mouse Motion" onClick="{
  setTimeout(function() {
        const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
@@ -152,6 +154,33 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 
        document.addEventListener('mousemove', mousemoveListener);
    }, 1000); // wait x ms to start mouse movement
+    }"><br> 
+
+
+-->
+
+
+   <input type="button" value="Mouse Motion" onClick="{
+ setTimeout(function() {
+       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
+       let myMouseCount = 0;
+       let myMouseOutput = '';
+       document.getElementById('myArea01').value = 'Move the Mouse!';
+
+       function handleMouseMove(event) {
+           if (myMouseCount < myNumberOfSamples) {
+               myMouseOutput += `${event.x},${event.y}\r\n`;
+               myMouseCount++;
+           }
+           if (myMouseCount >= myNumberOfSamples) {
+               document.removeEventListener('mousemove', handleMouseMove);
+               document.getElementById('myArea01').value = myMouseOutput;
+               myShowGraph();
+           }
+       }
+
+       document.addEventListener('mousemove', handleMouseMove);
+   }, 1000); // delay before starting mouse movement collection to avoid immediate firing
     }"><br> 
 
    
