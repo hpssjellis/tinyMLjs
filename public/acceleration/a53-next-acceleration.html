@@ -142,9 +142,9 @@ Presently for complex vision or sound data it is easier to use <a href="https://
        document.getElementById('myArea01').value = 'Move the Mouse!';
 
        const mousemoveListener = function (event) {
-           if (myMouseCount < myNumberOfSamples - 1) {
-               myMouseOutput += `${event.x},${event.y}\r\n`;
-               myMouseCount++;
+                let formattedData = `${event.x},${event.y}`.replace(/\r\n|\n|\r/g, '\n');  // Normalize to Unix style line endings
+                myMouseOutput += formattedData + '\n';  // Ensure consistent line endings
+                myMouseCount++;
            } else {
                document.removeEventListener('mousemove', mousemoveListener);
                document.getElementById('myArea01').value = myMouseOutput;
