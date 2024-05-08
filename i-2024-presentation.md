@@ -11,17 +11,16 @@ Start of TinyMlJs SPA (Single Page Application)
 
 
 
-Using the laptop mouse or your cell phone accelerometer populate the data and clean it of messy input and keep the data
+Using your cell phone accelerometer (use QR code above) populate the data and clean it of messy input and keep the data
 
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/a671c649-2fd7-49ea-9c52-7be563747509)
 
-repeat for 3 total sideways readings (would be much more with real data)
+repeat for 3 total moving sideways readings (you would collect much more if this was not a demo)
 
-Then repeat for 3 more vertical readings.
+Then repeat for 3 more moving vertical readings.
 
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/d2304866-c8fa-4dcc-8000-ff97084666e5)
+
 
 
 
