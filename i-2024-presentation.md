@@ -43,7 +43,12 @@ Converting a tensorflowJS file to a tflite file needs a seperate method. I would
 
 ![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c5c9609d-9296-4665-8450-d2c21226a48f)
 
+https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs
 
+
+https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing
+
+https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs    or gitpod load  https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs
 
 
 
@@ -53,8 +58,17 @@ Converting a tensorflowJS file to a tflite file needs a seperate method. I would
 
 Download the TensorflowLite Arduino Library   https://github.com/hpssjellis/RocksettaTinyML   which was adapted from eloquentArduino
 
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/eeb3b61d-26bc-4c75-ab6b-639980b28b9f)
 
-For your microcontroller run the example but replace the c-header byte code with your code.
+Here is the c-header file
+
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/34c75e7e-72cc-4317-a387-63c20dbfaf57)
+
+
+
+
+For your microcontroller run the example first to see if it works, then replace the c-header byte code with your code.
 
 
 
