@@ -58,30 +58,25 @@ https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs    or gitpod 
 
 Download the TensorflowLite Arduino Library   https://github.com/hpssjellis/RocksettaTinyML   which was adapted from eloquentArduino
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/eeb3b61d-26bc-4c75-ab6b-639980b28b9f)
+
+
+  <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/eeb3b61d-26bc-4c75-ab6b-639980b28b9f" width = 900/>
 
 Here is the c-header file
 
 
-![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/34c75e7e-72cc-4317-a387-63c20dbfaf57)
 
-
+  <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/34c75e7e-72cc-4317-a387-63c20dbfaf57" width = 900/>   
 
 
 For your microcontroller run the example first to see if it works, then replace the c-header byte code with your code.
 
 
-
+Load the serial monitor and see if you are getting classifications on your live data.
 
   .
 
-  
- 
-  <img src="" width = 900/>   
-  <img src="" width = 500/>   
-  <img src="" width = 500/>   
-  <img src="" width = 500/>   
-  <img src="" width = 500/>   
+    
 
 
 
