@@ -39,6 +39,29 @@ You can also upload the 3 files onto your laptop. click show file uploading, fin
 
 
   <img src="https://github.com/hpssjellis/tinyMLjs/assets/5605614/5ad0c048-f622-4a6b-83e7-b5ccdce911bb" width = 900/> 
+Converting a tensorflowJS file to a tflite file needs a seperate method. I would really like if this part was easier for Javascript developers.
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/c5c9609d-9296-4665-8450-d2c21226a48f)
+
+
+
+
+
+
+  .
+
+
+Download the TensorflowLite Arduino Library   https://github.com/hpssjellis/RocksettaTinyML   which was adapted from eloquentArduino
+
+
+For your microcontroller run the example but replace the c-header byte code with your code.
+
+
+
+
+  .
+
+  
  
   <img src="" width = 900/>   
   <img src="" width = 500/>   
