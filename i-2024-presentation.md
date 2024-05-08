@@ -46,7 +46,12 @@ Converting a tensorflowJS file to a tflite file needs a seperate method. I would
 https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs
 
 
-https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing
+https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing  
+
+If successful it will look like this
+
+![image](https://github.com/hpssjellis/tinyMLjs/assets/5605614/667b67c1-62fd-41ba-815b-488d0769f3bd)
+
 
 https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs    or gitpod load  https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs
 
