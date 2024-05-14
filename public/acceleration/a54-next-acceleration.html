@@ -132,6 +132,33 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    
 }"> 
 
+
+<input type="button" value="Mouse Motion" onClick="{
+   setTimeout(function() {
+       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
+       let myMouseCount = 0;
+       let myMouseOutput = '';
+       document.getElementById('myArea01').value = 'Move the Mouse!';
+   
+       const mousemoveListener = function (event) {
+           if (myMouseCount <= myNumberOfSamples) {
+               myMouseOutput += `${event.x},${event.y}\n`;
+               myMouseCount++;
+           } else {
+               document.removeEventListener('mousemove', mousemoveListener);
+               document.getElementById('myArea01').value = myMouseOutput;
+               console.log(myMouseOutput);
+               myShowGraph();
+           }
+       };
+
+       document.addEventListener('mousemove', mousemoveListener);
+   }, 1000); // wait x ms to start mouse movement
+}">
+
+
+<!--
+   
  <input type="button" value="Mouse Motion" onClick="{
    setTimeout(function() {
        const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
@@ -156,6 +183,11 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    }, 1000); // wait x ms to start mouse movement
     }"><br> 
 
+
+-->
+
+
+   
    
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
 <br>    
