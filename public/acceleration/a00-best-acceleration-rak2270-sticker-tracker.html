@@ -1,4 +1,4 @@
-.<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <script>  
@@ -56,7 +56,7 @@
 <body>
 <h1 align=center>TinyMLjs </h1>
 <h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.53.3-212 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h6> Version 0.56.3-215 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
@@ -101,6 +101,9 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    }
 }">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
+
+<!--
+   
 <input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
@@ -109,12 +112,6 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 }"> 
 
 
-
-
-
-
-
-   <!--
 <input type=button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
@@ -127,10 +124,9 @@ Presently for complex vision or sound data it is easier to use <a href="https://
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('proximity'); }, 300);  // short delay to send the first line before activating the sensor
     setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
-}"> 
-   -->
+}">
    
-   
+--> 
    
    <br> 
     
@@ -145,59 +141,41 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    
 }"> 
 
-<!--
 
- <input type="button" value="Mouse Motion" onClick="{
- setTimeout(function() {
+<input type="button" value="Mouse Motion"  style=" height:50px; " onClick="{
+   setTimeout(function() {
        const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
        let myMouseCount = 0;
        let myMouseOutput = '';
        document.getElementById('myArea01').value = 'Move the Mouse!';
-
+   
        const mousemoveListener = function (event) {
-                let formattedData = `${event.x},${event.y}`.replace(/\r\n|\n|\r/g, '\n');  // Normalize to Unix style line endings
-                myMouseOutput += formattedData + '\n';  // Ensure consistent line endings
-                myMouseCount++;
+           if (myMouseCount < myNumberOfSamples -1 ) {
+
+               myMouseOutput += parseFloat(event.x/window.screen.width).toFixed(2);
+               myMouseOutput += ','; 
+               myMouseOutput += parseFloat(event.y/window.screen.height).toFixed(2);
+               myMouseOutput += '\r\n'; 
+   
+              // myMouseOutput += `${event.x},${event.y}\\r\n`;
+               myMouseCount++;
            } else {
                document.removeEventListener('mousemove', mousemoveListener);
                document.getElementById('myArea01').value = myMouseOutput;
+               console.log(myMouseOutput);
                myShowGraph();
            }
        };
 
        document.addEventListener('mousemove', mousemoveListener);
    }, 1000); // wait x ms to start mouse movement
-    }"><br> 
+}">
 
 
 
 
 
-   <input type="button" value="Mouse Motion" onClick="{
- setTimeout(function() {
-       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
-       let myMouseCount = 0;
-       let myMouseOutput = '';
-       document.getElementById('myArea01').value = 'Move the Mouse!';
-
-       function handleMouseMove(event) {
-           if (myMouseCount < myNumberOfSamples) {
-               myMouseOutput += `${event.x},${event.y}\r\n`;
-               myMouseCount++;
-           }
-           if (myMouseCount >= myNumberOfSamples) {
-               document.removeEventListener('mousemove', handleMouseMove);
-               document.getElementById('myArea01').value = myMouseOutput;
-               myShowGraph();
-           }
-       }
-
-       document.addEventListener('mousemove', handleMouseMove);
-   }, 1000); // delay before starting mouse movement collection to avoid immediate firing
-    }"><br> 
-
-
-   -->
+   
    
 <!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
 <br>    
@@ -1635,23 +1613,18 @@ if (myCellPhoneOnce){
    
 
 <br><br>
-RakWireless RAK2270 Sticker Tracker webSerial code that can be adapted for other microcontrollers<br> 
+Aruino NiclaVision webSerial code that can be adapted for other microcontrollers<br> 
 <input type=button value=copy onclick="{                                      
    const element = document.getElementById('myCode')
   element.select();
   element.setSelectionRange(0, 99999);
   document.execCommand('copy');                                                                         
 }"> <br>
-
-
-  <!--
 The "fancy" Arduino sketch for the Nano33BleSense is on the github here 
 <a href="https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt">https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt</a> <br>  
 
 
-   -->
-
-<!-- ******************************** The following sketch should be uploaded to your RAK2270 **************************************************************  -->
+<!-- ******************************** The following sketch should be uploaded to your Arduino NiclaVision **************************************************************  -->
 
 
 
@@ -1850,12 +1823,8 @@ This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acc
 <ol><b>A couple of gotchas (as of Jun 22, 2023):</b><br>
 <br>  <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
 <br>   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
-<br>   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing while training then your trained data probably has errors. The "clean,trim,fill" buttons might help.
+<br>   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
 <br>  <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
-<br> Hard to make the model but when using the model on an Arduino it is very forgiving to bad data, which you also should be careful about.
-<br> Reminder that the link to   <a href="https://github.com/hpssjellis/RocksettaTinyML"> RocksettaTinyML</a>   the arduino IDE compatible library I use is the only library I know about that makes a model small enough to fit onto the RAK2270
-   LoRa/ LoRaWan sticker tracke.
-<br> Only LoRa works when a machine learning model is placed on the RAK2270. LoRaWan takes too much space on the device. (There is an interesting option <a href="https://hpssjellis.github.io/mcu-stable-edu-launch/rak2270-sticker-tracker/html/lora-webpage-best.html">here</a> )   
 </ol>   
 </body>
 </html>
