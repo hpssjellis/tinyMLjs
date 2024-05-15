@@ -101,12 +101,17 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    }
 }">   
 <input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
+
+<!--
+   
 <input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
     setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
 }"> 
+
+
 <input type=button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
@@ -119,7 +124,11 @@ Presently for complex vision or sound data it is easier to use <a href="https://
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('proximity'); }, 300);  // short delay to send the first line before activating the sensor
     setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
-}">  <br> 
+}">
+   
+--> 
+   
+   <br> 
     
 <input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
    myCellPhoneOnce = true  // so it will show the data
@@ -133,7 +142,7 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 }"> 
 
 
-<input type="button" value="Mouse Motion" onClick="{
+<input type="button" value="Mouse Motion"  style=" height:50px; " onClick="{
    setTimeout(function() {
        const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
        let myMouseCount = 0;
@@ -163,34 +172,7 @@ Presently for complex vision or sound data it is easier to use <a href="https://
 }">
 
 
-<!--
-   
- <input type="button" value="Mouse Motion" onClick="{
-   setTimeout(function() {
-       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
-       let myMouseCount = 0;
-       let myMouseOutput = '';
-       document.getElementById('myArea01').value = 'Move the Mouse!';
-   
-       const mousemoveListener = function (event) {
-         //  if (myMouseCount < myNumberOfSamples - 1) {
-           if ( myMouseCount <= myNumberOfSamples ) {
-               myMouseOutput += `${event.x},${event.y}\n`;
-               myMouseCount++;
-           } else {
-               document.removeEventListener('mousemove', mousemoveListener);
-               document.getElementById('myArea01').value = myMouseOutput;
-               console.log(myMouseOutput)
-               myShowGraph();
-           }
-       };
 
-       document.addEventListener('mousemove', mousemoveListener);
-   }, 1000); // wait x ms to start mouse movement
-    }"><br> 
-
-
--->
 
 
    
