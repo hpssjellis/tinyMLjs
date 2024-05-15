@@ -141,7 +141,7 @@ Presently for complex vision or sound data it is easier to use <a href="https://
        document.getElementById('myArea01').value = 'Move the Mouse!';
    
        const mousemoveListener = function (event) {
-           if (myMouseCount <= myNumberOfSamples) {
+           if (myMouseCount < myNumberOfSamples -1 ) {
 
                myMouseOutput += parseFloat(event.x/window.screen.width).toFixed(2);
                myMouseOutput += ','; 
