@@ -1,3 +1,33 @@
+.<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>  
+   // Global CVariables
+   let exports = {};  // really important for WebSerial and Polyfill
+   let model
+   
+   let myDataFiles, myTensor; 
+   let myDataTotal = 0;
+   let myDataMcu = 0;
+   let myDataCSV = 0;
+   let mySendFirstLine = false
+   
+   let labelsArray;
+   let uniqueLabels, labelsTensor;
+   let myModelSamples, myModelSenses
+   let myMultiCSV = true
+   let myCellPhoneOnce = false
+ //  let myCellPhoneEvent = true
+   
+   let accelerometerData = [];
+   let startTime = null;
+   let myModelWasUploaded = false
+   let myBaseCsvFileName = 'myCSV-'
+   
+    // let myRaw = false
+   //  let myRawInterval
+
+   
 
  // for the textarea grow functions    
  // mySpecialVar = '\x3Cscript src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.3"> \x3C/script>\n\n' 
