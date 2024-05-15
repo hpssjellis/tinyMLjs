@@ -112,11 +112,11 @@ Presently for complex vision or sound data it is easier to use <a href="https://
    
        const mousemoveListener = function (event) {
            if (myMouseCount <= myNumberOfSamples) {
-          /*     let myX = event.x/window.screen.width;
-               let myY = event.y/window.screen.height;
-               myMouseOutput += `${myX},${myY}\r\n`;   */
               // myMouseOutput += `${event.x},${event.y}\n`;
-              // myMouseOutput += `${event.x},${event.y}\n`;
+               myMouseOutput += parseFloat(event.x);
+               myMouseOutput += ','; 
+               myMouseOutput += parseFloat(event.y);
+               myMouseOutput += '\r\n'; 
                myMouseCount++;
            } else {
                document.removeEventListener('mousemove', mousemoveListener);
