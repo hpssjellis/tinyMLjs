@@ -55,15 +55,15 @@
 </head>
 <body>
 <h1 align=center>TinyMLjs </h1>
-<h3>Making TinyML truely client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
-<h6> Version 0.56.3-215 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (pixel Phones) or Windows, only works on Edge for Linux</h6>
+<h3>Making TinyML truly client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
+<h6> Version 0.56.3-215 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (Pixel Phones early verson) or Windows, only works on Edge for Linux</h6>
 
 
 This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
-That model can be saved and converted to a tFlite model then to a C-header model.h file using Tensorflow command line or Python converters. I simplify the conversion using a Gitpod.
+That model can be saved and converted to a tFlite model, then to a C-header model.h file using Tensorflow command line or Python converters. I simplify the conversion using a Gitpod.
 Finally the model.h file is combined with C/C++ code using an Arduino IDE ready library called RocksettaTinyML and compiled to the device for testing. <br><br>
 
-Presently for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
+Presently, for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
 
 
 
@@ -502,9 +502,9 @@ function myTextGrow(myT, myB){
 
 <input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
 <ol> Try the following steps:
-<li>Convert the exported model to Arduino ready c-header model.h file as well as a model.tflite file using 1 of the following methods:<br></li>
+<li>Convert the exported model to Arduino ready c-header model.h file as well as a model.tflite file using one of the following methods:<br></li>
 <li><table border=1>
-<tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client side do the conversions youruself. This github shows what you need to do. The installation might be different on your computer.</td></tr>
+<tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client side do the conversions yourself. This github shows what you need to do. The installation might be different on your computer.</td></tr>
 <tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook (Needs a google login) loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td></tr>
 <tr><td>3:</td><td>Use a Gitpod: <a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> or direct load: <a href="https://gitpod.io/#github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">Gitpod </a></td><td>A gitpod browser docker like program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view</td></tr>
 
