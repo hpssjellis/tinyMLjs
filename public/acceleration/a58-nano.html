@@ -1639,9 +1639,6 @@ The "fancy" Arduino sketch for the Nano33BleSense is on the github here
 
    
 <textarea id="myCode" rows=5 cols=70 NOWRAP>
-
-
-
 /*
  * webSerial for testing javascript connection with an arduino
  * 
@@ -1659,26 +1656,16 @@ The "fancy" Arduino sketch for the Nano33BleSense is on the github here
 
 #include <Arduino.h> // Only needed for https://platformio.org/
 //#include <Arduino_LSM9DS1.h> 
-//#include <Arduino_LSM6DSOX.h>
-//#include "VL53L1X.h"
-
-#include "SparkFunLIS3DH.h"  // for RAK2270 Sticker Tracker
-
-
-
-LIS3DH myIMU(I2C_MODE, 0x19); //Default constructor is I2C, addr 0x19.
-
-
-
-
+#include <Arduino_LSM6DSOX.h>
+#include "VL53L1X.h"
 
 // GLOBAL VAERIABLES
-//VL53L1X proximity;
+VL53L1X proximity;
 
-#define FREQUENCY_HZ        36     // how many samples per second 
+#define FREQUENCY_HZ        25     // how many samples per second 
 #define COLLECTION_SECONDS  1     // how many seconds to collect samples
 #define INTERVAL_MS  (1000 / (FREQUENCY_HZ + 1)) // need for the timer 
-#define CONVERT_G_TO_MS2    9.80665f   // accleration conversion 
+#define CONVERT_G_TO_MS2    9.80665f   // accleration conversion
 
 int myMaxData = FREQUENCY_HZ * COLLECTION_SECONDS;
 int myCount = 0;
@@ -1692,17 +1679,7 @@ int myProximityReading = 0;
 
 
 void setup() {
-  //Serial.begin(115200);
-    Serial.begin(115200, RAK_AT_MODE);
-    delay(5000); 
-    Serial.println("15 s to connect Serial monitor or enter AT+BOOT");
-    delay(5000); 
-    Serial.println("10 s to connect Serial monitor or enter AT+BOOT");
-    delay(5000);
-    Serial.println("5 s to connect Serial monitor or enter AT+BOOT");
-    delay(5000);
-    Serial.setTimeout(20);
-    
+  Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);   // onboard LED, HIGH = off
   //while (!Serial) {}                 // do nothing and wait
@@ -1710,39 +1687,44 @@ void setup() {
   myStart = millis();   // set delay
   randomSeed(analogRead(A0));  // AO pin on XIAO does not have to be connected to anything
   Serial.println("accX,accY,accZ");  // CSV file heading titles
-
-
-  // Now the RAK2270 Accelerometer
   
-    myIMU.settings.adcEnabled = 1;
-    myIMU.settings.tempEnabled = 1;
-    myIMU.settings.accelSampleRate = 50;  //Hz.  Can be: 0,1,10,25,50,100,200,400,1600,5000 Hz
-    myIMU.settings.accelRange = 16;      //Max G force readable.  Can be: 2, 4, 8, 16
-    myIMU.settings.xAccelEnabled = 1;
-    myIMU.settings.yAccelEnabled = 1;
-    myIMU.settings.zAccelEnabled = 1;
+  if (!IMU.begin()) {
+     Serial.println("Failed to initialize IMU!");
+     while (1);
+  }
 
 
-     //Call .begin() to configure the IMU
-    myIMU.begin();
+  // Initilize the Proximity sensor and com using wire1
+  Wire1.begin();
+  Wire1.setClock(400000); // use 400 kHz I2C
+  proximity.setBus(&Wire1);
 
 
+
+  if (!proximity.init()) {
+    Serial.println("Failed to detect and initialize sensor!");
+    while (1);
+  }
+
+  proximity.setDistanceMode(VL53L1X::Long);
+  proximity.setMeasurementTimingBudget(10000);
+  proximity.startContinuous(10);
 
 }
 
 void loop() {
+  float x, y, z;
+  myProximityReading = proximity.read();
   if ( (millis() - myStart ) >= myDelay) {       
      myStart = millis();      //  reset the delay time
      myCount += 1;
+  if (IMU.accelerationAvailable()) {
+    IMU.readAcceleration(x, y, z);
+    x *= 9.81;
+    y *= 9.81;
+    z *= 9.81;
 
-float myX, myY, myZ;
-
-
-
-     myX = (myIMU.readFloatAccelX() * 9.8) - 0.50;
-     myY = (myIMU.readFloatAccelY() * 9.8) + 0.50;
-     myZ = (myIMU.readFloatAccelZ() * -9.8) + 0.50;
-
+  }
 
      if (myCount >= myMaxData){
         mySendData = false;   // stop sending data when amount reached
@@ -1750,18 +1732,16 @@ float myX, myY, myZ;
 
      // This should be written better perhaps a case statement etc
      if (mySendData){
-      
         if (mySendProximity){
-         // Serial.println(String(myProximityReading));  
+          Serial.println(String(myProximityReading));  
         } else {
-          Serial.println( String(myX) + "," + String(myY) + "," +  String(myZ)  );
+          Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
         }
-        
      } 
    }
 
    while (Serial.available()) {
-   // delay(3);  
+    delay(3);  
     char myChar = Serial.read();
     readString += myChar; 
   }
@@ -1791,15 +1771,14 @@ float myX, myY, myZ;
         Serial.println("accX,accY,accZ");  // CSV file heading titles
       }
     }
-/*
+
     if (readString == "proximity"){
       mySendProximity = true;
       mySendData = true;
       myStart = millis();      //  reset the delay time
       myCount = 0;
 
-    } 
-    */
+    }
     readString="";
   } 
   
@@ -1808,9 +1787,6 @@ float myX, myY, myZ;
     
 
 
-    
-
-   
     
 </textarea> <br><br>
 
