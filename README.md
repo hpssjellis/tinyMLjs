@@ -2,6 +2,8 @@
 Client side, single file webpage tools using javascript based tensorflowjs for full control Machine Learning using microcontrollers.
 
 
+Have a look at this 5 min lightening talk about based but abouton tinyMLjs  [TensorflowTinyJS](https://hpssjellis.github.io/google-should-make-tensorflowTinyJS/)
+
 Started Jun 2, 2023.
 
 
