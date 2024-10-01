@@ -201,8 +201,8 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
     document.getElementById('myArea01').value = '';
     if (mySendFirstLine) { mySendIt('firstline'); } 
     setTimeout(function() { mySendIt('start'); }, 200);  // short delay to send the data
-    setTimeout(function() { cleanFillTrim(); }, 2000);  // short delay to send the data
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart  
+    setTimeout(function() { cleanFillTrim(); }, 3000);  // short delay to send the data// need bigger delay for more data
+    setTimeout(function() { myShowGraph() }, 3500);      // give the data a few seconds to load before drawing chart  
                                             
 }">    
    
@@ -212,9 +212,9 @@ Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Backgrou
     document.getElementById('myArea01').value = '';
     if (mySendFirstLine) { mySendIt('firstline'); } 
     setTimeout(function() { mySendIt('start'); }, 200);  // short delay to send the data
-    setTimeout(function() { cleanFillTrim(); }, 2000);  // short delay to send the data
-    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2400);     
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart  
+    setTimeout(function() { cleanFillTrim(); }, 3000);  // short delay to send the data need more time for more data
+    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 3400);     
+    setTimeout(function() { myShowGraph() }, 3500);      // give the data a few seconds to load before drawing chart  
 
 
    /*
@@ -263,7 +263,7 @@ CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onCh
     document.getElementById('myArea01').value = '' 
     if (mySendFirstLine) { mySendIt('firstline'); }
     setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
-    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
+    setTimeout(function() { myShowGraph() }, 3000);      // give the data a few seconds to load before drawing chart, need more time if more data or a slow connection.                                           
 }">   
 <input type="button" value="Show Graph" onclick="myShowGraph()">
 <input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
@@ -1620,9 +1620,13 @@ Aruino NiclaVision webSerial code that can be adapted for other microcontrollers
   element.setSelectionRange(0, 99999);
   document.execCommand('copy');                                                                         
 }"> <br>
-The "fancy" Arduino sketch for the Nano33BleSense is on the github here 
+The "fancy" Arduino sketch for the Nano33Ble-Sense is on the github here 
 <a href="https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt">https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt</a> <br>  
 
+For a REV2 friendly version of the above Fancy Nano 33 Ble Sense code look <a href="a00-accell-nano33-fancy-rev2.txt">here<a>
+
+
+   
 
 <!-- ******************************** The following sketch should be uploaded to your Arduino NiclaVision **************************************************************  -->
 
