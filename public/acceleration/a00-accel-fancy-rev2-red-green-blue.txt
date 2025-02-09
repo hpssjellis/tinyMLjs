@@ -319,12 +319,12 @@ void loop() {
       digitalWrite(LEDG, HIGH);
       digitalWrite(LEDB, HIGH);
     }
-    if (readString == "green"){
+    if (readString == "blue"){
       digitalWrite(LEDR, HIGH);
-      digitalWrite(LEDG, LOW);
+      digitalWrite(LEDG, LOW);   // sseems wrong but works
       digitalWrite(LEDB, HIGH);
     }
-    if (readString == "blue"){
+    if (readString == "green"){
       digitalWrite(LEDR, HIGH);
       digitalWrite(LEDG, HIGH);
       digitalWrite(LEDB, LOW);
