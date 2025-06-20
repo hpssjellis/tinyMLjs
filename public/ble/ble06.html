@@ -1057,7 +1057,7 @@ async function mySendString(text) {
 
         // Throttle sending to prevent overwhelming the device (e.g., 100ms delay)
         await new Promise(resolve => setTimeout(resolve, 100));
-    } cathode(err) {
+    } catch(err) { // Corrected from cathode(err) to catch(err)
         logMessage("BLE Write error: " + err.message, 'error');
     } finally {
         isWriting = false;
