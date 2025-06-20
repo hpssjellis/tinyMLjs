@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSerial & WebBLE Communicator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Hide scrollbar for readability in status boxes */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex items-center justify-center p-6 md:p-10">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-4xl w-full flex flex-col md:flex-row gap-8 transform hover:scale-[1.01] transition-transform duration-300 ease-in-out">
+        <!-- Main Title -->
+        <div class="md:w-1/2 flex flex-col justify-between">
+            <div>
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-4 text-center md:text-left">
+                    Device Communicator
+                </h1>
+                <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                    Connect and interact with your Arduino via Web Serial or other BLE devices using Web Bluetooth, all from your browser!
+                    <br><br>
+                    <span class="font-semibold text-orange-600">Note:</span> Both Web Serial and Web Bluetooth require a secure context (HTTPS) and user gestures (button clicks) to initiate connections.
+                </p>
+            </div>
+            <!-- Global Status / Messages -->
+            <div class="mt-auto bg-gray-100 p-4 rounded-lg shadow-inner">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">Messages</h2>
+                <div id="messages" class="h-32 overflow-y-auto no-scrollbar bg-gray-50 p-3 rounded-md text-sm text-gray-700 border border-gray-200">
+                    Ready.
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Panels -->
+        <div class="md:w-1/2 flex flex-col gap-8">
+            <!-- Web Serial Section -->
+            <div class="bg-blue-50 p-6 rounded-xl shadow-md border border-blue-200">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Web Serial (Arduino USB)</h2>
+                <button id="connectSerialBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1 mb-4">
+                    Connect to Serial Port
+                </button>
+                <div class="mb-4">
+                    <input type="text" id="serialInput" placeholder="Enter data to send..." class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-700">
+                </div>
+                <button id="sendSerialBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-5 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Send to Serial
+                </button>
+                <div class="mt-4 bg-blue-100 p-4 rounded-lg shadow-inner">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-2">Received Serial Data:</h3>
+                    <div id="serialReceivedData" class="h-24 overflow-y-auto no-scrollbar bg-blue-50 p-3 rounded-md text-sm text-blue-800 border border-blue-200">
+                        No data yet.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web Bluetooth Section -->
+            <div class="bg-purple-50 p-6 rounded-xl shadow-md border border-purple-200">
+                <h2 class="text-2xl font-bold text-purple-800 mb-4">Web Bluetooth (BLE)</h2>
+                <button id="connectBleBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-5 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1 mb-4">
+                    Connect to BLE Device
+                </button>
+                <div class="mb-4">
+                    <input type="text" id="bleInput" placeholder="Enter data to send..." class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent text-gray-700">
+                </div>
+                <button id="sendBleBtn" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-5 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Send to BLE
+                </button>
+                <div class="mt-4 bg-purple-100 p-4 rounded-lg shadow-inner">
+                    <h3 class="text-lg font-semibold text-purple-700 mb-2">Received BLE Data:</h3>
+                    <div id="bleReceivedData" class="h-24 overflow-y-auto no-scrollbar bg-purple-50 p-3 rounded-md text-sm text-purple-800 border border-purple-200">
+                        No data yet.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for Web Serial
+        let serialPort;
+        let serialReader;
+        let serialWriter;
+
+        // Global variables for Web Bluetooth
+        let bleDevice;
+        let bleTxCharacteristic; // Characteristic for sending data (usually WriteWithoutResponse or Write)
+        let bleRxCharacteristic; // Characteristic for receiving data (usually Notify or Indicate)
+
+        // UI Elements
+        const connectSerialBtn = document.getElementById('connectSerialBtn');
+        const sendSerialBtn = document.getElementById('sendSerialBtn');
+        const serialInput = document.getElementById('serialInput');
+        const serialReceivedData = document.getElementById('serialReceivedData');
+
+        const connectBleBtn = document.getElementById('connectBleBtn');
+        const sendBleBtn = document.getElementById('sendBleBtn');
+        const bleInput = document.getElementById('bleInput');
+        const bleReceivedData = document.getElementById('bleReceivedData');
+
+        const messagesDiv = document.getElementById('messages');
+
+        /**
+         * Appends a message to the global messages div.
+         * @param {string} msg The message to display.
+         * @param {string} type Optional type for styling (e.g., 'error', 'success').
+         */
+        function logMessage(msg, type = '') {
+            const p = document.createElement('p');
+            p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            if (type === 'error') {
+                p.classList.add('text-red-600', 'font-medium');
+            } else if (type === 'success') {
+                p.classList.add('text-green-600', 'font-medium');
+            } else {
+                p.classList.add('text-gray-700');
+            }
+            messagesDiv.prepend(p); // Add to top
+            if (messagesDiv.children.length > 20) { // Keep only latest 20 messages
+                messagesDiv.removeChild(messagesDiv.lastChild);
+            }
+        }
+
+        /**
+         * Appends received serial data to the serial data display area.
+         * @param {string} data The data string to display.
+         */
+        function displaySerialData(data) {
+            const span = document.createElement('span');
+            span.textContent = data;
+            serialReceivedData.appendChild(span);
+            serialReceivedData.scrollTop = serialReceivedData.scrollHeight; // Scroll to bottom
+        }
+
+        /**
+         * Appends received BLE data to the BLE data display area.
+         * @param {string} data The data string to display.
+         */
+        function displayBleData(data) {
+            const span = document.createElement('span');
+            span.textContent = data;
+            bleReceivedData.appendChild(span);
+            bleReceivedData.scrollTop = bleReceivedData.scrollHeight; // Scroll to bottom
+        }
+
+        // --- Web Serial Functions ---
+
+        /**
+         * Connects to a serial port.
+         */
+        async function connectSerial() {
+            if (!('serial' in navigator)) {
+                logMessage('Web Serial API not supported in this browser. Please use Chrome, Edge, or Opera.', 'error');
+                return;
+            }
+
+            try {
+                // Request a serial port
+                serialPort = await navigator.serial.requestPort();
+                logMessage('Serial port requested.');
+
+                // Open the port
+                await serialPort.open({ baudRate: 9600 }); // Common baud rate for Arduino
+                logMessage('Serial port opened at 9600 baud.', 'success');
+
+                // Enable send button
+                sendSerialBtn.disabled = false;
+
+                // Start reading data from the port
+                readSerialData();
+
+            } catch (error) {
+                logMessage(`Error connecting to serial port: ${error.message}`, 'error');
+                if (serialPort && serialPort.readable && !serialPort.readable.locked) {
+                    await serialPort.close().catch(e => logMessage(`Error closing port: ${e.message}`, 'error'));
+                }
+            }
+        }
+
+        /**
+         * Reads data continuously from the serial port.
+         */
+        async function readSerialData() {
+            serialReader = serialPort.readable.getReader();
+            const textDecoder = new TextDecoder();
+            logMessage('Started reading from serial port.');
+
+            try {
+                while (true) {
+                    const { value, done } = await serialReader.read();
+                    if (done) {
+                        logMessage('Serial reader was released.', 'warning');
+                        break;
+                    }
+                    // value is a Uint8Array. Convert to string.
+                    const receivedString = textDecoder.decode(value, { stream: true }); // Use stream: true for partial data
+                    displaySerialData(receivedString);
+                }
+            } catch (error) {
+                logMessage(`Error reading serial data: ${error.message}`, 'error');
+            } finally {
+                serialReader.releaseLock();
+                logMessage('Serial port disconnected.');
+                sendSerialBtn.disabled = true; // Disable send button on disconnect
+                if (serialPort && serialPort.close) {
+                     await serialPort.close().catch(e => logMessage(`Error during final port close: ${e.message}`, 'error'));
+                }
+            }
+        }
+
+        /**
+         * Sends data to the connected serial port.
+         */
+        async function sendSerialData() {
+            if (!serialPort || !serialPort.writable) {
+                logMessage('No serial port connected or writable.', 'error');
+                return;
+            }
+
+            const data = serialInput.value + '\n'; // Add newline for typical serial communication
+            if (!data.trim()) {
+                logMessage('Please enter data to send via serial.', 'warning');
+                return;
+            }
+
+            serialWriter = serialPort.writable.getWriter();
+            const textEncoder = new TextEncoder();
+
+            try {
+                await serialWriter.write(textEncoder.encode(data));
+                logMessage(`Sent serial: "${data.trim()}"`, 'success');
+                serialInput.value = ''; // Clear input after sending
+            } catch (error) {
+                logMessage(`Error sending serial data: ${error.message}`, 'error');
+            } finally {
+                serialWriter.releaseLock();
+            }
+        }
+
+        // --- Web Bluetooth Functions ---
+
+        // Standard BLE UART Service UUID (common for many modules like HM-10, ESP32 BLE UART)
+        // You might need to change these based on your specific BLE device's services/characteristics.
+        const UART_SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e'; // Nordic UART Service
+        const TX_CHARACTERISTIC_UUID = '6e400002-b5a3-f393-e0a9-e50e24dcca9e'; // TX Characteristic (Write without response)
+        const RX_CHARACTERISTIC_UUID = '6e400003-b5a3-f393-e0a9-e50e24dcca9e'; // RX Characteristic (Notify)
+
+        /**
+         * Connects to a BLE device.
+         */
+        async function connectBluetooth() {
+            if (!('bluetooth' in navigator)) {
+                logMessage('Web Bluetooth API not supported in this browser. Please use Chrome, Edge, or Opera.', 'error');
+                return;
+            }
+
+            try {
+                logMessage('Requesting BLE device...');
+                bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ services: [UART_SERVICE_UUID] }],
+                    optionalServices: [] // Add any other optional services here if needed
+                });
+
+                if (!bleDevice) {
+                    logMessage('BLE device selection cancelled.', 'warning');
+                    return;
+                }
+
+                logMessage(`Connecting to BLE device: ${bleDevice.name || bleDevice.id}`);
+                bleDevice.addEventListener('gattserverdisconnected', onBleDisconnected);
+
+                const server = await bleDevice.gatt.connect();
+                logMessage('Connected to BLE GATT server.', 'success');
+
+                const service = await server.getPrimaryService(UART_SERVICE_UUID);
+                logMessage('Got UART service.');
+
+                bleTxCharacteristic = await service.getCharacteristic(TX_CHARACTERISTIC_UUID);
+                bleRxCharacteristic = await service.getCharacteristic(RX_CHARACTERISTIC_UUID);
+                logMessage('Got TX and RX characteristics.', 'success');
+
+                await bleRxCharacteristic.startNotifications();
+                bleRxCharacteristic.addEventListener('characteristicvaluechanged', handleBleNotifications);
+                logMessage('Started listening for BLE notifications.', 'success');
+
+                sendBleBtn.disabled = false; // Enable send button
+
+            } catch (error) {
+                logMessage(`Error connecting to BLE device: ${error.message}`, 'error');
+                if (bleDevice && bleDevice.gatt.connected) {
+                    bleDevice.gatt.disconnect();
+                }
+            }
+        }
+
+        /**
+         * Handles disconnection of a BLE device.
+         * @param {Event} event The disconnection event.
+         */
+        function onBleDisconnected(event) {
+            const device = event.target;
+            logMessage(`BLE device "${device.name || device.id}" disconnected.`, 'warning');
+            sendBleBtn.disabled = true; // Disable send button
+            bleDevice = null;
+            bleTxCharacteristic = null;
+            bleRxCharacteristic = null;
+        }
+
+        /**
+         * Handles incoming BLE characteristic notifications.
+         * @param {Event} event The characteristic value changed event.
+         */
+        function handleBleNotifications(event) {
+            const value = event.target.value; // DataView
+            const textDecoder = new TextDecoder();
+            const receivedString = textDecoder.decode(value);
+            displayBleData(receivedString);
+        }
+
+        /**
+         * Sends data to the connected BLE device's TX characteristic.
+         */
+        async function sendBleData() {
+            if (!bleTxCharacteristic) {
+                logMessage('No BLE device connected or TX characteristic not found.', 'error');
+                return;
+            }
+
+            const data = bleInput.value;
+            if (!data.trim()) {
+                logMessage('Please enter data to send via BLE.', 'warning');
+                return;
+            }
+
+            const textEncoder = new TextEncoder();
+            const dataToSend = textEncoder.encode(data);
+
+            try {
+                await bleTxCharacteristic.writeValue(dataToSend); // Use writeValue for reliable delivery
+                logMessage(`Sent BLE: "${data}"`, 'success');
+                bleInput.value = ''; // Clear input
+            } catch (error) {
+                logMessage(`Error sending BLE data: ${error.message}`, 'error');
+            }
+        }
+
+        // --- Event Listeners ---
+        connectSerialBtn.addEventListener('click', connectSerial);
+        sendSerialBtn.addEventListener('click', sendSerialData);
+
+        connectBleBtn.addEventListener('click', connectBluetooth);
+        sendBleBtn.addEventListener('click', sendBleData);
+
+    </script>
+</body>
+</html>
