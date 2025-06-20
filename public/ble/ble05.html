@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>  
+   // Global Variables
+   let exports = {};  // Not strictly needed for WebBLE, but kept if other polyfills are envisioned
+   let model
+   
+   let myDataFiles, myTensor; 
+   let myDataTotal = 0;
+   let myDataMcu = 0;
+   let myDataCSV = 0;
+   let mySendFirstLine = false // Flag to include header line in captured data
+   
+   let labelsArray;
+   let uniqueLabels, labelsTensor;
+   let myModelSamples, myModelSenses
+   let myMultiCSV = true // This flag seems to control how data is handled from serial, might need re-evaluation for BLE
+   let myCellPhoneOnce = false // Flag for one-time cell phone motion capture
+   
+   let accelerometerData = [];
+   let startTime = null;
+   let myModelWasUploaded = false
+   let myBaseCsvFileName = 'myCSV-'
+   
+   // WebBLE specific globals
+   let myCharacteristic = null;
+   let myDevice = null;
+   let isWriting = false; // To prevent multiple writes at once
+
+   // BLE Service and Characteristic UUIDs (from user's provided sketch)
+   const MY_SERVICE_UUID = '19b10000-e8f2-537e-4f6c-d104768a1214';
+   const MY_CHARACTERISTIC_UUID = '19b10000-e8f2-537e-4f6c-d104768a1214';
+
+</script>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TinyMLjs - WebBLE Enabled</title>
+    
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.js"></script>
+<script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
+<script src="https://unpkg.com/papaparse@5.3.2/papaparse.js"></script>  <!-- For CSV manipulation  -->
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    /* Custom font for Inter */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+        font-family: 'Inter', sans-serif;
+        @apply bg-gradient-to-br from-gray-50 to-blue-50 text-gray-800 p-6;
+    }
+    h1, h3, h6 {
+        @apply text-gray-900;
+    }
+    h1 {
+        @apply text-4xl font-extrabold text-center mb-6;
+    }
+    h3 {
+        @apply text-2xl font-bold mb-4;
+    }
+    h6 {
+        @apply text-sm text-gray-600 mb-4;
+    }
+    button {
+        @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-0.5;
+    }
+    input[type="text"], input[type="number"], textarea {
+        @apply p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-700;
+    }
+    .panel {
+        @apply bg-white p-6 rounded-xl shadow-lg mb-6;
+    }
+    .section-title {
+        @apply text-xl font-bold text-gray-800 mb-3;
+    }
+    .flex-row-wrap {
+        @apply flex flex-row flex-wrap justify-center gap-4;
+    }
+    .log-area {
+        @apply bg-gray-100 p-4 rounded-lg overflow-auto text-sm max-h-48 mb-4;
+    }
+</style>
+</head>
+<body>
+<h1 align=center>TinyMLjs - WebBLE Enabled</h1>
+<h3>Making TinyML truly client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
+<h6> Version 0.56.3-215 Note: Web Bluetooth (BLE) connection works on Chrome, Edge, Android, and potentially other browsers with BLE support. Requires HTTPS.</h6>
+
+<div class="panel">
+    This website makes machine learning models from Web Bluetooth connected micro-controller sensors using TensorflowJS. 
+    That model can be saved and converted to a tFlite model, then to a C-header model.h file using Tensorflow command line or Python converters. I simplify the conversion using a Gitpod.
+    Finally the model.h file is combined with C/C++ code using an Arduino IDE ready library called RocksettaTinyML and compiled to the device for testing. <br><br>
+
+    Presently, for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/" class="text-blue-600 hover:underline">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
+</div>
+
+<div class="panel">
+    <div class="section-title">BLE Device Connection & Communication</div>
+    <button id="connectButton" class="bg-purple-600 hover:bg-purple-700 w-48 mr-2">Connect via BLE</button>
+    <input type=text id="mySendText" value="start" class="w-24">
+    <input type=button value="Send Text" onclick="{ mySendString(document.getElementById('mySendText').value) }" class="bg-gray-500 hover:bg-gray-600" disabled>
+    <br><br>
+
+    <button value="send 'a' LED On or Off" onclick="{mySendString('a')}" class="bg-green-500 hover:bg-green-600" disabled>Send 'a' (LED Cmd)</button>
+    <button value="send 'b' LED Off or On" onclick="{mySendString('b')}" class="bg-red-500 hover:bg-red-600" disabled>Send 'b' (LED Cmd)</button><br>
+
+    <button class="bg-lime-500 hover:bg-lime-600 w-48" onclick="{
+        document.getElementById('myArea01').value = ''; 
+        if (mySendFirstLine) { mySendString('firstline'); }
+        setTimeout(function() { mySendString('start'); }, 300);
+        setTimeout(function() { myShowGraph() }, 2500);                                           
+    }" disabled>Clear and send 'start'</button>
+        
+    <button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendString('stop')}" class="bg-yellow-500 hover:bg-yellow-600" disabled>Send 'stop'</button>  
+    <button value="Clear Sensor Data" onclick="{document.getElementById('myArea01').value = '';}">Clear Sensor Data</button>
+    <button value="send firstline" Title="Only for proper CSV files not for here" onclick="{
+        if (this.value =='send firstline' ){
+            mySendFirstLine = true;
+            mySendString('firstline');
+            this.value = 'stop sending firstline';
+        } else {
+            this.value ='send firstline';  
+            mySendFirstLine = false;
+        }
+    }" disabled>Send firstline</button>   
+    <button value="send 'start' only " onclick="{mySendString('start')}" disabled>Send 'start' only</button>  
+
+    <button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
+        document.getElementById('myArea01').value = ''; 
+        if (mySendFirstLine) { mySendString('firstline'); }
+        setTimeout(function() { mySendString('fancy1'); }, 300);
+        setTimeout(function() { myShowGraph() }, 2500);   
+    }" disabled>Nano33-fancy1</button> 
+
+    <button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
+        document.getElementById('myArea01').value = ''; 
+        if (mySendFirstLine) { mySendString('firstline'); }
+        setTimeout(function() { mySendString('fancy2'); }, 300);
+        setTimeout(function() { myShowGraph() }, 2500);   
+    }" disabled>Nano33-fancy2</button>   
+    <br> 
+
+    <button value="Cell Phone: Motion" title="Only Works with a cell phone" class="h-12 bg-indigo-500 hover:bg-indigo-600" onclick="{
+        myCellPhoneOnce = true;
+        accelerometerData = [];
+        startTime = null;
+        document.getElementById('myArea01').value = ''; 
+        if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n'; }
+        setTimeout(function() {myCellPhoneMotion(); }, 300);
+        setTimeout(function() { myShowGraph() }, 2500);        
+    }">Cell Phone: Motion</button> 
+
+    <input type="button" value="Mouse Motion" class="h-12 bg-teal-500 hover:bg-teal-600" onClick="{
+        setTimeout(function() {
+            const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
+            let myMouseCount = 0;
+            let myMouseOutput = '';
+            document.getElementById('myArea01').value = 'Move the Mouse!';
+        
+            const mousemoveListener = function (event) {
+                if (myMouseCount < myNumberOfSamples -1 ) {
+                    myMouseOutput += parseFloat(event.x/window.screen.width).toFixed(2);
+                    myMouseOutput += ','; 
+                    myMouseOutput += parseFloat(event.y/window.screen.height).toFixed(2);
+                    myMouseOutput += '\r\n'; 
+                    myMouseCount++;
+                } else {
+                    document.removeEventListener('mousemove', mousemoveListener);
+                    document.getElementById('myArea01').value = myMouseOutput;
+                    console.log(myMouseOutput);
+                    myShowGraph();
+                }
+            };
+            document.addEventListener('mousemove', mousemoveListener);
+        }, 1000);
+    }">
+    <div id="messages" class="log-area mt-4 border border-gray-300">Ready.</div>
+</div>
+
+<div class="panel">
+    <div class="section-title">Data Collection & Preprocessing</div>
+    <textarea id="myArea01" rows=10 cols=100 class="w-full h-48 mb-4"></textarea>
+    <br>
+    <button class="bg-lime-500 hover:bg-lime-600" onclick="{cleanFillTrim()}">Clean, Trim or Fill</button>
+          
+    Label: <input type=text id="mySingleLabel" placeholder="1label" class="bg-lime-100" value="1label" onChange="{
+        document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv';
+    }">  
+    <button class="bg-lime-500 hover:bg-lime-600" onclick="{previewSensorData()}">Keep</button>  
+       
+    <button value="Auto Next" title="Keeps current data, clears textarea, sends 'start', cleans, and graphs." onclick="{
+        previewSensorData();
+        document.getElementById('myArea01').value = '';
+        if (mySendFirstLine) { mySendString('firstline'); } 
+        setTimeout(function() { mySendString('start'); }, 200);
+        setTimeout(function() { cleanFillTrim(); }, 2000);
+        setTimeout(function() { myShowGraph() }, 2500);  
+    }" disabled>Auto Next</button>    
+       
+    <button value="Auto Next and save" title="Does all auto next steps and saves to CSV." onclick="{
+        previewSensorData();
+        document.getElementById('myArea01').value = '';
+        if (mySendFirstLine) { mySendString('firstline'); } 
+        setTimeout(function() { mySendString('start'); }, 200);
+        setTimeout(function() { cleanFillTrim(); }, 2000);
+        setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2400);     
+        setTimeout(function() { myShowGraph() }, 2500);  
+    }" disabled>Auto Next and Save</button>     
+    <br>
+        
+    <button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">Save CSV</button>  
+    CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
+        myBaseCsvFileName = this.value.split('-')[0] + '-';
+    }">
+</div>
+
+<div class="panel">
+    <div class="section-title">Data Visualization & Classification</div>
+    <button value="Show Graph" onclick="myShowGraph()">Show Graph</button>
+    <button value="Classify Data" class="bg-lime-500 hover:bg-lime-600 w-48" onclick="{classifyData();}" disabled>Classify Data</button>
+    <button value="Show All Data" onclick="{
+        document.getElementById('myArea01').value ='';
+        let dataString = '';
+        let labelString = '';
+        for (let i = 0; i <= myDataCSV; i++) {                                       
+            const dataElement = document.getElementById('myData' + i);
+            const labelElement = document.getElementById('myLabel' + i);
+            if (dataElement) { dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n'; }
+            if (labelElement) { labelString += 'Label #' + i + ':' + labelElement.textContent + '\n'; }
+        }
+        for (let i = 0; i <= myDataMcu; i++) {                                       
+            const dataElement = document.getElementById('myData2Mcu' + i);
+            const labelElement = document.getElementById('myLabel2Mcu' + i);
+            if (dataElement) { dataString += 'Data #' + i + '\n' + dataElement.textContent + ', length: ' + dataElement.textContent.length + '\n\n'; }
+            if (labelElement) { labelString += 'Label #' + i + ':' + labelElement.textContent + ', length: ' + labelElement.textContent.length +  '\n'; }
+        }
+        document.getElementById('myArea01').value = dataString + labelString;                                             
+    }">Show All Data</button> <br>
+    <span id="mySpanResults" class="text-lg font-semibold text-blue-700">...</span>
+        
+    <div id="myChart" class="w-full h-80 mt-4 bg-gray-50 rounded-lg shadow-inner"></div>
+</div>
+
+<div class="panel">
+    <div class="section-title">Machine Learning Model Training</div>
+    Machine Learning models often need very specific data.<br>
+
+    <button value="Clean, Trim or Fill All" onclick="{  
+        document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
+        myDataCheckCSV();
+        myDataCheckSenses();
+    }">Clean, Trim or Fill All</button>
+
+    Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5 class="w-16">
+    Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5 class="w-16">
+    Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5 class="w-16"><br>
+       
+    Number of Samples/count: <input type=text id="myNumSamples" value="36"   size=4 class="w-20" onChange="{myModelSamples = parseInt(this.value)}">
+    Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 class="w-20" onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
+       
+    <textarea id="myTextarea123" wrap="off" class="font-mono text-white bg-gray-900 w-full p-4 rounded-lg text-sm" rows=3 onclick="{
+        if (myOnce123){
+            myTextGrow('myTextarea123', 'myDiv123Code');
+            document.getElementById('myUpdate123').style.visibility = 'visible';
+            myOnce123 = false;
+        }
+    }">Click here to see the working HTML code.</textarea><br>
+
+    <button value="Convert Data to Tensor" class="bg-lime-500 hover:bg-lime-600 w-48" onclick="loadDataToTensor()">Convert Data to Tensor</button><br>
+       
+    Enter number of epochs: <input type="number" id="myEpochs" value=100 class="w-20">,
+    Learning rate: <input type="number" id="myLearningRate" value="0.0005" class="w-24"> <br>
+    
+    <div id="mySpanClassify" class="log-area mt-4">...</div>
+
+    <span id="myDiv123Code">
+        <input type="button" id="myTrainButton" value="Train Model" class="bg-lime-500 hover:bg-lime-600 w-48" onclick="{
+            async function trainModel() {
+                myModelSamples = parseInt(document.getElementById('myNumSamples').value);
+                myModelSenses  = parseInt(document.getElementById('myNumSenses').value); 
+                myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value);   
+                 
+                console.log('myModelSamples', myModelSamples);   
+                console.log('myModelSenses', myModelSenses);   
+                console.log('myModelTotalCount', myModelTotalCount);   
+
+                if (!myModelWasUploaded) {
+                    if (model){   
+                        model.dispose();
+                        console.log('Model deleted');
+                    }
+                    model = tf.sequential();   
+                    model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
+                    model.add(tf.layers.dense({units: 8, activation: 'relu'})); // Added activation
+                    model.add(tf.layers.dense({ units: 20, activation: 'relu'})); // Added activation   
+                    model.add(tf.layers.dense({ units: 30, activation: 'relu'})); // Added activation
+                    model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+                }
+                   
+                const myRate = parseFloat(document.getElementById('myLearningRate').value);
+                model.compile({
+                    optimizer: tf.train.adam(myRate),
+                    loss: 'categoricalCrossentropy',
+                    metrics: ['accuracy']
+                });
+                model.summary();
+                   
+                justFit();
+                console.log(model);
+            }
+            trainModel();
+        }"> 
+    </span>
+
+    <input id="myUpdate123" type=button value="Update Model" class="bg-pink-500 hover:bg-pink-600 w-48 invisible" onclick="{
+        document.getElementById('myUpdate123').style.backgroundColor = 'gray';
+        myFred = document.getElementById('myTextarea123').value.split('\n');
+        myFred.pop();
+        myFred.push('');
+        myFred.shift();
+        myFred.shift();
+        myJoe = myFred.join('\n');
+        document.getElementById('myDiv123Code').innerHTML = myJoe;
+        document.getElementById('myTrainButton').click();
+    }">
+       
+    <button value="Just Fit - retrain" onclick="{justFit(); console.log(model.summary());}">Just Fit - Retrain</button> 
+    <button value="View Model" onclick="{
+        document.getElementById('myShowModelDiv').innerHTML = '<br>';
+        model.layers.forEach((layer, index) => {
+            document.getElementById('myShowModelDiv').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`;
+            console.log(`Layer ${index + 1}:`);
+            console.log(`- Name: ${layer.name}`);
+            console.log(`- Type: ${layer.getClassName()}`);
+            console.log(`- Output Shape: ${layer.outputShape}`);
+            console.log(`- Number of Parameters: ${layer.countParams()}`);
+            console.log(`- Trainable: ${layer.trainable}`);
+            if (layer.getWeights().length > 0) {
+                console.log(`- Weights: ${layer.getWeights().map(w => w.shape).join(', ')}`);
+            } else {
+                console.log('- No Weights');
+            }
+            console.log('-----------------------');
+        });
+    }">View Model</button> <br> 
+       
+    <div id="myShowModelDiv" class="log-area mt-2">...</div>  <br>
+
+    <button value="Export Model" onclick="exportModel()">Export Model</button> 
+    <input id="myExportFileName" type=text value="model" class="w-32"> <br>
+    <ol class="list-decimal list-inside text-sm mt-4 space-y-1">
+        <li>Try the following steps:
+            <li>Convert the exported model to Arduino ready c-header model.h file as well as a model.tflite file using one of the following methods:<br></li>
+            <li><table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-300 p-2 text-left">1:</th>
+                        <th class="border border-gray-300 p-2 text-left">Method</th>
+                        <th class="border border-gray-300 p-2 text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-300 p-2">1:</td>
+                        <td class="border border-gray-300 p-2"><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs" class="text-blue-600 hover:underline">tensorflowjs-to-arduino-for-tinymljs</a> </td>
+                        <td class="border border-gray-300 p-2">Best to install the modules needed to client-side do the conversions yourself. This github shows what you need to do. The installation might be different on your computer. I always find this hard to do at school.</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 p-2">2:</td>
+                        <td class="border border-gray-300 p-2"><a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing" class="text-blue-600 hover:underline">iPython Notebook TFJS to TFlite</a></td>
+                        <td class="border border-gray-300 p-2">This web based Google Colab iPython notebook (Needs a google login) loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 p-2">3:</td>
+                        <td class="border border-gray-300 p-2">Use a Gitpod: <a href="https://github.com/hpssjellis/Gitpod-auto-tensorflowJS-to-arduino" class="text-blue-600 hover:underline">https://github.com/hpssjellis/Gitpod-auto-tensorflowJS-to-arduino</a> or direct load the gitpod: <a href="https://gitpod.io/#github.com/hpssjellis/Gitpod-auto-tensorflowJS-to-arduino" class="text-blue-600 hover:underline">Gitpod Here </a></td>
+                        <td class="border border-gray-300 p-2">A Gitpod browser docker like program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view, if you have a github account it loads fast.</td>
+                    </tr>
+                </tbody>
+            </table> <br><br></li>
+
+            <li>Use <a href="https://netron.app/" class="text-blue-600 hover:underline">https://netron.app/</a> to check and visualize your downloaded model.tflite <br> </li>
+            <li>Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML" class="text-blue-600 hover:underline">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  <br></li>
+        </ol> 
+    <span id="mySpanExport" class="log-area mt-4">...</span>
+    <hr class="my-6 border-gray-200">
+</div>
+
+<div class="panel">
+    <button class="bg-red-500 hover:bg-red-600" onclick="{
+        if (this.value != 'Show File Uploading') {
+            this.value = 'Show File Uploading';   
+            this.style.backgroundColor = 'red';
+            document.getElementById('myUploadCsvSpan').style.display = 'none'; 
+            document.getElementById('mySpanModelUpload').style.display = 'none'; 
+        }  else {
+            document.getElementById('myUploadCsvSpan').style.display = 'block'; 
+            document.getElementById('mySpanModelUpload').style.display = 'block'; 
+            this.value = 'Hide File Uploading';
+            this.style.backgroundColor = 'lime';
+        }
+    }">Show File Uploading</button><br>
+
+    <span id="myUploadCsvSpan" style="display:none; ">
+       <p class="mt-4">Upload from a raw CSV file or an Arduino style microcontroller using Web Bluetooth (Android Pixel phones also work) or your cell phone motion sensor.
+       Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
+       vanilla Javascript webpage! <br><br></p>
+       
+       Show: <input type=radio name="myPre" onclick="{
+          document.getElementById('myDataPreviewCSV').style.display = 'block';
+          document.getElementById('myDataPreviewSensor').style.display = 'block';
+       }" CHECKED>
+       Hide: <input type=radio name="myPre" onclick="{
+          document.getElementById('myDataPreviewCSV').style.display = 'none';
+          document.getElementById('myDataPreviewSensor').style.display = 'none';
+       }"> Load .csv files: 
+          
+       <input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
+           if (!myDataFiles) {
+              myDataFiles = event.target.files;
+           } else {
+              myDataFiles = [...myDataFiles, ...event.target.files];
+           }
+           if (myDataFiles.length > 0) {
+             previewData();
+           }                                                      
+       }"> 
+       <br>
+       
+       <p class="mt-2">Following is the list of actual labels used in the same order as uploaded (comma-separated)
+       Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br></p>
+          
+       CSV Lables (careful): <input type="text" id="myLabels" size=80 value="" class="w-full"> 
+       
+       <div id="myDataPreviewCSV" class="flex-row-wrap"></div>
+       <hr class="my-6 border-gray-200">
+       
+    </span><br>
+       
+    Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value="" class="w-full"> <br><br>
+
+    <div id="myDataPreviewSensor" class="flex-row-wrap"></div>
+
+    <span id="mySpanModelUpload" style="display : none; ">   
+        <label for="modelFile" class="block mb-1">Select model file (.json):</label>
+        <input type="file" id="modelFile" accept=".json" class="mb-2">
+        <br>
+        <label for="weightsFile" class="block mb-1">Select weights file (.bin):</label>
+        <input type="file" id="weightsFile" accept=".bin" class="mb-2">
+        <br>
+        <label for="labelFile" class="block mb-1">Select labels file (.txt):</label>
+        <input type="file" id="labelsFile" accept=".txt" class="mb-2">
+        <br>
+              
+        Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical" class="w-full">
+        <button value="Re-set labels" onclick="{
+            const labelsInput3 = document.getElementById('myNewLabels').value;   
+            const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+            uniqueLabels = [...new Set(labelsArray3)];
+            console.log('uniqueLabels', uniqueLabels);
+        }">Re-set labels</button>   
+        <br>
+              
+        <button value="Upload Model" onclick="uploadModel()">Upload Model</button><br>
+        <span id="mySpanUpload" class="log-area mt-4">...</span>
+      
+        <hr class="my-6 border-gray-200">
+    </span> 
+</div>
+
+ <!-- --------------------------------- End of regular webpage tags with Javascript as events -------------------------------------------------------  -->       
+ <!-- --------------------------------- Start of pure Javascript coding -----------------------------------------------------------------------------  -->           
+
+<script>
+    /**
+     * Appends a message to the global messages div.
+     * @param {string} msg The message to display.
+     * @param {string} type Optional type for styling (e.g., 'error', 'success', 'warning').
+     */
+    function logMessage(msg, type = '') {
+        const messagesDiv = document.getElementById('messages');
+        const p = document.createElement('p');
+        p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        if (type === 'error') {
+            p.classList.add('text-red-600', 'font-medium');
+        } else if (type === 'success') {
+            p.classList.add('text-green-600', 'font-medium');
+        } else if (type === 'warning') {
+            p.classList.add('text-orange-600', 'font-medium');
+        } else {
+            p.classList.add('text-gray-700');
+        }
+        messagesDiv.prepend(p); // Add to top
+        if (messagesDiv.children.length > 20) { // Keep only latest 20 messages
+            messagesDiv.removeChild(messagesDiv.lastChild);
+        }
+    }
+
+
+function myDataCheckCSV(){
+   for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
+      document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+      document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+      document.getElementById('mySpanClassify').innerHTML += 'CSV #:'+ i + '<br><br>'
+   }  
+
+   const myTotalNumber = parseInt(document.getElementById('myNumSamples').value)
+
+   console.log(`myDataCSV: ${myDataCSV}`) 
+
+   for (let i = 0; i < myDataCSV; i++) { 
+      let myDoing = ''                 
+      let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
+      if (myTempArray[myTempArray.length - 1] === '') {
+        myTempArray.pop();
+      }   
+      let myDifference =  myTempArray.length - myTotalNumber                                                 
+
+      console.log(`myDifference: ${myDifference}`)  
+      
+      document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
+      if (myDifference == 0){myDoing += 'fine,'}
+      
+      if (myDifference > 0) {                                     
+         for (let myI2 = 0; myI2 < myDifference; myI2++){                     
+            myTempArray.pop()   // delete the item 
+            myDoing += 'deleted,'
+         }  
+      }
+      if (myDifference < 0) {     
+         myDifference = myDifference * -1
+         for (let myI3=0; myI3 < myDifference; myI3++){ 
+            let myTempSenses = []                                             
+            for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
+               myTempSenses[myI4] = 0                                        
+            }                                             
+            myTempArray.push(myTempSenses.join(',')) 
+            myDoing += 'added,' 
+         }     
+      }       
+      document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
+      document.getElementById('mySpanClassify').innerHTML += `Data #${i} ${myDoing}<br>`    
+   }
+}   
+
+function myDataCheckSenses(){
+    for (let i = 1; i <= myDataMcu; i++) {                                
+       document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/\n\n/g, '\n')
+       document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/,,/g, '0,0,0')
+       document.getElementById('mySpanClassify').innerHTML += 'Senses #:'+ i + '<br><br>'
+    }  
+
+    const myTotalNumber = parseInt(document.getElementById('myNumSamples').value)
+
+    console.log(`myDataMcu: ${myDataMcu}`) 
+
+    for (let i = 1; i <= myDataMcu; i++) { 
+       let myDoing = ''                 
+       let myTempArray = document.getElementById('myData2Mcu' + i).textContent.split('\n')                    
+       if (myTempArray[myTempArray.length - 1] === '') {
+         myTempArray.pop();
+       }  
+       let myDifference =  myTempArray.length - myTotalNumber                                                 
+
+       console.log(`myDifference: ${myDifference}`)  
+       
+       document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
+       if (myDifference == 0){myDoing += 'fine,'}
+       
+       if (myDifference > 0) {                                     
+          for (let myI2 = 0; myI2 < myDifference; myI2++){                     
+             myTempArray.pop()
+             myDoing += 'deleted,'
+          }  
+       }
+       if (myDifference < 0) {          
+          myDifference = myDifference * -1
+          const lastValue = myTempArray[myTempArray.length - 1];
+          for (let myI3=0; myI3 < myDifference; myI3++){  
+             myTempArray.push(lastValue);                               
+             myDoing += 'added,' 
+          }  
+       }   
+       document.getElementById('myData2Mcu' + i).textContent = myTempArray.join('\n') 
+       document.getElementById('mySpanClassify').innerHTML += `Data #${i} ${myDoing}<br>`
+    }
+}   
+
+
+function cleanFillTrim(){
+   document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n');
+   document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n');
+   document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/,,/g, '0,0,0');
+                                                        
+   myShowGraph(); 
+                                                        
+   let myCountArray =  document.getElementById('myArea01').value.split('\n');
+   if (myCountArray[myCountArray.length - 1] === '') {
+     myCountArray.pop();
+   }   
+   myTotalNumber = parseInt(document.getElementById('myNumSamples').value);
+
+   console.log(' myCountArray.length', myCountArray.length);
+   console.log( 'myTotalNumber ', myTotalNumber);
+                                                 
+   myDifference = myCountArray.length - myTotalNumber;                                                 
+   console.log('myDifference', myDifference);            
+                                                 
+   if (myDifference > 0) {                                     
+      for (myI=0; myI < myDifference; myI++){                     
+         myCountArray.pop();                                
+      }  
+   }
+
+   if (myDifference < 0) {       // add to the data 
+       myDifference *= -1;
+       const lastValue = myCountArray[myCountArray.length - 1];
+       for (myI = 0; myI < myDifference; myI++) {  
+          myCountArray.push(lastValue);                               
+       }  
+   }
+   document.getElementById('myArea01').value = myCountArray.join('\n');      
+   myShowGraph(); 
+   console.log('myCountArray.length', myCountArray.length);
+}
+
+function previewData() {
+   document.getElementById("mySpanUpload").innerHTML = '';   
+   
+   const previewCSV = document.getElementById("myDataPreviewCSV");
+   previewCSV.innerHTML = "";
+
+   myDataTotal = myDataMcu + myDataFiles.length;
+   myDataCSV = myDataFiles.length;
+   console.log(`myDataMcu: ${myDataMcu}, myDataCSV: ${myDataCSV}, myDataFiles.length:  ${myDataFiles.length} `);
+
+   document.getElementById("myNumCountCSV").value  = myDataCSV;
+   document.getElementById("myNumCountTotal").value  = myDataTotal;
+   for (let i = 0; i < myDataFiles.length; i++) {
+      const file = myDataFiles[i];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+         const container = document.createElement("div");
+         container.style.display = "flex";
+         container.style.flexDirection = "column";
+         container.style.alignItems = "center";
+         const dataElement = document.createElement("span");
+         dataElement.textContent = reader.result;
+         dataElement.id = "myData"+i;    
+         container.appendChild(dataElement);
+
+         let filename = file.name;
+         let parts = filename.split(".");
+         let csv = parts.pop();
+         let [myFileName, myFileLabel] = parts[0].split('-');
+         
+         let [myFileLabelReduced, myFileNumber] = myFileLabel.split(' ');
+
+         if (i == 0) {
+            document.getElementById("myLabels").value = myFileLabelReduced;
+         } else {
+           document.getElementById("myLabels").value += ',' + myFileLabelReduced;
+         }  
+
+         const labelElement = document.createElement("span");
+         labelElement.textContent = `#:${i}, Filename: ${filename}, Label: ${myFileLabelReduced}`;  
+         labelElement.id = "myLabel"+i;    
+         container.prepend(labelElement);
+         previewCSV.appendChild(container);
+         };
+      reader.readAsText(file);
+   }
+}
+
+function previewSensorData() {
+   document.getElementById("mySpanUpload").innerHTML = '';
+   myDataTotal += 1;
+   myDataMcu += 1;
+   if (myDataFiles) {   
+        console.log(`myDataMcu: ${myDataMcu},  myDataCSV: ${myDataCSV}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `);
+   } else {
+        console.log(`myDataMcu: ${myDataMcu}, myDataCSV: ${myDataCSV}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `);
+   }   
+   document.getElementById("myNumCountSenses").value = myDataMcu;
+   document.getElementById("myNumCountTotal").value = myDataTotal;
+ 
+   const previewSensor = document.getElementById("myDataPreviewSensor");
+   if (myDataMcu == 1) {
+      document.getElementById("mySenseLabels").value  =   document.getElementById("mySingleLabel").value;
+   } else {
+      document.getElementById("mySenseLabels").value  +=  ',' + document.getElementById("mySingleLabel").value;
+   }
+   const container = document.createElement("div");
+   container.style.display = "flex";
+   container.style.flexDirection = "column";
+   container.style.alignItems = "center";
+   const dataElement = document.createElement("span");
+   dataElement.textContent = document.getElementById("myArea01").value;
+   dataElement.id = "myData2Mcu" + myDataMcu;    
+   container.appendChild(dataElement);
+   const labelElement = document.createElement("span");
+   labelElement.textContent = 'Senses #:'+ myDataMcu + ', ' + document.getElementById("mySingleLabel").value; 
+   labelElement.id = "myLabel2Mcu" + myDataMcu; 
+   container.prepend(labelElement);
+   previewSensor.appendChild(container);
+}   
+    
+async function loadDataToTensor() {
+   document.getElementById("mySpanClassify").innerHTML = '';
+   let dataArrays = [];
+
+   for (let i = 0; i < myDataCSV; i++) {
+      const dataElement = document.getElementById('myData' + i);
+      if (dataElement) {
+         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+         dataArrays.push(dataArray);  
+         document.getElementById("mySpanClassify").innerHTML = 'DataCSV:' + i;
+      }
+   }
+   for (let i = 1; i <= myDataMcu; i++) {
+      const dataElement = document.getElementById('myData2Mcu' + i);
+      if (dataElement) {
+         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+         dataArrays.push(dataArray);   
+         document.getElementById("mySpanClassify").innerHTML = 'DataSenses: ' + i;      
+      }
+   }
+   
+   console.log(dataArrays);
+   const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
+   myTensor = tf.stack(tensors);
+   console.log('Data converted to tensor:', myTensor);
+   document.getElementById("mySpanClassify").innerHTML += `, myTensor.shape: ${ myTensor.shape}<br>`;
+
+    let labelsArray1 = [];
+    let labelsArray2 = [];
+   
+   if (myDataCSV > 0){
+      const labelsInput = document.getElementById("myLabels").value;   // from CSV files
+      labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+   }
+   console.log(labelsArray1);
+   
+   if (myDataMcu > 0){
+      const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
+      labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
+   }
+   console.log(labelsArray2);
+
+   const labelsArray = labelsArray1.concat(labelsArray2);
+   console.log('labelsArray', labelsArray);
+   
+   uniqueLabels = [...new Set(labelsArray)];
+   console.log('uniqueLabels', uniqueLabels);
+   const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+   labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
+   console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
+   document.getElementById("mySpanClassify").innerHTML += `labelsTensor.shape: ${ labelsTensor.shape}<br>`;
+}
+    
+async function justFit() {
+    await model.fit(myTensor, labelsTensor, {
+        epochs:  parseInt(document.getElementById('myEpochs').value),
+        batchSize: 32,
+        callbacks: {
+            onEpochEnd: (epoch, logs) => {
+                console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+                document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`;
+            }
+        }
+    });
+}   
+
+async function exportModel() {
+    let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value;
+    await model.save(myModelFileName);
+    mySaveTxt(document.getElementById('myExportFileName').value+'Labels');
+}
+   
+async function uploadModel() {
+   myModelWasUploaded = true;
+   
+    async function loadLabelsFile() {
+        const labelsFileInput = document.getElementById("labelsFile");
+
+        if (labelsFileInput.files.length === 0) {
+            logMessage('Please select a text file for labels.', 'error');
+            return;
+        }
+
+        const file = labelsFileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = async function () {
+            try {
+                const labelsInput3 = await reader.result;
+                document.getElementById('myNewLabels').value = labelsInput3;
+                const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+                uniqueLabels = [...new Set(labelsArray3)];
+                console.log('uniqueLabels', uniqueLabels);
+                logMessage('Labels loaded successfully.', 'success');
+            } catch (error) {
+                logMessage(`Error loading labels: ${error.message}`, 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+   loadLabelsFile();
+   
+   const modelFile = document.getElementById("modelFile").files[0];
+   const weightsFile = document.getElementById("weightsFile").files[0];
+   if (!modelFile || !weightsFile) {
+      logMessage("Please select both a model file and a weights file to upload", 'error');
+      return;
+   }
+   try {
+       model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+       model.summary();
+       logMessage('Model uploaded successfully.', 'success');
+   } catch (error) {
+       logMessage(`Error uploading model: ${error.message}`, 'error');
+   }
+}
+
+async function classifyData() {
+    myModelSamples = parseInt(document.getElementById('myNumSamples').value);
+    myModelSenses  = parseInt(document.getElementById('myNumSenses').value); 
+      
+    const dataString = document.getElementById("myArea01").value;
+
+    let dataArray = dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+       
+    const inputTensor = tf.tensor([dataArray]); 
+    console.log('inputTensor before reshape', inputTensor);  
+      
+    const inputTensor2 = inputTensor.reshape([1 ,myModelSamples, myModelSenses]);
+      
+    console.log('inputTensor2 after reshape', inputTensor2);  
+      
+    const prediction = model.predict(inputTensor2);
+    const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+    console.log('predictedLabelIndex', predictedLabelIndex);   
+
+    // Send commands based on classification (adjust 'a' and 'b' meanings as per your Arduino sketch)
+    if (predictedLabelIndex == 0){
+       mySendString('a'); // Example: turn on/off Microcontroller LED
+    }  else {
+      mySendString('b'); // Example: turn off/on Microcontroller LED
+    }
+       
+    const predictedLabel = uniqueLabels[predictedLabelIndex];
+    console.log(`Predicted label: ${predictedLabel}`);
+    document.getElementById('mySpanResults').innerHTML = `predictedLabelIndex: ${predictedLabelIndex},  Predicted label: ${predictedLabel} <br>`;
+
+    console.log('prediction', prediction);
+
+    const predictedArray = prediction.arraySync();
+     
+    console.log('predictedArray', predictedArray);  
+
+    for (let myLabelCount = 0; myLabelCount < uniqueLabels.length; myLabelCount++){
+       let myPercent = Math.round(predictedArray[0][myLabelCount] * 100);
+       document.getElementById('mySpanResults').innerHTML += `${uniqueLabels[myLabelCount]}: ${myPercent}%<br>`;    
+    }
+    inputTensor.dispose();
+}
+  
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function myShowGraph() {
+  const dataString2 = document.getElementById("myArea01").value;
+
+  const dataArray = dataString2.split("\n").map(row => row.split(",").map(value => parseFloat(value)));
+  document.getElementById('mySpanResults').innerHTML =  "Number of Samples:" + dataArray.length;
+   
+  const myModelSenses = dataArray[0].length;
+  document.getElementById('myNumSenses').value  = myModelSenses;
+  const lineData = [];
+
+  for (let i = 0; i < myModelSenses; i++) {
+    lineData.push([]);
+  }
+
+  for (let i = 0; i < dataArray.length; i++) {
+    for (let j = 0; j < myModelSenses; j++) {
+      const value = parseFloat(dataArray[i][j]);
+      lineData[j].push(value);
+    }
+  }
+
+  const lineTraces = [];
+
+  for (let i = 0; i < myModelSenses; i++) {
+    const trace = {
+      x: Array.from(Array(lineData[i].length).keys()),
+      y: lineData[i],
+      mode: 'lines',
+      name: `Line ${i + 1}`,
+      line: { color: getRandomColor() },
+    };
+    lineTraces.push(trace);
+  }
+
+  const layout = {
+    title: "Sensor Data Chart",
+    xaxis: { title: 'Sample Index' },
+    yaxis: { title: 'Value' },
+  };
+
+  Plotly.purge('myChart');
+  Plotly.newPlot('myChart', lineTraces, layout);
+}
+
+function mySaveCSV(myInFileName) {
+  var csv = document.getElementById("myArea01").value;
+  var data = Papa.parse(csv, { header: true }).data;
+  var csvContent = Papa.unparse(data, { delimiter: "," });
+
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", "data:text/csv;charset=utf-8," + encodedUri);
+  link.setAttribute("download", myInFileName);
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  logMessage(`CSV file '${myInFileName}' saved.`, 'success');
+}
+
+function mySaveTxt(myInFileName) {
+  var text = uniqueLabels.join(','); // Join labels with comma for saving to txt
+  var encodedUri = "data:text/plain;charset=utf-8," + encodeURI(text);
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", myInFileName + '.txt'); // Add .txt extension
+  link.click();
+  logMessage(`Labels file '${myInFileName}.txt' saved.`, 'success');
+}
+    
+   /////////////////////////////////////// End of user code ///////////////////////////////////////////   
+
+  /////////////////////////////////////// WebBLE code starts ///////////////////////////////////////////
+  
+document.getElementById('connectButton').addEventListener('click', () => {
+    myConnectBLE();
+});
+
+/**
+ * Connects to a BLE device using the specified UUIDs.
+ */
+async function myConnectBLE() {
+    if (!('bluetooth' in navigator)) {
+        logMessage('Web Bluetooth API not supported in this browser. Please use Chrome, Edge, or Opera.', 'error');
+        return;
+    }
+    logMessage("Connecting to BLE device...");
+    try {
+        myDevice = await navigator.bluetooth.requestDevice({
+            filters: [{ services: [MY_SERVICE_UUID] }],
+            optionalServices: [] // No optional services for this example, add if needed
+        });
+
+        if (!myDevice) {
+            logMessage('BLE device selection cancelled.', 'warning');
+            return;
+        }
+
+        logMessage(`Connecting to: ${myDevice.name || myDevice.id}`);
+        myDevice.addEventListener('gattserverdisconnected', myHandleDisconnect);
+
+        const server = await myDevice.gatt.connect();
+        logMessage('Connected to BLE GATT server.', 'success');
+
+        const service = await server.getPrimaryService(MY_SERVICE_UUID);
+        logMessage('Got BLE service.');
+
+        // Get the characteristic for reading/writing and notifications
+        myCharacteristic = await service.getCharacteristic(MY_CHARACTERISTIC_UUID);
+        logMessage('Got BLE characteristic.', 'success');
+
+        await myCharacteristic.startNotifications();
+        myCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+            const value = new TextDecoder().decode(event.target.value);
+            // Append incoming data to the main textarea for TinyML processing
+            document.getElementById('myArea01').value += value + '\r\n'; // Add newline for readability
+            logMessage("Arduino sent → Web: " + value);
+        });
+
+        logMessage("Connected to: " + myDevice.name, 'success');
+        // Enable buttons that send data
+        document.getElementById('mySendText').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'a\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'b\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'start\')"]').disabled = false; // "Clear and send 'start'" button
+        document.querySelector('button[onclick*="mySendString(\'stop\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'firstline\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'start\')"][value="send \'start\' only "]').disabled = false; // "send 'start' only"
+        document.querySelector('button[onclick*="mySendString(\'fancy1\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'fancy2\')"]').disabled = false;
+        // Enable Auto Next and Auto Next and save buttons
+        document.querySelector('button[value="Auto Next"]').disabled = false;
+        document.querySelector('button[value="Auto Next and save"]').disabled = false;
+        // Enable Classify Data button
+        document.querySelector('button[value="Classify Data"]').disabled = false;
+
+
+    } catch (error) {
+        logMessage(`BLE Connection failed: ${error.message}`, 'error');
+        if (myDevice && myDevice.gatt.connected) {
+            myDevice.gatt.disconnect();
+        }
+    }
+}
+
+/**
+ * Sends a string to the connected BLE characteristic.
+ * @param {string} text The string to send.
+ */
+async function mySendString(text) {
+    if (!myCharacteristic) {
+        logMessage("Please connect to a BLE device first.", 'warning');
+        return;
+    }
+    if (isWriting) {
+        logMessage("Already sending, please wait.", 'warning');
+        return;
+    }
+
+    try {
+        isWriting = true;
+        // Temporarily disable send buttons to prevent rapid clicks
+        document.getElementById('mySendText').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'a\')"]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'b\')"]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'start\')"]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'stop\')"]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'firstline\')"]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'start\')"][value="send \'start\' only "]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'fancy1\')"]').disabled = true;
+        document.querySelector('button[onclick*="mySendString(\'fancy2\')"]').disabled = true;
+        document.querySelector('button[value="Auto Next"]').disabled = true;
+        document.querySelector('button[value="Auto Next and save"]').disabled = true;
+        document.querySelector('button[value="Classify Data"]').disabled = true;
+
+
+        const encoded = new TextEncoder().encode(text);
+        await myCharacteristic.writeValue(encoded);
+        logMessage("Web sent → Arduino: " + text, 'success');
+
+        // Throttle sending to prevent overwhelming the device (e.g., 100ms delay)
+        await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (err) {
+        logMessage("BLE Write error: " + err.message, 'error');
+    } finally {
+        isWriting = false;
+        // Re-enable send buttons
+        document.getElementById('mySendText').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'a\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'b\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'start\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'stop\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'firstline\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'start\')"][value="send \'start\' only "]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'fancy1\')"]').disabled = false;
+        document.querySelector('button[onclick*="mySendString(\'fancy2\')"]').disabled = false;
+        document.querySelector('button[value="Auto Next"]').disabled = false;
+        document.querySelector('button[value="Auto Next and save"]').disabled = false;
+        document.querySelector('button[value="Classify Data"]').disabled = false;
+    }
+}
+
+/**
+ * Handles BLE device disconnection.
+ */
+function myHandleDisconnect(event) {
+    const device = event.target;
+    logMessage(`BLE device "${device.name || device.id}" disconnected.`, 'error');
+    myCharacteristic = null;
+    myDevice = null;
+    // Disable all send buttons upon disconnection
+    document.getElementById('mySendText').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'a\')"]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'b\')"]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'start\')"]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'stop\')"]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'firstline\')"]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'start\')"][value="send \'start\' only "]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'fancy1\')"]').disabled = true;
+    document.querySelector('button[onclick*="mySendString(\'fancy2\')"]').disabled = true;
+    document.querySelector('button[value="Auto Next"]').disabled = true;
+    document.querySelector('button[value="Auto Next and save"]').disabled = true;
+    document.querySelector('button[value="Classify Data"]').disabled = true;
+}
+
+
+myOnce123 = true;
+
+function myTextGrow(myT, myB){
+   var myCursorStart = document.getElementById(myT).selectionStart;
+   var myCursorEnd = document.getElementById(myT).selectionEnd;
+   document.getElementById(myT).value = document.getElementById(myB).innerHTML;
+   
+   setTimeout(function() {
+      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
+          document.getElementById(myT).rows += 3; 
+      } 
+   }, 100);
+
+  document.getElementById(myT).selectionStart = myCursorStart;
+  document.getElementById(myT).selectionEnd = myCursorEnd;
+}  
+
+//////////////////////////// Cell Phone Motion Code ///////////////////////////////////////////////
+
+async function myCellPhoneMotion(){
+  logMessage(`Checking if using a cell phone!`);
+  logMessage(`/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}`);
+  logMessage(`/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}`);
+  logMessage(`navigator.userAgent: ${navigator.userAgent}`);
+   
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    try {
+      const permissionState = await DeviceMotionEvent.requestPermission();
+      if (permissionState === 'granted') {
+        window.addEventListener('devicemotion', handleMotionEvent);
+        myCellPhoneOnce = true;
+      } else {
+        logMessage('Device motion permission denied.', 'warning');
+      }
+    } catch (error) {
+      console.log(error);
+      logMessage(`Error requesting device motion permission: ${error.message}`, 'error');
+    }
+  } else {
+    window.addEventListener('devicemotion', handleMotionEvent);
+  }
+}
+
+function handleMotionEvent(event) {
+if (myCellPhoneOnce){    
+  const { accelerationIncludingGravity } = event;
+  let { x, y, z } = accelerationIncludingGravity;
+   
+   if ( /Android/i.test(navigator.userAgent) ) {
+      x *= -1;
+      y *= -1;
+      z *= -1;
+   }
+   
+  const formattedX = typeof x === 'number' ? x.toFixed(2) : 'NaN';
+  const formattedY = typeof y === 'number' ? y.toFixed(2) : 'NaN';
+  const formattedZ = typeof z === 'number' ? z.toFixed(2) : 'NaN';
+
+   if (startTime === null) {
+     startTime = performance.now();
+   }
+   
+   const elapsedTime = performance.now() - startTime;
+   
+   if (elapsedTime < 410) {
+     accelerometerData.push([formattedX, formattedY, formattedZ]);
+   }
+   else if (elapsedTime > 1000 ){}         
+   else {
+      if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n'; }
+        document.getElementById('myArea01').value += accelerometerData.join('\r\n');
+        myShowGraph(); 
+        myCellPhoneOnce = false;
+        window.removeEventListener('devicemotion', handleMotionEvent); 
+        logMessage('Cell phone motion data collected and stopped.', 'success');
+      }
+   } 
+}
+
+////////////////////////////////////////////////////////  END OF SCRIPT TAG //////////////////////////////////////////////////////////////  
+</script>
+
+<div class="panel">
+    <div class="section-title">Arduino/ESP32 BLE Sketch</div>
+    <p>The following sketch should be uploaded to your Arduino or ESP32 board. Make sure to delete any conflicting `ArduinoBLE` library if you are using ESP32 with `BLEDevice.h`.</p>
+    <button value="copy" class="mt-2" onclick="{                                      
+       const element = document.getElementById('myCode');
+      element.select();
+      element.setSelectionRange(0, 99999);
+      document.execCommand('copy');                                                                         
+    }">Copy Sketch</button> <br>
+    <p class="mt-2">The "fancy" Arduino sketch for the Nano33BleSense is on the github here 
+    <a href="https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt" class="text-blue-600 hover:underline">https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt</a> <br></p>  
+
+    <textarea id="myCode" rows=25 cols=80 class="w-full h-96 font-mono text-sm bg-gray-900 text-white p-4 rounded-lg mt-4" NOWRAP>
+/*
+ * WebBLE for testing javascript connection with an Arduino/ESP32
+ * * Based on user provided code.
+ * * NOTE: For ESP32, you need to use the ESP32 BLE Library (BLEDevice.h, BLEServer.h etc.)
+ * and ensure ArduinoBLE is NOT installed or it will conflict.
+ * For other Arduino boards (e.g., Nano 33 BLE, Nicla Vision), use ArduinoBLE.h.
+ * * Service UUID and Characteristic UUID must match the JavaScript code.
+ * MY_SERVICE_UUID: "19b10000-e8f2-537e-4f6c-d104768a1214"
+ * MY_CHARACTERISTIC_UUID: "19b10000-e8f2-537e-4f6c-d104768a1214"
+ */
+
+#if defined(ESP32)
+  #include <BLEDevice.h>
+  #include <BLEServer.h>
+  #include <BLEUtils.h>
+  #include <BLE2902.h>
+#else
+  #include <ArduinoBLE.h>
+#endif
+
+// Define your Service and Characteristic UUIDs - MUST MATCH JAVASCRIPT!
+#define MY_SERVICE_UUID        "19b10000-e8f2-537e-4f6c-d104768a1214"
+#define MY_CHARACTERISTIC_UUID "19b10000-e8f2-537e-4f6c-d104768a1214"
+
+unsigned long myLastSendTime = 0; // For throttling sensor data sending
+
+// Define sensor parameters for data collection
+#define FREQUENCY_HZ        36     // how many samples per second 
+#define COLLECTION_SECONDS  1     // how many seconds to collect samples
+#define INTERVAL_MS  (1000 / (FREQUENCY_HZ + 1)) // need for the timer 
+#define CONVERT_G_TO_MS2    9.80665f   // accleration conversion
+
+int myMaxData = FREQUENCY_HZ * COLLECTION_SECONDS;
+int myCount = 0;
+unsigned long myStart; 
+bool mySendData = false; // Control flag for sending sensor data
+
+#if defined(ESP32)
+BLECharacteristic *myCharacteristic;
+bool myDeviceConnected = false;
+
+// Callback for when the characteristic is written to (Web -> Arduino)
+class MyCallbacks : public BLECharacteristicCallbacks {
+  void onWrite(BLECharacteristic* pChar) override {
+    String value = pChar->getValue();
+
+    if (value.length() > 0) {
+      Serial.print("Received over BLE: ");
+      Serial.println(value);
+
+      // Command handling
+      if (value == "start") {
+        Serial.println("Command: start - Starting sensor data.");
+        mySendData = true; // Start sending data
+        myStart = millis(); // Reset timer
+        myCount = 0;        // Reset sample count
+      } else if (value == "stop") {
+        Serial.println("Command: stop - Stopping sensor data.");
+        mySendData = false; // Stop sending data
+        Serial.println("Stopping at count: " + String(myCount));
+      } else if (value == "a") {
+        Serial.println("Command: a - Toggling LED.");
+        digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); // Toggle LED
+      } else if (value == "b") {
+        Serial.println("Command: b - Toggling LED.");
+        digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); // Toggle LED (same as 'a' for this simple example)
+      } else if (value == "firstline"){
+        Serial.println("accX,accY,accZ"); // Send CSV header
+      } else {
+        Serial.println("Command: unknown");
+        // For TinyML 'fancy' commands, you'd add more 'if' statements here
+      }
+    }
+  }
+};
+
+// Callback for BLE server connection/disconnection
+class MyServerCallbacks : public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) {
+    myDeviceConnected = true;
+    Serial.println("Central connected");
+  }
+  void onDisconnect(BLEServer* pServer) {
+    myDeviceConnected = false;
+    Serial.println("Central disconnected");
+    pServer->getAdvertising()->start(); // Restart advertising
+  }
+};
+#else // For Arduino boards like Nano 33 BLE, Nicla Vision
+  #include <Arduino_LSM9DS1.h> // Example IMU library, replace if your board has different sensors
+  BLEService myService(MY_SERVICE_UUID);
+  // Characteristic for read, write, and notify. Max length 32 bytes for basic BLE.
+  BLECharacteristic myCharacteristic(MY_CHARACTERISTIC_UUID, BLERead | BLEWrite | BLENotify, 32); 
+#endif
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH); // Onboard LED, HIGH = off (common for some boards)
+  
+  // Initialize IMU if using a sensor (e.g., Nano 33 BLE Sense, Nicla Vision)
+  #if !defined(ESP32) // Only for Arduino-specific boards with IMU. ESP32 would have its own sensor setup.
+  if (!IMU.begin()) {
+     Serial.println("Failed to initialize IMU!");
+     while (1); // Halt if IMU fails
+  }
+  #endif
+  
+  randomSeed(analogRead(A0)); // Seed for random numbers (if used)
+  Serial.println("Serial ready. Setting up BLE...");
+
+#if defined(ESP32)
+  BLEDevice::init("ESP32-TinyML-BLE"); // Name for your ESP32 device
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
+
+  BLEService *pService = pServer->createService(MY_SERVICE_UUID);
+
+  myCharacteristic = pService->createCharacteristic(
+    MY_CHARACTERISTIC_UUID,
+    BLECharacteristic::PROPERTY_READ |
+    BLECharacteristic::PROPERTY_WRITE |
+    BLECharacteristic::PROPERTY_NOTIFY
+  );
+
+  myCharacteristic->addDescriptor(new BLE2902()); // For client characteristic configuration
+  myCharacteristic->setValue("ready"); // Initial value
+  myCharacteristic->setCallbacks(new MyCallbacks());
+
+  pService->start();
+  pServer->getAdvertising()->addServiceUUID(BLEUUID(MY_SERVICE_UUID)); // Advertise your service UUID
+  pServer->getAdvertising()->start();
+
+  Serial.println("BLE ready on ESP32");
+#else // Arduino BLE (e.g., Nano 33 BLE)
+  if (!BLE.begin()) {
+    Serial.println("BLE failed to start");
+    while (1); // Halt if BLE fails
+  }
+
+  BLE.setLocalName("Arduino-TinyML-BLE"); // Name for your Arduino device
+  BLE.setAdvertisedService(myService);
+  myService.addCharacteristic(myCharacteristic);
+  BLE.addService(myService);
+
+  myCharacteristic.writeValue("ready"); // Initial value
+  BLE.advertise(); // Start advertising
+
+  Serial.println("BLE ready on Arduino BLE");
+#endif
+}
+
+void loop() {
+  // Read and send sensor data (e.g., IMU data) via BLE
+  #if defined(ESP32)
+  if (myDeviceConnected && mySendData && (millis() - myStart >= INTERVAL_MS)) {
+    myStart = millis(); // Reset timer
+    myCount += 1;
+    float x, y, z;
+    // Example: Read accelerometer data (replace with your sensor code)
+    // For ESP32, you'd likely use an external sensor library (e.g., for MPU6050, LSM9DS1, etc.)
+    // For demonstration, let's just send dummy data if no sensor is integrated.
+    // In a real application, replace this with actual sensor reads.
+    x = random(-500, 500) / 100.0f; // Dummy data
+    y = random(-500, 500) / 100.0f;
+    z = random(-500, 500) / 100.0f;
+
+    String sensorData = String(x) + "," + String(y) + "," + String(z);
+    myCharacteristic->setValue(sensorData.c_str());
+    myCharacteristic->notify();
+    Serial.println("Sent BLE: " + sensorData);
+
+    if (myCount >= myMaxData) {
+      mySendData = false; // Stop sending after max samples
+      Serial.println("Max samples reached. Stopping data sending.");
+    }
+  }
+#else // Arduino BLE (e.g., Nano 33 BLE)
+  BLEDevice central = BLE.central(); // Check for connected central
+  if (central) {
+    Serial.print("Connected to: ");
+    Serial.println(central.address());
+
+    while (central.connected()) {
+      // Handle incoming data (Web -> Arduino)
+      if (myCharacteristic.written()) {
+        // Read incoming value into a buffer first, then convert to String
+        // This provides explicit control over the buffer and might resolve
+        // subtle issues with direct String conversion on some ArduinoBLE versions.
+        int len = myCharacteristic.valueLength();
+        uint8_t buffer[32]; // Max characteristic length is 32 bytes for this example
+        myCharacteristic.readValue(buffer, len);
+        
+        // Ensure null termination if the incoming data is not exactly 'len' and contains nulls.
+        // For String conversion, it's safer to ensure it's null-terminated if it's treated as a C-string.
+        // However, String(char*, length) constructor is better if the data might not be null-terminated by sender.
+        // If the sender always null-terminates, String((char*)buffer) is fine.
+        // Given the Web-side uses TextEncoder().encode(), it's likely not null-terminated.
+        String incoming = ""; // Initialize an empty string
+        for (int i = 0; i < len; i++) {
+            incoming += (char)buffer[i]; // Append char by char
+        }
+        
+        Serial.print("Web says: ");
+        Serial.println(incoming);
+
+        // Command handling (same as ESP32 version)
+        if (incoming == "start") {
+          Serial.println("Command: start - Starting sensor data.");
+          mySendData = true;
+          myStart = millis();
+          myCount = 0;
+        } else if (incoming == "stop") {
+          Serial.println("Command: stop - Stopping sensor data.");
+          mySendData = false;
+          Serial.println("Stopping at count: " + String(myCount));
+        } else if (incoming == "a") {
+          Serial.println("Command: a - Toggling LED.");
+          digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+        } else if (incoming == "b") {
+          Serial.println("Command: b - Toggling LED.");
+          digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+        } else if (incoming == "firstline"){
+          myCharacteristic.writeValue("accX,accY,accZ"); // Send CSV header back via BLE
+          Serial.println("Sent BLE: accX,accY,accZ");
+        } else {
+          Serial.println("Command: unknown");
+        }
+      }
+
+      // Send sensor data (Arduino -> Web)
+      if (mySendData && (millis() - myStart >= INTERVAL_MS)) {
+        myStart = millis();
+        myCount += 1;
+        float x, y, z;
+        IMU.readAcceleration(x, y, z); // Read actual IMU data
+        x *= CONVERT_G_TO_MS2;
+        y *= CONVERT_G_TO_MS2;
+        z *= CONVERT_G_TO_MS2;
+        
+        String sensorData = String(x, 2) + "," + String(y, 2) + "," + String(z, 2); // Format to 2 decimal places
+        myCharacteristic.writeValue(sensorData); // Send sensor data
+        Serial.println("Sent BLE: " + sensorData);
+
+        if (myCount >= myMaxData) {
+          mySendData = false;
+          Serial.println("Max samples reached. Stopping data sending.");
+          myCharacteristic.writeValue("stop_data"); // Optionally send a signal that data collection stopped
+        }
+      }
+    }
+    Serial.println("Disconnected.");
+  }
+#endif
+}
+    </textarea> <br><br>
+
+Use at your own risk!<br>
+By Jeremy Ellis @rocksetta<br>
+Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main" class="text-blue-600 hover:underline">https://github.com/hpssjellis/tinyMLjs/tree/main</a><br> 
+Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html" class="text-blue-600 hover:underline">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
+This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html" class="text-blue-600 hover:underline">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> <br><br>
+   
+<ol class="list-decimal list-inside text-sm space-y-1"><b>A couple of gotchas (as of Jun 19, 2024):</b><br>
+<br>  <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
+<br>   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
+<br>   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
+<br>  <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
+<br>  <li> **HTTPS Required for Web BLE:** Web Bluetooth, like Web Serial, only works on secure contexts (HTTPS). If testing locally, you will need to serve your page over HTTPS.
+<br>  <li> **BLE UUIDs:** The provided Arduino sketch and JavaScript use specific Service and Characteristic UUIDs (`19b10000-e8f2-537e-4f6c-d104768a1214`). Ensure your BLE device firmware uses these exact UUIDs for communication to work.
+</ol>   
+</body>
+</html>
