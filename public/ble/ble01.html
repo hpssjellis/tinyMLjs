@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>  
+   // Global CVariables
+   let exports = {};  // really important for WebSerial and Polyfill
+   let model
+   
+   let myDataFiles, myTensor; 
+   let myDataTotal = 0;
+   let myDataMcu = 0;
+   let myDataCSV = 0;
+   let mySendFirstLine = false
+   
+   let labelsArray;
+   let uniqueLabels, labelsTensor;
+   let myModelSamples, myModelSenses
+   let myMultiCSV = true
+   let myCellPhoneOnce = false
+ //  let myCellPhoneEvent = true
+   
+   let accelerometerData = [];
+   let startTime = null;
+   let myModelWasUploaded = false
+   let myBaseCsvFileName = 'myCSV-'
+   
+    // let myRaw = false
+   //  let myRawInterval
+
+   
+
+ // for the textarea grow functions    
+ // mySpecialVar = '\x3Cscript src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.3"> \x3C/script>\n\n' 
+
+ mySpecialVar = '' 
+    
+
+
+</script>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceleration Data to Tensor</title>
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script> 
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+   -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.js"></script>
+  <script src="https://cdn.plot.ly/plotly-1.47.4.min.js"></script>
+    
+<script src="https://cdn.jsdelivr.net/npm/web-serial-polyfill@1.0.13/dist/serial.js"> </script> 
+<script src="https://unpkg.com/papaparse@5.3.2/papaparse.js"></script>  <!-- For CSV manipulation  -->
+    
+
+</head>
+<body>
+<h1 align=center>TinyMLjs </h1>
+<h3>Making TinyML truly client-side. Giving Makers full control of the process, user friendly, private and protected</h3>   
+<h6> Version 0.56.3-215 Note: WebSerial microcontroller connection works on Chrome or Edge for Mac, Android (Pixel Phones early verson) or Windows, only works on Edge for Linux</h6>
+
+
+This website makes machine learning models from WebSerial connected micro-controller sensors using TensorflowJS. 
+That model can be saved and converted to a tFlite model, then to a C-header model.h file using Tensorflow command line or Python converters. I simplify the conversion using a Gitpod.
+Finally the model.h file is combined with C/C++ code using an Arduino IDE ready library called RocksettaTinyML and compiled to the device for testing. <br><br>
+
+Presently, for complex vision or sound data it is easier to use <a href="https://edgeimpulse.com/">EdgeImpulse.com</a> as it will achieve the needed model compression that we have not yet achieved. <br><br>
+
+
+
+
+
+
+   
+   
+<button id="connectButton"  style="background-color:lime; width:200px; ">Connect via Serial Port</button><br>
+<input type=text id="mySendText" value="start">
+<input type=button value="send" onclick="{ mySendIt(document.getElementById('mySendText').value) }"><br><br>
+
+<input type=button value="send 'a' LED On or Off" onclick="{mySendIt('a')}">
+<input type=button value="send 'b' LED Off or On" onclick="{mySendIt('b')}"><br>
+
+<input type=button value="Clear and send 'start' "  style="Background-color:lime; width:200px;"  onclick="{
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
+}">
+    
+<input type=button value="send 'stop' " title="Normal Acceleration Demo" onclick="{mySendIt('stop')}">  
+   <input type=button value="Clear" onclick="{
+    document.getElementById('myArea01').value = ''                                                                                            
+}">
+<input type=button value="send firstline" Title="Only for proper CSV files not for here" onclick="{
+   if (this.value =='send firstline' ){
+     mySendFirstLine = true
+     mySendIt('firstline')
+     this.value = 'stop sending firstline'
+   } else {
+     this.value ='send firstline'  
+      mySendFirstLine = false
+   }
+}">   
+<input type=button value="send 'start' only " onclick="{mySendIt('start')}">  
+
+
+   
+<input type=button value="Nano33-fancy1" title="simple gestures: 0 down, 1 up, 2 right, 3 left" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('fancy1'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}"> 
+
+
+<input type=button value="Nano33-fancy2" title="18 sensor fusion example" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('fancy2'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}">   
+   <!--
+<input type=button value="Nicla-Proximity" title="18 sensor fusion example" onclick="{ 
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('proximity'); }, 300);  // short delay to send the first line before activating the sensor
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart   
+}">
+   
+--> 
+   
+   <br> 
+    
+<input type=button value="Cell Phone: Motion" title="Only Works with a cell phone" style=" height:50px; " onclick="{
+   myCellPhoneOnce = true  // so it will show the data
+   accelerometerData = [];
+   startTime = null;
+   document.getElementById('myArea01').value = '' 
+   if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }  // actually this is deleted, also done in the next function
+   setTimeout(function() {myCellPhoneMotion(); }, 300);  // short delay to send the first line before activating the sensor
+   setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart        
+   
+}"> 
+
+
+<input type="button" value="Mouse Motion"  style=" height:50px; " onClick="{
+   setTimeout(function() {
+       const myNumberOfSamples = parseInt(document.getElementById('myNumSamples').value);
+       let myMouseCount = 0;
+       let myMouseOutput = '';
+       document.getElementById('myArea01').value = 'Move the Mouse!';
+   
+       const mousemoveListener = function (event) {
+           if (myMouseCount < myNumberOfSamples -1 ) {
+
+               myMouseOutput += parseFloat(event.x/window.screen.width).toFixed(2);
+               myMouseOutput += ','; 
+               myMouseOutput += parseFloat(event.y/window.screen.height).toFixed(2);
+               myMouseOutput += '\r\n'; 
+   
+              // myMouseOutput += `${event.x},${event.y}\\r\n`;
+               myMouseCount++;
+           } else {
+               document.removeEventListener('mousemove', mousemoveListener);
+               document.getElementById('myArea01').value = myMouseOutput;
+               console.log(myMouseOutput);
+               myShowGraph();
+           }
+       };
+
+       document.addEventListener('mousemove', mousemoveListener);
+   }, 1000); // wait x ms to start mouse movement
+}">
+
+
+
+
+
+   
+   
+<!--<input type="button" value="Stop Cell Data" style=" height:50px; " onclick="{ window.removeEventListener('devicemotion', handleMotionEvent); }">-->
+<br>    
+
+<input type=button   style="Background-color:lime;"  value="Clean, Trim or Fill" onclick="{
+  cleanFillTrim()
+}">
+      
+Label: <input type=text id="mySingleLabel" placeholder="1lable"  style="Background-color:lime;"  value="1label" onChange="{
+  document.getElementById('myOutFilename').value =  myBaseCsvFileName + this.value +'.csv'
+   
+}">  
+<input type=button style="Background-color:lime;"  value="Keep" onclick="{previewSensorData()}">  
+   
+
+<input type=button   value="Auto Next" title="Does it all. After the first entry is made." onclick="{
+   // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
+    previewSensorData()  // Keep the entered data
+   
+    //setTimeout(function() { document.getElementById('myArea01').value = '';   }, 500);  // short delay to send the first line
+    //setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 1000);  // short delay to send the first line
+  
+    document.getElementById('myArea01').value = '';
+    if (mySendFirstLine) { mySendIt('firstline'); } 
+    setTimeout(function() { mySendIt('start'); }, 200);  // short delay to send the data
+    setTimeout(function() { cleanFillTrim(); }, 2000);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart  
+                                            
+}">    
+   
+<input type=button   value="Auto Next and save" title="Does it all. After the first entry is made and saved the CSV files" onclick="{
+   // does all the main steps. Keeps the previous value, activates the next, cleans it and save it. Just change the label if needed                                        
+    previewSensorData()  // Keep the entered data
+    document.getElementById('myArea01').value = '';
+    if (mySendFirstLine) { mySendIt('firstline'); } 
+    setTimeout(function() { mySendIt('start'); }, 200);  // short delay to send the data
+    setTimeout(function() { cleanFillTrim(); }, 2000);  // short delay to send the data
+    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 2400);     
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart  
+
+
+   /*
+    setTimeout(function() { document.getElementById('myArea01').value = '';   }, 500);  // short delay to send the first line
+    setTimeout(function() { if (mySendFirstLine) { mySendIt('firstline'); } }, 1000);  // short delay to send the first line
+    setTimeout(function() { mySendIt('start'); }, 2000);  // short delay to send the data
+    setTimeout(function() { myShowGraph() }, 4000);      // give the data a few seconds to load before drawing chart  
+    setTimeout(function() { mySaveCSV( document.getElementById('myOutFilename').value ) }, 5000);      // give the data a few seconds to load before saving as a csv
+       */                                    
+}">     
+   <br>
+    
+<input type=button value="Save CSV" onclick="{ mySaveCSV( document.getElementById('myOutFilename').value ) }">  
+CSV FileName: <input id="myOutFilename" type=text value="myCSV-myLabel.csv" onChange="{
+    myBaseCsvFileName = this.value.split('-')[0] + '-'    // just grab the part before the 'dash' and then add the dash back
+   alert(myBaseCsvFileName)
+}"><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+<textarea id="myArea01" rows=6 cols=120></textarea>
+<br>
+<input type=button value="Clear and send 'start' "    onclick="{
+    document.getElementById('myArea01').value = '' 
+    if (mySendFirstLine) { mySendIt('firstline'); }
+    setTimeout(function() { mySendIt('start'); }, 300);  // short delay to send the first line
+    setTimeout(function() { myShowGraph() }, 2500);      // give the data a few seconds to load before drawing chart                                           
+}">   
+<input type="button" value="Show Graph" onclick="myShowGraph()">
+<input type=button value="Clean, Trim or Fill" onclick="{cleanFillTrim();}">
+<input type="button" value="Classify Data"  style="background-color:lime; width:200px;"  onclick="{classifyData();}">
+<input type=button value="Show All Data" onclick="{
+   document.getElementById('myArea01').value =''                                        
+ 
+   let dataString = '';
+   let labelString = '';
+   // for (let i = 0; i < myDataFiles.length; i++) {
+   for (let i = 0; i <= myDataCSV; i++) {                                       
+      const dataElement = document.getElementById('myData' + i);
+      const labelElement = document.getElementById('myLabel' + i);
+      if (dataElement) {
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + '\n\n';
+      }
+      if (labelElement) {
+         labelString += 'Label #' + i + ':' + labelElement.textContent + '\n';
+      }
+   }
+   for (let i = 0; i <= myDataMcu; i++) {                                       
+      const dataElement = document.getElementById('myData2Mcu' + i);
+      const labelElement = document.getElementById('myLabel2Mcu' + i);
+      if (dataElement) {
+         dataString += 'Data #' + i + '\n' + dataElement.textContent + ', length: ' + dataElement.textContent.length + '\n\n';
+      }
+      if (labelElement) {
+         labelString += 'Label #' + i + ':' + labelElement.textContent + ', length: ' + labelElement.textContent.length +  '\n';
+      }
+   }
+
+  document.getElementById('myArea01').value = dataString + labelString;                                             
+                                             
+}"> <br>
+<span id="mySpanResults">...</span>
+    
+
+<!-- <canvas id="myChart" width="700" height="300"></canvas> -->
+<div id="myChart" style="width:1000px; height:300px"></div>
+
+
+
+
+
+
+
+
+   
+Machine Learning models often need very specific data.<br>
+
+<input type=button value="Clean, Trim or Fill All" onclick="{  
+   document.getElementById('mySpanClassify').innerHTML = 'Output here: <br>'  // clear the span to show on the webpage
+   myDataCheckCSV()   /// ~line 264  Checks all the csv data for correct number of samples and senses  
+   myDataCheckSenses()   /// ~line 318  Checks all the csv data for correct number of samples and senses 
+}">
+
+Count CSV:  <input type=text id="myNumCountCSV" value=0 READONLY  size=5>
+Count Senses:  <input type=text id="myNumCountSenses" value=0  READONLY    size=5>
+Count Total:  <input type=text id="myNumCountTotal" value=0  READONLY    size=5><br>
+   
+Number of Samples/count: <input type=text id="myNumSamples" value="36"   size=4 onChange="{myModelSamples = parseInt(this.value)}">
+Number of Senses/sample: <input type=text id="myNumSenses" value="3"   size=4 onChange = "{myModelSenses = parseInt(this.value)}"><br><br>
+   
+
+
+
+
+
+<textarea id="myTextarea123"  wrap="off"  style= "font-size:15px; color:white; background-color:black; width:90%;"   rows=2 onclick="{
+  if (myOnce123){
+     myTextGrow('myTextarea123', 'myDiv123Code')
+     document.getElementById('myUpdate123').style.visibility = 'visible'
+     myOnce123 = false
+  }
+}">
+Click here to see the working HTML code.
+</textarea><br>
+
+
+
+<input type="button" value="Convert Data to Tensor"  style="background-color:lime; width:200px;" onclick="loadDataToTensor()"><br>
+   
+Enter number of epochs: <input type="number" id="myEpochs" value=100 style="width:50px">,
+Learning rate: <input type="number" id="myLearningRate" value="0.0005" style="width:70px"> <br>
+
+
+   
+ 
+<div id="mySpanClassify">...</div>
+
+
+
+
+<span id="myDiv123Code">    <!-- Start fancy span that allows instant updates  -->
+
+
+   
+<input type="button" id="myTrainButton" value="Train Model"  style="background-color:lime; width:200px;" onclick="{
+
+async function trainModel() {
+// Define the model architecture
+myModelSamples = parseInt(document.getElementById('myNumSamples').value)
+myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
+myModelTotalCount = parseInt(document.getElementById('myNumCountTotal').value)   
+ 
+console.log('myModelSamples')   
+console.log(myModelSamples)   
+console.log('myModelSenses')   
+console.log(myModelSenses)   
+console.log('myModelTotalCount')   
+console.log(myModelTotalCount)   
+
+
+if (!myModelWasUploaded) {    // only declare the model if it has not yet been loaded
+   if (model){   
+      model.dispose();  // get rid of the old model
+      console.log('Model deleted')
+   }
+
+   model = tf.sequential();   
+   // Add Flatten layer before Dense layer
+   model.add(tf.layers.flatten({ inputShape: [myModelSamples, myModelSenses]  }));
+   model.add(tf.layers.dense({units: 8}));
+   model.add(tf.layers.dense({ units: 20 }) );     
+   model.add(tf.layers.dense({ units: 30 }) );     
+   model.add(tf.layers.dense({units: uniqueLabels.length, activation: 'softmax'}));
+
+}
+
+   
+// Compile the model
+const myRate = parseFloat(document.getElementById('myLearningRate').value)
+model.compile({
+      optimizer: tf.train.adam(myRate),
+      loss: 'categoricalCrossentropy',
+      metrics: ['accuracy']
+});
+model.summary();
+   
+// Train the model
+justFit()
+console.log(model)
+}
+
+trainModel() // run the above async code
+}"> 
+
+</span>   <!-- End fancy span that allows instant updates  -->
+
+
+<script>   // This is the funciton needed for the fancy stuff above
+
+myOnce123 = true    // so textareas are only clicked once
+
+  
+ 
+function myTextGrow(myT, myB){
+   var myCursorStart = document.getElementById(myT).selectionStart
+   var myCursorEnd = document.getElementById(myT).selectionEnd
+
+  // myDivName = myB.replace('Code','')
+   //document.getElementById(myT).value = mySpecialVar  + document.getElementById(myB).innerHTML 
+  // document.getElementById(myT).value += '<div id=\''+myDivName+'\'>...</div><br>'     
+
+   
+
+
+   document.getElementById(myT).value = document.getElementById(myB).innerHTML 
+
+   
+   setTimeout(function() {
+      while (  document.getElementById(myT).clientHeight < document.getElementById(myT).scrollHeight){                                                                                                                                              
+          document.getElementById(myT).rows += 3; 
+      } 
+   }, 100)
+
+  document.getElementById(myT).selectionStart = myCursorStart
+  document.getElementById(myT).selectionEnd = myCursorEnd
+
+}  
+
+
+</script>  
+
+
+   
+
+<input id="myUpdate123" type=button value="Update Model"  style="background-color:pink; width:200px; visibility:hidden;" onclick="{
+  document.getElementById('myUpdate123').style.backgroundColor = 'gray'
+   // first remove first and last line since they are injected
+  myFred = document.getElementById('myTextarea123').value.split('\n')
+  console.log(myFred)
+  myFred.pop()
+  myFred.push('')
+  myFred.shift()
+  myFred.shift()
+  myJoe = myFred.join('\n')
+  console.log(myJoe)
+  document.getElementById('myDiv123Code').innerHTML =    myJoe 
+//  document.getElementById('myButton123').click()
+ // trainModel()
+
+ document.getElementById('myTrainButton').click()
+   
+                                             
+}">
+   
+<input type="button" value="Just Fit - retrain"   onclick="{justFit(); console.log(model.summary());}"> 
+<input type="button" value="View Model"   onclick="{
+ //  let myMod = model.replace('}', '}<br>')
+//   let myMod = model.replace('}', '}<br>')
+  // document.getElementById('mySpanClassify').innerHTML = JSON.stringify(myMod);
+   console.log(model.summary())
+
+
+   document.getElementById('myShowModelDiv').innerHTML = '<br>'
+   model.layers.forEach((layer, index) => {
+     document.getElementById('myShowModelDiv').innerHTML +=`Layer ${index + 1}:${ layer.name}, outShape ${layer.outputShape}, params: ${layer.countParams()}, trainable: ${layer.trainable} <br>`
+     console.log(`Layer ${index + 1}:`);
+     console.log(`- Name: ${layer.name}`);
+     console.log(`- Type: ${layer.getClassName()}`);
+     console.log(`- Output Shape: ${layer.outputShape}`);
+     console.log(`- Number of Parameters: ${layer.countParams()}`);
+     console.log(`- Trainable: ${layer.trainable}`);
+     if (layer.getWeights().length > 0) {
+         console.log(`- Weights: ${layer.getWeights().map(w => w.shape).join(', ')}`);
+     } else {
+         console.log('- No Weights');
+     }
+     console.log('-----------------------');
+    });
+}"> <br> 
+
+   
+<div id="myShowModelDiv" >...</div>  <br>
+
+<input type="button" value="Export Model" onclick="exportModel()"> <input id="myExportFileName" type=text value="model"> <br>
+<ol> Try the following steps:
+<li>Convert the exported model to Arduino ready c-header model.h file as well as a model.tflite file using one of the following methods:<br></li>
+<li><table border=1>
+<tr><td>1:</td><td><a href="https://github.com/hpssjellis/tensorflowjs-to-arduino-for-tinymljs">tensorflowjs-to-arduino-for-tinymljs</a> </td><td>Best to install the modules needed to client-side do the conversions yourself. This github shows what you need to do. The installation might be different on your computer. I always find this hard to do at school.</td></tr>
+<tr><td>2:</td><td> <a href="https://colab.research.google.com/drive/1OgCcKhklL3EH_SdWHdtlb5dbtYvjGQnn?usp=sharing">iPython Notebook TFJS to TFlite</a></td><td>This web based Google Colab iPython notebook (Needs a google login) loads the necessary code then you click on an upload button to load your tensorflowjs exported "model.json" and "model.weights.bin" files and it zips and downloads the tflite and c-header files.</td></tr>
+<tr><td>3:</td><td>Use a Gitpod: <a href="https://github.com/hpssjellis/Gitpod-auto-tensorflowJS-to-arduino">https://github.com/hpssjellis/Gitpod-auto-tensorflowJS-to-arduino</a> or direct load the gitpod: <a href="https://gitpod.io/#github.com/hpssjellis/Gitpod-auto-tensorflowJS-to-arduino">Gitpod Here </a></td><td>A Gitpod browser docker like program that auto loads the necessaray python files and then runs a bash program to do the command line conversions. All code is easy to view, if you have a github account it loads fast.</td></tr>
+
+</table> <br><br></li>
+
+<li>Use <a href="https://netron.app/">https://netron.app/</a> </td></td> Use the online netron.app to check and visualize your downloaded model.tflite <br> </li>
+<li>Once you have made a model.h file then install this Arduino Library <a href="https://github.com/hpssjellis/RocksettaTinyML">RocksettaTinyML</a> based on EloquentArduino  to load the code onto your Arduino IDE.  <br></li>
+
+ 
+<span id="mySpanExport">...</span>
+<hr>
+
+
+
+
+
+   
+<input  type=button value="Show File Uploading" style="background-color:red;" onclick="{
+
+   if (this.value != 'Show File Uploading') {
+       this.value = 'Show File Uploading'   
+       this.style.backgroundColor = 'red'
+       document.getElementById('myUploadCsvSpan').style.display = 'none' 
+       document.getElementById('mySpanModelUpload').style.display = 'none' 
+   }  else {
+      document.getElementById('myUploadCsvSpan').style.display = 'block' 
+      document.getElementById('mySpanModelUpload').style.display = 'block' 
+      this.value = 'Hide File Uploading'
+      this.style.backgroundColor = 'lime'
+   }
+}"><br>
+<span id="myUploadCsvSpan" style="display:none; ">
+   
+   Upload from a raw CSV file or an Arduino style microcontroller using webSerial (Android Pixel phones also work) or your cell phone motion sensor.
+   Keep the raw sensor data then Machine Learning train a tensorflowJS model for export or for live classification all on this single 
+   vanilla Javascript webpage! <br><br>
+   
+       
+       
+   
+   Show: <input type=radio name="myPre" onclick="{
+      document.getElementById('myDataPreviewCSV').style.display = 'block'
+      document.getElementById('myDataPreviewSensor').style.display = 'block'
+   }" CHECKED> ------------ 
+   Hide: <input type=radio name="myPre" onclick="{
+      document.getElementById('myDataPreviewCSV').style.display = 'none'
+      document.getElementById('myDataPreviewSensor').style.display = 'none'
+   }"> ----------- Load .csv files: 
+      
+   <input type="file" id="myDataFile" accept=".csv"  multiple onChange="{
+       if (!myDataFiles) {
+          myDataFiles = event.target.files;
+       } else {
+          myDataFiles = [...myDataFiles, ...event.target.files];
+       }
+       if (myDataFiles.length > 0) {
+         previewData();
+       }                                                      
+   }"> 
+   <br>
+   
+   Following is the list of actual labels used in the same order as uploaded (comma-separated)
+   Note: expecting files to be named: "name-lable.csv" or "name-lable (1).csv" etc.<br><br>
+      
+   CSV Lables (careful): <input type="text" id="myLabels" size=80 value=""> 
+   
+   <div id="myDataPreviewCSV" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+   <hr>
+   
+</span><br>
+   
+Senses Labels (In the order collected): <input type="text" id="mySenseLabels" size=80 value=""> <br><br>
+
+<div id="myDataPreviewSensor" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; padding:20px;"></div>
+
+
+
+
+
+
+
+
+
+
+   
+<span id="mySpanModelUpload" style="display : none; ">   
+
+   <label for="modelFile">Select model file (.json):</label>
+   <input type="file" id="modelFile" accept=".json">
+   <br>
+   <label for="weightsFile">Select weights file (.bin):</label>
+   <input type="file" id="weightsFile" accept=".bin">
+   <br>
+   <label for="labelFile">Select labels file (.txt):</label>
+   <input type="file" id="labelsFile" accept=".txt">
+   <br>
+      
+   Enter Labels (comma seperated): <input type=text id="myNewLabels"  value='' size=50 placeholder="0unknown,1facingup,2onSide,3vertical">
+   <input type=button value="Re-set labels" onclick="{
+      const labelsInput3 = document.getElementById('myNewLabels').value;   
+      const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+      uniqueLabels = [...new Set(labelsArray3)];
+      console.log('uniqueLabels')
+      console.log(uniqueLabels)
+     // const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+   }">   
+   <br>
+      
+   <input type="button" value="Upload Model" onclick="uploadModel()"><br>
+   <span id="mySpanUpload">...</span>
+  
+   <hr>
+</span> 
+
+
+
+
+
+
+   
+   
+ <!-- --------------------------------- End of regular webpage tags with Javascript as events -------------------------------------------------------  -->       
+ <!-- --------------------------------- Start of pure Javascript coding -----------------------------------------------------------------------------  -->           
+
+<script>
+
+    
+function myDataCheckCSV(){
+
+   
+for (let i = 0; i < myDataCSV; i++) {   // clean out empty lines                                    
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+   document.getElementById('myData' + i).textContent =  document.getElementById('myData' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+  // document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData' + i).textContent + '<br><br><br>'
+   document.getElementById('mySpanClassify').innerHTML += 'CSV #:'+ i + '<br><br>'
+   
+}  
+
+const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+
+console.log(`myDataCSV: ${myDataCSV}`) 
+//console.log(`myTotalNumber: ${myTotalNumber}`) 
+
+for (let i = 0; i < myDataCSV; i++) { 
+   let myDoing = ''                 
+   let myTempArray = document.getElementById('myData' + i).textContent.split('\n')                    
+  // check if last value is empty
+   if (myTempArray[myTempArray.length - 1] === '') {
+     myTempArray.pop();
+   }   
+   let myDifference =  myTempArray.length - myTotalNumber                                                 
+
+   console.log(`myDifference: ${myDifference}`)  
+   
+    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
+   if (myDifference == 0){myDoing += 'fine,'}
+   
+   if (myDifference > 0) {                                     
+      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
+         myTempArray.pop()   // delete the item 
+         myDoing += 'deleted,'
+      }  
+   }
+   if (myDifference < 0) {     
+      myDifference = myDifference * -1
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
+         let myTempSenses = []                                             
+         for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
+            myTempSenses[myI4] = 0                                        
+         }                                             
+         myTempArray.push(myTempSenses.join(',')) 
+         myDoing += 'added,' 
+      }     
+   }       
+   //  console.log(myCountArray)
+   document.getElementById('myData' + i).textContent = myTempArray.join('\n') 
+ //  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
+ // great for debugging
+  document.getElementById('mySpanClassify').innerHTML += `Data #${i} ${myDoing}<br>`    
+}
+
+}   
+
+function myDataCheckSenses(){
+ 
+//document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu1').textContent +'<br>'   
+//document.getElementById('mySpanClassify').innerHTML += document.getElementById('myData2Mcu2').textContent +'<br>'   
+   
+//for (let i = 0; i < myDataMcu; i++) {   // clean out empty lines        
+for (let i = 1; i <= myDataMcu; i++) {   // careful starting at number 1 not zero                                
+   document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/\n\n/g, '\n') // remove blank lines
+   //document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+   document.getElementById('myData2Mcu' + i).textContent =  document.getElementById('myData2Mcu' + i).textContent.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+  // document.getElementById('mySpanClassify').innerHTML += '#:'+ i + ', ' + document.getElementById('myData2Mcu' + i).textContent + '<br><br><br>'
+   document.getElementById('mySpanClassify').innerHTML += 'Senses #:'+ i + '<br><br>'
+   
+}  
+
+const myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)      
+
+console.log(`myDataMcu: ${myDataMcu}`) 
+//console.log(`myTotalNumber: ${myTotalNumber}`) 
+
+for (let i = 1; i <= myDataMcu; i++) { 
+   let myDoing = ''                 
+   let myTempArray = document.getElementById('myData2Mcu' + i).textContent.split('\n')                    
+  // check if last value is empty
+   if (myTempArray[myTempArray.length - 1] === '') {
+     myTempArray.pop();
+   }  
+   let myDifference =  myTempArray.length - myTotalNumber                                                 
+
+   console.log(`myDifference: ${myDifference}`)  
+   
+    document.getElementById('mySpanClassify').innerHTML += `myDifference: ${myDifference}<br>`   
+   if (myDifference == 0){myDoing += 'fine,'}
+   
+   if (myDifference > 0) {                                     
+      for (let myI2 = 0; myI2 < myDifference; myI2++){                     
+         myTempArray.pop()   // delete the item 
+         myDoing += 'deleted,'
+      }  
+   }
+
+
+/*
+   
+   if (myDifference < 0) {          
+      myDifference = myDifference * -1
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
+         let myTempSenses = []                                             
+         for (let myI4=0; myI4 < parseInt(document.getElementById('myNumSenses').value); myI4++){
+            myTempSenses[myI4] = 0                                        
+         }                                             
+         myTempArray.push(myTempSenses.join(',')) 
+         myDoing += 'added,' 
+      }  
+   }   
+
+*/
+
+   if (myDifference < 0) {          
+      myDifference = myDifference * -1
+      const lastValue = myTempArray[myTempArray.length - 1]; // Get the last value
+      for (let myI3=0; myI3 < myDifference; myI3++){  // for different number of senses recorded
+         myTempArray.push(lastValue);   // Duplicate the last value                               
+         myDoing += 'added,' 
+      }  
+   }   
+   
+   
+   //  console.log(myCountArray)
+   document.getElementById('myData2Mcu' + i).textContent = myTempArray.join('\n') 
+//  console.log(`#${i} , myTempArray.length: ${myTempArray.length}`)  
+
+   // great for debugging
+   document.getElementById('mySpanClassify').innerHTML += `Data #${i} ${myDoing}<br>`    // remove once working
+
+}
+
+
+}   
+
+
+function cleanFillTrim(){
+
+   document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\n\n/g, '\n') // remove blank lines   
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/\s+/g, '\n')    // convert spaces to line breaks  
+    document.getElementById('myArea01').value =  document.getElementById('myArea01').value.replace(/,,/g, '0,0,0')    // convert empty entries to zeros
+    // not setup to replacve individual empty entires. Perhaps test for that later 
+                                                        
+    myShowGraph() 
+                                                        
+    let myCountArray =  document.getElementById('myArea01').value.split('\n')   
+  // check if last value is empty
+   if (myCountArray[myCountArray.length - 1] === '') {
+     myCountArray.pop();
+   }   
+    myTotalNumber = parseInt(document.getElementById('myNumSamples').value) // *  parseInt(document.getElementById('myNumSenses').value)                          
+
+    console.log(' myCountArray.length' )
+    console.log( myCountArray.length )                                             
+    console.log( 'myTotalNumber ' )
+    console.log( myTotalNumber  )
+                                                 
+    myDifference = myCountArray.length - myTotalNumber                                                 
+    console.log('myDifference')            
+    console.log(myDifference)  
+                                                 
+    if (myDifference > 0) {                                     
+      for (myI=0; myI < myDifference; myI++){                     
+         myCountArray.pop()   // delete this data                                
+      }  
+    }
+
+
+if (myDifference < 0) {       // add to the data 
+   myDifference *= -1;  // make it positive                                                 
+   const lastValue = myCountArray[myCountArray.length - 1]; // Get the last value
+   for (myI = 0; myI < myDifference; myI++) {  
+      myCountArray.push(lastValue);   // Duplicate the last value                               
+   }  
+}
+
+
+   /*
+    if (myDifference < 0) {       // add to the data 
+       myDifference *= -1  // make it positive                                                 
+      for (myI=0; myI < myDifference; myI++){  
+        let myTempSenses = []                                             
+        for (let i=0; i < parseInt(document.getElementById('myNumSenses').value); i++){
+            myTempSenses[i] = 0                                        
+         }                                             
+         myCountArray.push(myTempSenses.join(','))   // put them together add the extra '0,0,0' for xyz                               
+      }  
+    }                                               
+
+*/
+   
+                                                                                                                      
+                                                 
+  // console.log(myCountArray)
+   document.getElementById('myArea01').value = myCountArray.join('\n')      
+   myShowGraph() 
+   console.log('myCountArray.length')
+   console.log(myCountArray.length)
+   
+}
+
+   
+
+function previewData() {
+   document.getElementById("mySpanUpload").innerHTML = ''   
+   
+   const previewCSV = document.getElementById("myDataPreviewCSV");
+   previewCSV.innerHTML = "";
+  // if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
+ //  const labelsInput = document.getElementById("myLabels").value;
+ //  const labelsArray = labelsInput.split(",").map((label) => label.trim());
+   //const myOldData = myDataTotal
+
+   myDataTotal = myDataMcu + myDataFiles.length;  // keep track of how many samples. Note: myDataFiles.length always has all the files loaded  
+   myDataCSV = myDataFiles.length
+   console.log(`myDataMcu: ${myDataMcu}, myDataCSV: ${myDataCSV}, myDataFiles.length:  ${myDataFiles.length} `)
+
+   document.getElementById("myNumCountCSV").value  = myDataCSV
+   document.getElementById("myNumCountTotal").value  = myDataTotal
+   for (let i = 0; i < myDataFiles.length; i++) {
+      const file = myDataFiles[i];
+   //   const label = labelsArray[i];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+         const container = document.createElement("div");
+         container.style.display = "flex";
+         container.style.flexDirection = "column";
+         container.style.alignItems = "center";
+         const dataElement = document.createElement("span");
+         dataElement.textContent = reader.result;
+        // document.getElementById("mySpanUpload").innerHTML += `# ${i}, length: ${ reader.result.length}<br>`
+         dataElement.id = "myData"+i;    
+         container.appendChild(dataElement);
+
+         // we need the filename to grab the label
+         let filename = file.name;
+         console.log(`Filename: ${filename}`);
+       //  filename.replace(/ \(\d+\)/g, '')   // gets rid of numbers in brackets after a space. / \(\d+\)/g, ""
+       //  console.log(`cleaned Filename: ${filename}`);
+         let parts = filename.split(".");
+         let csv = parts.pop();
+         let [myFileName, myFileLabel] = parts[0].split('-');
+         
+         let [myFileLabelReduced, myFileNumber] = myFileLabel.split(' ');
+         console.log(`myFileName: ${myFileName}, myFileLabel: ${myFileLabel}, csv: ${csv}, myFileLabelReduced:  ${myFileLabelReduced},  myFileNumber:   ${myFileNumber}    `);
+
+         if (i == 0) {
+            document.getElementById("myLabels").value = myFileLabelReduced 
+         } else {
+           document.getElementById("myLabels").value += ',' + myFileLabelReduced  
+         }  
+
+         const labelElement = document.createElement("span");
+         labelElement.textContent = `#:${i}, Filename: ${filename}, Label: ${myFileLabelReduced}` ;  
+         labelElement.id = "myLabel"+i;    
+         //container.appendChild(labelElement);
+         container.prepend(labelElement);
+         previewCSV.appendChild(container);
+         
+       //  console.log('previewCSV.children[i]')
+        // console.log(previewCSV.children[i])
+                  // Extract the filename
+
+         };
+      reader.readAsText(file);
+   }
+
+   //console.log('previewCSV.children')
+   //console.log(previewCSV.children)
+}
+
+    
+function previewSensorData() {
+   document.getElementById("mySpanUpload").innerHTML = ''
+ //  if (myDataTotal == 0) {document.getElementById("myLabels").value = ''} // delete the default labels if no data
+   myDataTotal += 1  // keep totalling both
+   myDataMcu += 1;     // to keep track of how many times we added data from the MCU  
+   if (myDataFiles) {   
+        console.log(`myDataMcu: ${myDataMcu},  myDataCSV: ${myDataCSV}, myDataTotal: ${myDataTotal}, myDataFiles.length:  ${myDataFiles.length} `)
+   } else {
+        console.log(`myDataMcu: ${myDataMcu}, myDataCSV: ${myDataCSV}, myDataTotal: ${myDataTotal}, myDataFiles.length: not set `)    
+   }   
+   document.getElementById("myNumCountSenses").value = myDataMcu
+   document.getElementById("myNumCountTotal").value = myDataTotal
+ 
+   const previewSensor = document.getElementById("myDataPreviewSensor");
+   if (myDataMcu == 1) { // if first element then no comma for labels list
+      document.getElementById("mySenseLabels").value  =   document.getElementById("mySingleLabel").value
+   } else {
+      document.getElementById("mySenseLabels").value  +=  ',' + document.getElementById("mySingleLabel").value
+   }
+   const container = document.createElement("div");
+   container.style.display = "flex";
+   container.style.flexDirection = "column";
+   container.style.alignItems = "center";
+   const dataElement = document.createElement("span");
+   dataElement.textContent = document.getElementById("myArea01").value;
+   // possible some feedback here
+  // document.getElementById("mySpanUpload").innerHTML += `length: ${document.getElementById("myArea01").value.length}<br>`
+   dataElement.id = "myData2Mcu" + myDataMcu;    
+   container.appendChild(dataElement);
+   const labelElement = document.createElement("span");
+   labelElement.textContent = 'Senses #:'+ myDataMcu + ', ' + document.getElementById("mySingleLabel").value; 
+   labelElement.id = "myLabel2Mcu" + myDataMcu; 
+   //container.appendChild(labelElement);
+   container.prepend(labelElement);
+   previewSensor.appendChild(container);
+  // console.log('previewSensor.children[myDataMcu]')
+ //  console.log(previewSensor.children[myDataMcu])
+//   console.log('previewSensor.children')
+ //  console.log(previewSensor.children)
+
+}   
+    
+   
+   // fix here needs the sensor arrays as well
+async function loadDataToTensor() {
+   document.getElementById("mySpanClassify").innerHTML = ''
+   let dataArrays = []
+
+   for (let i = 0; i < myDataCSV; i++) { // note different starting itterator
+      const dataElement = document.getElementById('myData' + i);
+      if (dataElement) {  // put all one bit of data into a group of arrays
+         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+         dataArrays.push(dataArray);  
+         document.getElementById("mySpanClassify").innerHTML = 'DataCSV:' + i
+      }
+   }
+   for (let i = 1; i <= myDataMcu; i++) { // note different starting itterator
+      const dataElement = document.getElementById('myData2Mcu' + i);
+      if (dataElement) {  // put all one bit of data into a group of arrays
+         const dataArray = dataElement.textContent.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+         dataArrays.push(dataArray);   
+         document.getElementById("mySpanClassify").innerHTML = 'DataSenses: ' + i      
+      }
+   }
+   
+   console.log(dataArrays)
+   // Convert data arrays to tensors
+   const tensors = dataArrays.map((dataArray) => tf.tensor(dataArray));
+   myTensor = tf.stack(tensors);
+   console.log('Data converted to tensor:', myTensor);
+   document.getElementById("mySpanClassify").innerHTML += `, myTensor.shape: ${ myTensor.shape}<br>`
+
+    let labelsArray1 = []
+    let labelsArray2 = []
+   
+   // Create a one-hot encoded tensor for the labels or both the CSV files and the Senses data
+   if (myDataCSV > 0){
+      const labelsInput = document.getElementById("myLabels").value;   // from CSV files
+      labelsArray1 = labelsInput.split(",").map((label) => label.trim());
+     // labelsArray1 = labelsInput.split(",").map((label) => label.trim()).filter((label) => label !== '');  // get rid of blank elements using a filter
+   }
+   console.log(labelsArray1)
+   
+   if (myDataMcu > 0){
+      const labelsInput2 = document.getElementById("mySenseLabels").value;   // from Senses
+      labelsArray2 = labelsInput2.split(",").map((label) => label.trim());
+   }
+   console.log(labelsArray2)
+
+   // join both sets of labels togther
+   const labelsArray = labelsArray1.concat(labelsArray2)
+   console.log('labelsArray')
+   console.log(labelsArray)
+
+   // possibly filter here?
+   
+   uniqueLabels = [...new Set(labelsArray)];
+   console.log('uniqueLabels')
+   console.log(uniqueLabels)
+   const indices = labelsArray.map((label) => uniqueLabels.indexOf(label));
+   labelsTensor = tf.oneHot(tf.tensor1d(indices, 'int32'), uniqueLabels.length);
+   console.log('Labels converted to one-hot encoded tensor:', labelsTensor);
+   document.getElementById("mySpanClassify").innerHTML += `labelsTensor.shape: ${ labelsTensor.shape}<br>`
+   
+}
+    
+ 
+
+   
+
+async function justFit() {
+// Train the model
+//await model.fit(xs, ys, {
+await model.fit(myTensor, labelsTensor, {
+   epochs:  parseInt(document.getElementById('myEpochs').value),
+   batchSize: 32,
+   callbacks: {
+      onEpochEnd: (epoch, logs) => {
+        // console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+         console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+         document.getElementById('mySpanClassify').innerHTML = `Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`
+      }
+   }
+});
+
+
+}   
+
+async function exportModel() {
+let myModelFileName = 'downloads://' + document.getElementById('myExportFileName').value
+await model.save(myModelFileName);
+mySaveTxt(document.getElementById('myExportFileName').value+'Labels')   // save the unique Label names
+   
+}
+
+   
+   
+async function uploadModel() {
+   myModelWasUploaded = true
+   let labelsInput3
+
+   
+        async function loadLabelsFile() {
+            const labelsFileInput = document.getElementById("labelsFile");
+
+            if (labelsFileInput.files.length === 0) {
+                console.error('Please select a text file.');
+                return;
+            }
+
+            const file = labelsFileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function () {
+                try {
+                    const labelsInput3 = await reader.result;
+                    document.getElementById('myNewLabels').value = labelsInput3;
+                    const labelsArray3 = labelsInput3.split(',').map((label) => label.trim());
+                    uniqueLabels = [...new Set(labelsArray3)];
+                    console.log('uniqueLabels');
+                    console.log(uniqueLabels);
+                } catch (error) {
+                    console.error('An error occurred:', error);
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+   loadLabelsFile()
+// presently txt file reader is not working. perhaps should be a csv file reader anyway
+   // the issue is the code is not waiting for the labelsInput3
+   /*
+ // let labelsInput3;
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const fileContent = e.target.result;
+    labelsInput3 = fileContent;
+  };
+
+  reader.readAsText(document.getElementById("modelFile").files[0]);  // grab the .txt file
+
+*/
+
+   
+   // get the model
+   const modelFile = document.getElementById("modelFile").files[0];
+   const weightsFile = document.getElementById("weightsFile").files[0];
+   if (!modelFile || !weightsFile) {
+      alert("Please select both a model file and a weights file to upload");
+      return;
+   }
+   // careful here somehow need labels loaded!
+   model = await tf.loadLayersModel(tf.io.browserFiles([modelFile, weightsFile]));
+   model.summary()
+}
+
+async function classifyData() {
+// Get data from input field
+
+myModelSamples = parseInt(document.getElementById('myNumSamples').value)
+myModelSenses  = parseInt(document.getElementById('myNumSenses').value) 
+  
+ const dataString = document.getElementById("myArea01").value;
+
+// Convert data string to array
+let dataArray = dataString.split("\n").map((row) => row.split(",").map((value) => parseFloat(value)));
+   /*
+console.log(dataArray)
+let myLength = myModelSamples * myModelSenses;  // shape of final tensor
+let myOrig = dataArray[0].length
+let myBig = myLength-dataArray.length
+console.log('dataArray[0].length is myOrig')
+console.log(myOrig)
+console.log('myLength')
+console.log(myLength)
+console.log('myBig')
+console.log(myBig)
+console.log('myBig-myOrig')
+console.log(myBig-myOrig)
+  */
+//document.getElementById('mySpanClassify').innerHTML = `dataArray 1st: ${dataArray}<br><br><br>` 
+
+
+/*
+
+// Problem what if incoming data is the wrong length for the ML model!
+if (dataArray.length > myLength) { 
+   dataArray.length = myLength;   // reduce it if it is too big
+} else { 
+     for (let myLoop = myOrig; myLoop <= myBig;  myLoop++ ){
+     // dataArray[myLoop + myOrig] = 0
+      dataArray[0].push(0)     // use push so wwe don't have to worry about the array locations
+     }  
+}
+   
+  */ 
+// document.getElementById('mySpanClassify').innerHTML += `dataArray 2nd: ${dataArray}<br>` 
+
+// Convert data array to tensor
+const inputTensor = tf.tensor([dataArray]); 
+console.log('inputTensor before reshape')  
+console.log(inputTensor)  
+  
+const inputTensor2 = inputTensor.reshape([1 ,myModelSamples, myModelSenses])
+//inputTensor.reshape([99,3]).print();
+  
+console.log('inputTensor2 after reshape')  
+console.log(inputTensor2)  
+  
+// Make a prediction using the trained model
+const prediction = model.predict(inputTensor2);
+const predictedLabelIndex = prediction.argMax(1).dataSync()[0];
+console.log('predictedLabelIndex')   
+console.log(predictedLabelIndex)   
+if (predictedLabelIndex == 0){   // if the first item then LED activate
+   mySendIt('a') // turn on/off Microcontroller LED
+}  else {
+  mySendIt('b') // turn off/on Microcontroller LED
+}
+   
+const predictedLabel = uniqueLabels[predictedLabelIndex];
+console.log(`Predicted label: ${predictedLabel}`);
+document.getElementById('mySpanResults').innerHTML = `predictedLabelIndex: ${predictedLabelIndex},  Predicted label: ${predictedLabel} <br>`
+
+console.log('prediction')
+console.log(prediction)
+
+const predictedArray = prediction.arraySync()
+ 
+console.log('predictedArray')
+console.log(predictedArray)  
+
+for (let myLabelCount = 0; myLabelCount < uniqueLabels.length; myLabelCount++){
+   let myPercent = Math.round(predictedArray[0][myLabelCount] * 100  )
+   document.getElementById('mySpanResults').innerHTML += `${uniqueLabels[myLabelCount]}: ${myPercent}%<br>`    
+}
+
+
+   
+//document.getElementById('mySpanResults').innerHTML += `predictedArray[0][0]: ${predictedArray[0][0]}<br>`
+//document.getElementById('mySpanResults').innerHTML += `predictedArray[0][1]: ${predictedArray[0][1]}<br>`
+     
+console.log(predictedLabel)
+// Dispose the input tensor to free up memory
+inputTensor.dispose();
+}
+  
+// for the plotlyjs graphing code below it  
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function myShowGraph() {
+  const dataString2 = document.getElementById("myArea01").value;
+
+  // Convert data string to array
+  const dataArray = dataString2.split("\n").map(row => row.split(",").map(value => parseFloat(value)));
+  document.getElementById('mySpanResults').innerHTML =  "Number of Samples:" + dataArray.length  
+   
+  // Extract the number of senses (columns) from the first row of data
+  const myModelSenses = dataArray[0].length;
+  document.getElementById('myNumSenses').value  = myModelSenses
+  // Create an array to store line data
+  const lineData = [];
+
+  // Initialize lineData array with empty arrays for each sense
+  for (let i = 0; i < myModelSenses; i++) {
+    lineData.push([]);
+  }
+
+  // Push the data into the lineData array
+  for (let i = 0; i < dataArray.length; i++) {
+    for (let j = 0; j < myModelSenses; j++) {
+      const value = parseFloat(dataArray[i][j]);
+      lineData[j].push(value);
+    }
+  }
+
+  // Create an array to store line traces
+  const lineTraces = [];
+
+  // Generate traces for each line
+  for (let i = 0; i < myModelSenses; i++) {
+    const trace = {
+      x: Array.from(Array(lineData[i].length).keys()),
+      y: lineData[i],
+      mode: 'lines',
+      name: `Line ${i + 1}`,
+      line: { color: getRandomColor() }, // Generate a random color for each line
+    };
+
+    lineTraces.push(trace);
+  }
+
+  // Define the layout for the chart
+  const layout = {
+    title: "Chart",
+    xaxis: {
+      title: 'Time (ms)',
+    //  fixedrange: true,
+    },
+    yaxis: {
+      title: 'Value',
+    //  range: [-100, 100],
+    //  fixedrange: true,
+    },
+  };
+
+  // Clear the existing chart
+  Plotly.purge('myChart');
+
+  // Create the new chart with the line traces
+  Plotly.newPlot('myChart', lineTraces, layout);
+}
+
+
+
+   
+
+
+function mySaveCSV(myInFileName) {
+  var csv = document.getElementById("myArea01").value;
+  var data = Papa.parse(csv, { header: true }).data;
+  var csvContent = Papa.unparse(data, { delimiter: "," });
+
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", "data:text/csv;charset=utf-8," + encodedUri);
+  link.setAttribute("download", myInFileName);
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+}
+
+function mySaveTxt(myInFileName) {
+  var text = uniqueLabels
+
+  // Create a data URI for the text content
+  var encodedUri = "data:text/plain;charset=utf-8," + encodeURI(text);
+
+  // Create an anchor element to trigger the download
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", myInFileName);
+
+  // Simulate a click event to download the file
+  link.click();
+}
+    
+   /////////////////////////////////////// End of user code ///////////////////////////////////////////   
+
+  /////////////////////////////////////// webSerial code starts ///////////////////////////////////////////
+  
+  //Global Variables
+  //let writer;  
+  let port
+  
+
+document.getElementById('connectButton').addEventListener('click', () => {
+  if (navigator.serial) {
+    connectSerial();
+  } else {
+    document.getElementById('myDiv01').innerHTML = 'Web Serial API not supported. Switching to Polyfill<br>'
+    myPoly()
+
+  }
+});
+
+
+async function connectSerial() {
+  try {
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+
+    const decoder = new TextDecoderStream(); 
+    port.readable.pipeTo(decoder.writable);
+
+    const inputStream = decoder.readable;
+    const reader = inputStream.getReader();
+    
+    while (true) {
+      const { value, done } = await reader.read();
+   //   if (value && !/^\s*$/g.test(value)) { // Check if value is not just whitespace or carriage return
+               // Check if value is not just a line feed or carriage return
+    //  if (!/^[\r\n]*$/g.test(value)) { 
+       console.log(value)
+      if (!/^[\r]*$/g.test(value)) { 
+        if (myMultiCSV) {
+            document.getElementById('myArea01').value += value;
+        } else {
+           document.getElementById('myArea01').value += value;
+           mySaveCSV(document.getElementById('myEnteredFileName').value);
+           keepOneLine();
+        }
+      }
+      if (done) {
+        console.log('[readLoop] DONE', done);
+        reader.releaseLock();
+        break;
+      }
+    }
+  } catch (error) {
+    document.getElementById('myArea01').value = error;
+  }
+}
+
+
+/*
+
+   
+async function connectSerial() {
+ // const log = document.getElementById('target');
+//  const log = document.getElementById('myArea01');
+    
+  try {
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+    
+    const decoder = new TextDecoderStream(); 
+    port.readable.pipeTo(decoder.writable);
+
+    //setup reader stream 
+    const inputStream = decoder.readable;
+    const reader = inputStream.getReader();
+    
+    //setup writer stream
+   // writer = port.writable.getWriter();
+     
+    while (true) {
+      const { value, done } = await reader.read();
+      if (value) {
+       // log.textContent += value + '\n';   // original div
+       // log.value += value + '\n';
+        if (myMultiCSV){
+            document.getElementById('myArea01').value += value;
+        } else {
+           document.getElementById('myArea01').value += value;
+           mySaveCSV(document.getElementById('myEnteredFileName').value)
+           keepOneLine();
+        }
+        
+        // error checking
+        if (document.getElementById('myArea01').value == ''){ console.log('nothing') }
+      }
+      if (done) {
+        console.log('[readLoop] DONE', done);
+        reader.releaseLock();
+        break;
+      }
+    }
+  
+  } catch (error) {
+    document.getElementById('myArea01').value = error;
+  }
+  
+  // resize textarea if needed.
+ // log.scrollTop = log.scrollHeight;   // not working
+  
+
+  
+}  
+
+
+*/
+
+
+   
+  
+async function mySendIt(myData) {  
+  if (navigator.serial) {  
+    const encoder = new TextEncoder();
+    const writer = port.writable.getWriter();
+    await writer.write(encoder.encode(myData));
+    writer.releaseLock();
+    console.log(myData);
+    document.getElementById('mySendText').value = myData
+  } else {
+    mySend(myData)
+  }
+
+} 
+  
+  
+///////////////////////////////////////// end webSerial //////////////////////////////////////////
+///////////////////////////////////////// start polyfill for Android ////////////////////////////
+  
+  
+  
+  //Global Variables for Polyfill
+  var serial = exports.serial;  // is this needed as defined in the npm
+ 
+  let myLooping  // for read setinterval
+  var mySerial;
+  //let receivedText = '';
+  let reader = {};
+  let writer = {};
+  
+   str2ab = function(str) {
+    var buf = new Uint8Array(str.length); // 1 byte for each char
+    for (var i=0, strLen=str.length; i < strLen; i++) {
+      buf[i] = str.charCodeAt(i);
+    }
+    return buf;
+  }
+
+  ab2str = function(buf) {
+    return String.fromCharCode.apply(null, buf);
+  } 
+  
+  
+  
+async function myRead(){  
+    reader.read().then(({value}) => {        
+        let receivedText = ab2str(value);
+        document.getElementById('target').innerHTML = receivedText + '<br>' + document.getElementById('target').innerHTML // latest on top
+      },
+      error => {
+      console.error('error from read', error)
+     document.getElementById('myDiv01').innerHTML = 'error from read' + error
+     }
+    );
+}
+  
+   
+  
+async function myPoly(){  
+    mySerial = await serial.requestPort()
+                                                                     
+    document.getElementById('myDiv01').innerHTML += await '<b>mySerial: </b><br><pre>' +  JSON.stringify(mySerial, null, 3) + '</pre><br><br>'      
+                                            
+                                                                                     
+    console.log('mySerial')                    
+    console.log(mySerial)   
+
+    const myOpen = await mySerial.open({baudRate: 115200});
+    reader = mySerial.readable.getReader();                                              
+    writer = mySerial.writable.getWriter();    
+                                            
+    const results = mySerial.getInfo();
+    
+    //document.getElementById('myDiv01').innerHTML += await 'Results:<b>: </b><br><pre>' +  JSON.stringify(results, null, 3) + '</pre><br><br>'                                          
+    console.log('get info results', results);
+    document.getElementById('myDiv01').innerHTML += 'results.usbVendorId: ' + results.usbVendorId + '<br>'
+    document.getElementById('myDiv01').innerHTML += 'results.usbProductId: ' + results.usbProductId + '<br>'
+ 
+    
+    // start looping the serial read. Is there a better way to do this?
+    clearInterval(myLooping)
+    myLooping = setInterval(myRead, 1000); 
+  }
+        
+ async function mySend(myData2){  
+    writer.ready.then(() => {                                         
+      let inputArrayBuffer = str2ab(myData2);
+      const myWritten = writer.write(inputArrayBuffer);
+      console.log('myWritten')
+      console.log(myWritten)
+        
+      document.getElementById('mySendText').value = myData2      // check if this works                           
+      //document.getElementById('myDiv01').innerHTML = '<br><br><b>myWriter: </b><br><pre>' +  JSON.stringify(myWritten, null, 3) + '</pre><br><br>'  
+                                            
+   
+    })    
+} 
+  
+/////////////////////////////////////// end Polyfill for Android ////////////////////////////////  
+
+//////////////////////////// Cell Phone Motion Code ///////////////////////////////////////////////
+
+
+
+
+
+
+async function myCellPhoneMotion(){
+  document.getElementById('mySpanExport').innerHTML = `Checking if using a cell phone!<br>`;
+  document.getElementById('mySpanExport').innerHTML += `/Android/i.test(navigator.userAgent): ${/Android/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanExport').innerHTML += `/iPhone|iPod/i.test(navigator.userAgent): ${/iPhone|iPod/i.test(navigator.userAgent)}<br>`;
+  document.getElementById('mySpanExport').innerHTML += `navigator.userAgent: ${navigator.userAgent}<br>`
+   
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    try {
+      const permissionState = await DeviceMotionEvent.requestPermission();
+      if (permissionState === 'granted') {
+        window.addEventListener('devicemotion', handleMotionEvent);
+      //  myCellPhoneEvent = false
+        myCellPhoneOnce = true
+      }
+    } catch (error) {
+      console.log(error);
+      document.getElementById('mySpanResults').innerHTML = `Error: ${error}`;
+    }
+  } else {  // if things are already setup then just add the event listener
+    window.addEventListener('devicemotion', handleMotionEvent);
+  }
+}
+
+function handleMotionEvent(event) {
+if (myCellPhoneOnce){    
+  const { accelerationIncludingGravity } = event;
+  let { x, y, z } = accelerationIncludingGravity;
+   
+   if ( /Android/i.test(navigator.userAgent) ) {  // correct only if not on desktop setting. Android orientation is opposite apple
+      x *= -1;
+      y *= -1;
+      z *= -1;
+   }
+   
+  const formattedX = typeof x === 'number' ? x.toFixed(2) : 'NaN';
+  const formattedY = typeof y === 'number' ? y.toFixed(2) : 'NaN';
+  const formattedZ = typeof z === 'number' ? z.toFixed(2) : 'NaN';
+
+ // document.getElementById('myDiv01').innerHTML = `iPhone x: ${formattedX}, y: ${formattedY}, z: ${formattedZ}`;
+   // Start collecting data if startTime is null
+   if (startTime === null) {
+     startTime = performance.now();
+   }
+   
+   // Calculate elapsed time in milliseconds
+   const elapsedTime = performance.now() - startTime;
+   
+   // Collect accelerometer data for 500 ms
+   if (elapsedTime < 410) {  // 500 ~ 30 samples, I want 25 samples
+     accelerometerData.push([formattedX, formattedY, formattedZ]);
+   }
+   else if (elapsedTime > 1000 ){} // estentially do nothing if the event handler does not get erased         
+   else {
+      // put the data in the main textarea
+      if (mySendFirstLine) { document.getElementById('myArea01').value = 'accelX,accelY,accelZ\r\n';  }   // prints first line for CSV saving
+        document.getElementById('myArea01').value += accelerometerData.join('\r\n')  // puts linefeed at end of data
+        myShowGraph() 
+        myCellPhoneOnce = false  
+        window.removeEventListener('devicemotion', handleMotionEvent); 
+      }
+   
+   } 
+}
+
+
+
+
+////////////////////////////////////////////////////////  END OF SCRIPT TAG //////////////////////////////////////////////////////////////  
+</script>
+
+
+
+
+ 
+
+
+
+
+
+
+   
+
+<br><br>
+Aruino NiclaVision webSerial code that can be adapted for other microcontrollers<br> 
+<input type=button value=copy onclick="{                                      
+   const element = document.getElementById('myCode')
+  element.select();
+  element.setSelectionRange(0, 99999);
+  document.execCommand('copy');                                                                         
+}"> <br>
+The "fancy" Arduino sketch for the Nano33BleSense is on the github here 
+<a href="https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt">https://github.com/hpssjellis/tinyMLjs/blob/main/public/acceleration/a00-accell-nano33-fancy.txt</a> <br>  
+
+
+<!-- ******************************** The following sketch should be uploaded to your Arduino NiclaVision **************************************************************  -->
+
+
+
+
+
+
+
+
+
+   
+<textarea id="myCode" rows=5 cols=70 NOWRAP>
+/*
+ * webSerial for testing javascript connection with an arduino
+ * 
+ * Latest work at   https://github.com/hpssjellis/webMLserial
+ * 
+ * Note: On the Arduino Serial monitor make sure no line-ending or if statements will not work
+ * 
+ * Android https://hpssjellis.github.io/web-serial-polyfill/index.html
+ * Laptops Desktops  https://hpssjellis.github.io/my-examples-of-arduino-webUSB-webSerial/public/index.html
+ * IOS     not really sure
+ * 
+ */
+
+
+
+#include <Arduino.h> // Only needed for https://platformio.org/
+#include <Arduino_LSM9DS1.h>
+
+
+#define FREQUENCY_HZ        36     // how many samples per second 
+#define COLLECTION_SECONDS  1     // how many seconds to collect samples
+#define INTERVAL_MS  (1000 / (FREQUENCY_HZ + 1)) // need for the timer 
+#define CONVERT_G_TO_MS2    9.80665f   // accleration conversion
+
+int myMaxData = FREQUENCY_HZ * COLLECTION_SECONDS;
+int myCount = 0;
+int myDelay = INTERVAL_MS;   // non-block delay in milliseconds
+unsigned long myStart; 
+
+String readString;
+bool mySendData = true;
+
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);   // onboard LED, HIGH = off
+  //while (!Serial) {}                 // do nothing and wait
+  
+  myStart = millis();   // set delay
+  randomSeed(analogRead(A0));  // AO pin on XIAO does not have to be connected to anything
+  Serial.println("accX,accY,accZ");  // CSV file heading titles
+  
+  if (!IMU.begin()) {
+     Serial.println("Failed to initialize IMU!");
+     while (1);
+  }
+}
+
+void loop() {
+  float x, y, z;
+  if ( (millis() - myStart ) >= myDelay) {       
+     myStart = millis();      //  reset the delay time
+     myCount += 1;
+     IMU.readAcceleration(x, y, z);
+     // convert raw acceleration to acceleration due to gravity
+     x *= CONVERT_G_TO_MS2;
+     y *= CONVERT_G_TO_MS2;
+     z *= CONVERT_G_TO_MS2;
+     //Serial.println( String(myStart)+ "," + String(analogRead(A0)) + "," + String(analogRead(A1)) + "," +  String(analogRead(A2))  );
+     if (myCount >= myMaxData){
+        mySendData = false;   // stop sending data when amount reached
+     }
+     if (mySendData){
+       // Serial.println( String(x) + "," + String(y) + "," +  String(z)  );
+        Serial.println( String(x) + "," + String(y) + "," +  String(z) );
+     } 
+   }
+
+   while (Serial.available()) {
+    delay(3);  
+    char myChar = Serial.read();
+    readString += myChar; 
+  }
+
+  if (readString.length() > 0) {
+    readString.trim();  // get rid of last weird character
+    if (readString == "a"){
+      digitalWrite(LED_BUILTIN, LOW); //onboard LED LOW = on
+    }
+    if (readString == "b"){
+      digitalWrite(LED_BUILTIN, HIGH);
+    }
+    if (readString == "start"){
+      mySendData = true;
+      myStart = millis();      //  reset the delay time
+      myCount = 0;
+    }
+    if (readString == "stop"){
+      mySendData = false;
+      Serial.println("Stopping at count: "+ String(myCount));  // CSV file heading titles
+    }
+    if (readString == "firstline"){
+      Serial.println("accX,accY,accZ");  // CSV file heading titles
+    }
+    readString="";
+  } 
+  
+}
+   
+  
+</textarea> <br><br>
+
+Use at your own risk!<br>
+By Jeremy Ellis @rocksetta<br>
+Github at <a href="https://github.com/hpssjellis/tinyMLjs/tree/main">https://github.com/hpssjellis/tinyMLjs/tree/main</a><br> 
+Demo's Index at <a href="https://hpssjellis.github.io/tinyMLjs/public/index.html">https://hpssjellis.github.io/tinyMLjs/public/index.html</a><br>
+This page should be at <a href="https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html">https://hpssjellis.github.io/tinyMLjs/public/acceleration/a00-best-acceleration.html</a> <br><br>
+   
+<ol><b>A couple of gotchas (as of Jun 22, 2023):</b><br>
+<br>  <li> File names have to be in the format "name-lable.csv" or  "name-lable (1).csv" or  "name-lable (2).csv" etc. Unfortunately Android and iPhone don't auto make the numbering for you. 
+<br>   <li> Android and Apple device have an opposite orientation, so I have made negative all the android motion data so when your phone is on a table z = -9.8 m/s^2 etc. When looking veritacally at your phone y = -9.8 m/s^2. The auto detect of this only works if an Android phone is in mobile format not "desktop site" 
+<br>   <li> Real data has lots of rough data, machine learning models do not like missing data. If your results show "NaN" either your training data or classification data has errors. Note: If the loss is not changing your trained data probably has errors. The "clean,trim,fill" buttons might help.
+<br>  <li> Presently a CSV label upload bug happens sometimes. Easy to fix by entering the correct labels in the correct order. I will try to fix the issue when I figure out what is causing it.
+</ol>   
+</body>
+</html>
