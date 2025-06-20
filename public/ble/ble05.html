@@ -1437,7 +1437,7 @@ void loop() {
         z *= CONVERT_G_TO_MS2;
         
         String sensorData = String(x, 2) + "," + String(y, 2) + "," + String(z, 2); // Format to 2 decimal places
-        myCharacteristic.writeValue(sensorData); // Send sensor data
+        myCharacteristic.writeValue(sensorData.c_str()); // Send sensor data
         Serial.println("Sent BLE: " + sensorData);
 
         if (myCount >= myMaxData) {
